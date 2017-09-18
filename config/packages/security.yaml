@@ -1,10 +1,13 @@
 security:
     encoders:
-        FOS\UserBundle\Model\UserInterface: bcrypt
+        FOS\UserBundle\Model\UserInterface:
+            algorithm: bcrypt
+            cost: 12
 
     role_hierarchy:
         ROLE_READER: ROLE_USER
-        ROLE_ADMIN: ROLE_READER
+        ROLE_ADMIN: [ROLE_READER]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN]
 
     providers:
         in_memory: { memory: ~ }
@@ -18,12 +21,14 @@ security:
             anonymous: true
             provider: fos_userbundle
             json_login:
-                check_path: /login
+                check_path: api_login_check
                 username_path: username
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
+            form_login:
+                always_use_default_target_path: false
+                default_target_path: /profile
         main:
             pattern:   ^/
             provider: fos_userbundle
@@ -32,10 +37,10 @@ security:
             lexik_jwt: ~
 
         dev:
-            pattern:  ^/
-            #pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
     access_control:
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/profile, roles: ROLE_USER }

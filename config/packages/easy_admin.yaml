@@ -1,11 +1,36 @@
 easy_admin:
+    list:
+        actions: ['show', 'edit', 'delete']
     entities:
         User:
             class: App\Entity\User
+            list:
+                fields:
+                    - fullname
+                    - username
+                    - email
+                    - enabled
+            form:
+                fields:
+                    - fullname
+                    - username
+                    - email
+                    - enabled
+                    - lastLogin
+                    - { property: 'plainPassword', type: 'text', type_options: { required: false } }
+                    - { property: 'roles', type: 'choice', type_options: { multiple: true, choices: { 'ROLE_USER': 'ROLE_USER', 'ROLE_ADMIN': 'ROLE_ADMIN' } } }
+
         Project:
             class: App\Entity\Project
+            list:
+                fields:
+                    - name
+                    - author
+                    - url
+                    - createdAt
             form:
                 fields:
                     - name
                     - description
                     - url
+                    - author

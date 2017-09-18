@@ -238,14 +238,28 @@ class Project
 
     /**
      * @param string $name
-     *
-     * @return Project
      */
-    public function setName(string $name): Project
+    public function setName(string $name): void
     {
         $this->name = $name;
+    }
 
-        return $this;
+
+    /**
+     * @return string
+     */
+    public function getAuthor(): ?string
+    {
+        return $this->author;
+    }
+
+
+    /**
+     * @param string $author
+     */
+    public function setAuthor(string $author): void
+    {
+        $this->author = $author;
     }
 
 
@@ -260,14 +274,10 @@ class Project
 
     /**
      * @param string $description
-     *
-     * @return Project
      */
-    public function setDescription(string $description): Project
+    public function setDescription(string $description): void
     {
         $this->description = $description;
-
-        return $this;
     }
 
 
@@ -282,14 +292,10 @@ class Project
 
     /**
      * @param string $url
-     *
-     * @return Project
      */
-    public function setUrl(string $url): Project
+    public function setUrl(string $url): void
     {
         $this->url = $url;
-
-        return $this;
     }
 
 

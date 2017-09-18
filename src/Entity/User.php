@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as Base;
-use FOS\UserBundle\Model\UserInterface;
 use Ramsey\Uuid\Uuid;
+use FOS\UserBundle\Model\UserInterface;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -190,6 +192,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ORM\Entity
  * @ORM\Table(name="users")
+ *
+ * @method Uuid getId
  */
 class User extends Base
 {
@@ -200,6 +204,8 @@ class User extends Base
      * @ORM\Column(type="uuid_binary_ordered_time")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
+     *
+     * @Groups({"user-read"})
      */
     protected $id;
 
@@ -233,6 +239,28 @@ class User extends Base
      */
     protected $username;
 
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime")
+     *
+     * @Gedmo\Timestampable(on="create")
+     *
+     * @Groups({"user-read"})
+     */
+    protected $createdAt;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime")
+     *
+     * @Gedmo\Timestampable(on="update")
+     *
+     * @Groups({"user-read"})
+     */
+    protected $updatedAt;
+
 
     /**
      * @param string|null $fullname
@@ -253,6 +281,24 @@ class User extends Base
     public function getFullname(): ?string
     {
         return $this->fullname;
+    }
+
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+
+    /**
+     * @return DateTime
+     */
+    public function getUpdatedAt(): DateTime
+    {
+        return $this->updatedAt;
     }
 
 
