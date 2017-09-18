@@ -1,0 +1,11 @@
+easy_admin:
+    entities:
+        User:
+            class: App\Entity\User
+        Project:
+            class: App\Entity\Project
+            form:
+                fields:
+                    - name
+                    - description
+                    - url
