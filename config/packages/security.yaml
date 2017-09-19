@@ -15,6 +15,31 @@ security:
             id: fos_user.user_provider.username
 
     firewalls:
+
+        admin_login:
+            pattern: ^/admin/login$
+            anonymous: true
+
+        admin:
+            pattern:  ^/admin
+            stateless: false
+            anonymous: false
+            provider: fos_userbundle
+            form_login:
+                login_path: fos_user_security_login
+                check_path: fos_user_security_check
+                always_use_default_target_path: true
+                default_target_path: /admin
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /admin
+
+            logout:
+                path: fos_user_security_logout
+                target: fos_user_security_login
+
         login:
             pattern:  ^/login
             stateless: true
@@ -26,21 +51,32 @@ security:
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            form_login:
-                always_use_default_target_path: false
-                default_target_path: /profile
+
+        v1:
+            pattern: ^/v1/\w+
+            provider: fos_userbundle
+            anonymous: false
+            stateless: true
+            lexik_jwt:
+                authorization_header:
+                    enabled: true
+                    prefix: Bearer
+#               query_parameter:
+#                   enabled: true
+#                   name: token
+                throw_exceptions: false
+                create_entry_point: true
+
         main:
             pattern:   ^/
-            provider: fos_userbundle
-            stateless: true
             anonymous: true
-            lexik_jwt: ~
 
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
     access_control:
+        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/v1/\w+, roles: ROLE_READER }
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/profile, roles: ROLE_USER }
