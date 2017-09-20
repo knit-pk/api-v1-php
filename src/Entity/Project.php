@@ -11,7 +11,10 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(collectionOperations={
+ * @ApiResource(attributes={
+ *   "access_control"="is_granted('ROLE_READER')",
+ * },
+ * collectionOperations={
  *     "get"={
  *          "method"="GET",
  *          "swagger_context"={
