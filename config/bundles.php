@@ -12,4 +12,5 @@ return [
     'JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle' => ['all' => true],
     'FOS\UserBundle\FOSUserBundle' => ['all' => true],
     'Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle' => ['all' => true],
+    'Gesdinet\JWTRefreshTokenBundle\GesdinetJWTRefreshTokenBundle' => ['all' => true],
 ];

@@ -132,62 +132,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *               },
  *          },
  *     },
- *     "login"={
- *          "route_name"="api_login_check",
- *          "method"="POST",
- *          "swagger_context"={
- *              "summary"="Authenticate using credentials",
- *              "description"="Authenticate using credentials",
- *              "parameters"={
- *                  {
- *                      "name"="credentials",
- *                      "in"="body",
- *                      "description"="User authentication credentials",
- *                      "schema"={
- *                          "type"="object",
- *                          "properties"={
- *                              "username"={
- *                                  "type"="string",
- *                              },
- *                              "password"={
- *                                  "type"="string",
- *                              },
- *                          },
- *                      },
- *                  },
- *              },
- *              "responses"={
- *                  "200"={
- *                      "description"="Successfully authenticated",
- *                      "schema"={
- *                          "type"="object",
- *                          "properties"={
- *                              "token"={
- *                                  "type"="string",
- *                                  "description"="JWT",
- *                              },
- *                          },
- *                      },
- *                  },
- *                  "401"={
- *                      "description"="Invalid credentials",
- *                      "schema"={
- *                          "type"="object",
- *                          "properties"={
- *                              "code"={
- *                                  "type"="string",
- *                                  "description"="Error code",
- *                              },
- *                              "message"={
- *                                  "type"="string",
- *                                  "description"="Error message",
- *                              },
- *                          },
- *                      },
- *                  },
- *              },
- *          },
- *     },
  * })
  *
  * @ORM\Entity

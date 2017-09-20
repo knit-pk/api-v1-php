@@ -1,16 +1,16 @@
 fos_user_security_login:
-    methods: ['GET']
     path: /admin/login
+    methods: ['GET']
     defaults: { _controller: FOSUserBundle:Security:login }
 
 fos_user_security_check:
-    methods: ['POST']
     path: /admin/login_check
+    methods: ['POST']
     defaults: { _controller: FOSUserBundle:Security:check }
 
 fos_user_security_logout:
-    methods: ['GET', 'POST']
     path: /admin/logout
+    methods: ['GET', 'POST']
     defaults: { _controller: FOSUserBundle:Security:logout }
 
 fos_user_profile:

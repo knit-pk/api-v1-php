@@ -40,8 +40,8 @@ security:
                 path: fos_user_security_logout
                 target: fos_user_security_login
 
-        login:
-            pattern:  ^/login
+        token:
+            pattern:  ^/token
             stateless: true
             anonymous: true
             provider: fos_userbundle
@@ -79,4 +79,5 @@ security:
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/v1/\w+, roles: ROLE_READER }
+        - { path: ^/token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
