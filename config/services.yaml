@@ -43,3 +43,9 @@ services:
                 - { name: doctrine.event_subscriber, connection: default }
             calls:
                 - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    ### Add custom payload to JWT Access Token
+    acme_api.event.jwt_created_listener:
+            class: App\EventListener\JWTCreatedListener
+            tags:
+                - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
