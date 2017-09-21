@@ -4,19 +4,10 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
-use Symfony\Bridge\Doctrine\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
- * This class override Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken
- * to have an resource 'Token' in api platform, to be able to split routes
- * in documentation/
- *
- * @ORM\Table("refresh_token")
- * @ORM\Entity(repositoryClass="Gesdinet\JWTRefreshTokenBundle\Entity\RefreshTokenRepository")
- *
- * @Assert\UniqueEntity("refreshToken")
+ * This class exists to have an resource 'Token' in api platform documentation,
+ * to be able to expose corresponding routes
  *
  * @ApiResource(collectionOperations={},
  * itemOperations={
@@ -140,7 +131,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     },
  * })
  */
-class Token extends RefreshToken
+class Token
 {
 
 }

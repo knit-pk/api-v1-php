@@ -156,12 +156,10 @@ class Project
     protected $name;
 
     /**
-     * @var string
+     * @var User
      *
-     * @ORM\Column(type="string")
-     *
-     * @Assert\NotBlank()
-     * @Assert\Length(min="3",max="100")
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     protected $author;
 
@@ -170,7 +168,13 @@ class Project
      *
      * @ORM\Column(type="string", unique=true)
      *
-     * @Gedmo\Slug(fields={"author","name"},separator="-",updatable=true,unique=true)
+     * @Gedmo\Slug(handlers={
+     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler",options={
+     *          @Gedmo\SlugHandlerOption(name="relationField",value="author"),
+     *          @Gedmo\SlugHandlerOption(name="relationSlugField",value="username"),
+     *          @Gedmo\SlugHandlerOption(name="separator",value="/"),
+     *      }),
+     * },fields={"name"},separator="-",updatable=true,unique=true)
      */
     protected $code;
 
@@ -249,21 +253,22 @@ class Project
 
 
     /**
-     * @return string
+     * @return User
      */
-    public function getAuthor(): ?string
+    public function getAuthor(): User
     {
         return $this->author;
     }
 
 
     /**
-     * @param string $author
+     * @param User $author
      */
-    public function setAuthor(string $author): void
+    public function setAuthor(User $author): void
     {
         $this->author = $author;
     }
+
 
 
     /**
