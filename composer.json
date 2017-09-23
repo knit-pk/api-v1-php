@@ -16,6 +16,7 @@
     "symfony/yaml": "^3.3"
   },
   "require-dev": {
+    "doctrine/doctrine-fixtures-bundle": "^2.4",
     "javiereguiluz/easyadmin-bundle": "^1.17",
     "phpunit/phpunit": "^6.3",
     "symfony/console": "^3.3",
@@ -44,7 +45,8 @@
       "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
     },
     "post-install-cmd": [
-      "@auto-scripts"
+      "@auto-scripts",
+      "bin/console doctrine:fixtures:load -n"
     ],
     "post-update-cmd": [
       "@auto-scripts"

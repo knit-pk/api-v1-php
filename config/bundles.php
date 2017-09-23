@@ -13,4 +13,5 @@ return [
     'FOS\UserBundle\FOSUserBundle' => ['all' => true],
     'Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle' => ['all' => true],
     'Gesdinet\JWTRefreshTokenBundle\GesdinetJWTRefreshTokenBundle' => ['all' => true],
+    'Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle' => ['dev' => true, 'test' => true],
 ];
