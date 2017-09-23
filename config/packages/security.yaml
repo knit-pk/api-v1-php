@@ -5,14 +5,16 @@ security:
             cost: 12
 
     role_hierarchy:
-        ROLE_READER: ROLE_USER
-        ROLE_ADMIN: [ROLE_READER]
+        ROLE_USER: [ROLE_SINGLE_USER_READER]
+        ROLE_READER: [ROLE_USER]
+        ROLE_WRITER: [ROLE_READER]
+        ROLE_ADMIN: [ROLE_READER, ROLE_WRITER, ROLE_USER_READER, ROLE_USER_WRITER]
         ROLE_SUPER_ADMIN: [ROLE_ADMIN]
 
     providers:
         in_memory: { memory: ~ }
         fos_userbundle:
-            id: fos_user.user_provider.username
+            id: fos_user.user_provider.username_email
 
     firewalls:
 

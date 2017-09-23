@@ -6,6 +6,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -139,9 +140,9 @@ class Project
      * @var Uuid
      *
      * @ORM\Id
-     * @ORM\Column(type="uuid_binary_ordered_time")
+     * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     protected $id;
 
@@ -253,25 +254,6 @@ class Project
 
 
     /**
-     * @return User
-     */
-    public function getAuthor(): User
-    {
-        return $this->author;
-    }
-
-
-    /**
-     * @param User $author
-     */
-    public function setAuthor(User $author): void
-    {
-        $this->author = $author;
-    }
-
-
-
-    /**
      * @return string|null
      */
     public function getDescription(): ?string
@@ -295,6 +277,24 @@ class Project
     public function getUrl(): ?string
     {
         return $this->url;
+    }
+
+
+    /**
+     * @return User|null
+     */
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+
+    /**
+     * @param User $author
+     */
+    public function setAuthor(User $author): void
+    {
+        $this->author = $author;
     }
 
 
@@ -324,4 +324,13 @@ class Project
         return $this->updatedAt;
     }
 
+    /**
+     * @param UserInterface|null $user
+     *
+     * @return bool
+     */
+    public function isAuthor(UserInterface $user = null): bool
+    {
+        return $user instanceof self && $user->id === $this->id;
+    }
 }

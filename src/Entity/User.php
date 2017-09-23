@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as Base;
-use Ramsey\Uuid\Uuid;
 use FOS\UserBundle\Model\UserInterface;
-use ApiPlatform\Core\Annotation\ApiResource;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -20,6 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * collectionOperations={
  *     "get"={
  *          "method"="GET",
+ *          "access_control"="is_granted('ROLE_USER_READER')",
  *          "swagger_context"={
  *               "parameters"={
  *                   {
@@ -35,7 +36,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     "post"={
  *          "method"="POST",
- *          "normalization_context"={"groups"={"user","user-write"}},
+ *          "access_control"="is_granted('ROLE_USER_WRITER')",
  *          "swagger_context"={
  *               "parameters"={
  *                   {
@@ -59,6 +60,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * itemOperations={
  *     "get"={
  *          "method"="GET",
+ *          "access_control"="is_granted('ROLE_SINGLE_USER_READER') or (user and object.isUser(user))",
  *          "swagger_context"={
  *               "parameters"={
  *                   {
@@ -82,6 +84,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     "put"={
  *          "method"="PUT",
+ *          "access_control"="is_granted('ROLE_USER_WRITER') or (user and object.isUser(user))",
  *          "swagger_context"={
  *               "parameters"={
  *                   {
@@ -111,6 +114,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     "delete"={
  *          "method"="DELETE",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isUser(user))",
  *          "swagger_context"={
  *               "parameters"={
  *                   {
@@ -145,9 +149,9 @@ class User extends Base
      * @var Uuid
      *
      * @ORM\Id
-     * @ORM\Column(type="uuid_binary_ordered_time")
+     * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
      * @Groups({"user-read"})
      */
