@@ -18,128 +18,27 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     "denormalization_context"={"groups"={"Write"}},
  * },
  * collectionOperations={
- *     "hack"={
- *          "method"="GET",
- *          "route_name"="hack_do_not_use",
- *          "normalization_context"={"groups"={"Write"}},
- *     },
  *     "get"={
  *          "method"="GET",
  *          "access_control"="is_granted('ROLE_USER_READER')",
- *          "swagger_context"={
- *               "parameters"={
- *                   {
- *                       "name"="Authorization",
- *                       "description"="Access token",
- *                       "in"="header",
- *                       "default"="Bearer {{token}}",
- *                       "required"=true,
- *                       "type"="string",
- *                   },
- *               },
- *          },
  *     },
  *     "post"={
  *          "method"="POST",
  *          "access_control"="is_granted('ROLE_USER_WRITER')",
- *          "swagger_context"={
- *               "parameters"={
- *                   {
- *                       "name"="Authorization",
- *                       "description"="Access token",
- *                       "in"="header",
- *                       "default"="Bearer {{token}}",
- *                       "required"=true,
- *                       "type"="string",
- *                   },
- *                   {
- *                       "name"="user",
- *                       "in"="body",
- *                       "description"="The new User resource",
- *                       "schema"={"$ref"="#/definitions/User-Write"},
- *                   },
- *               },
- *          },
  *     },
  * },
  * itemOperations={
  *     "get"={
  *          "method"="GET",
  *          "access_control"="is_granted('ROLE_SINGLE_USER_READER') or (user and object.isUser(user))",
- *          "swagger_context"={
- *               "parameters"={
- *                   {
- *                       "name"="Authorization",
- *                       "description"="Access token",
- *                       "in"="header",
- *                       "default"="Bearer {{token}}",
- *                       "required"=true,
- *                       "type"="string",
- *                   },
- *                   {
- *                      "name"="id",
- *                      "in"="path",
- *                      "description"="Resource UUID",
- *                      "required"=true,
- *                      "type"="string",
- *                      "format"="uuid",
- *                   },
- *               },
- *          },
  *     },
  *     "put"={
  *          "method"="PUT",
  *          "access_control"="is_granted('ROLE_USER_WRITER') or (user and object.isUser(user))",
- *          "swagger_context"={
- *               "parameters"={
- *                   {
- *                       "name"="Authorization",
- *                       "description"="Access token",
- *                       "in"="header",
- *                       "default"="Bearer {{token}}",
- *                       "required"=true,
- *                       "type"="string",
- *                   },
- *                   {
- *                      "name"="id",
- *                      "in"="path",
- *                      "description"="Resource UUID",
- *                      "required"=true,
- *                      "type"="string",
- *                      "format"="uuid",
- *                   },
- *                   {
- *                       "name"="user",
- *                       "in"="body",
- *                       "description"="The new User resource",
- *                       "schema"={"$ref"="#/definitions/User-Write"},
- *                   },
- *               },
- *          },
  *     },
  *     "delete"={
  *          "method"="DELETE",
  *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isUser(user))",
- *          "swagger_context"={
- *               "parameters"={
- *                   {
- *                       "name"="Authorization",
- *                       "description"="Access token",
- *                       "in"="header",
- *                       "default"="Bearer {{token}}",
- *                       "required"=true,
- *                       "type"="string",
- *                   },
- *                   {
- *                      "name"="id",
- *                      "in"="path",
- *                      "description"="Resource UUID",
- *                      "required"=true,
- *                      "type"="string",
- *                      "format"="uuid",
- *                   },
- *               },
- *          },
  *     },
  * })
  *

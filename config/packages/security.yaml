@@ -54,6 +54,10 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
+        docs:
+            pattern: ^/v1/(docs|index)
+            anonymous: true
+
         v1:
             pattern: ^/v1/\w+
             provider: fos_userbundle
@@ -78,9 +82,9 @@ security:
             security: false
 
     access_control:
-        - { path: ^/__, roles: ROLE_SUPER_ADMIN }
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/v1/(docs|index), roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v1/\w+, roles: ROLE_USER }
         - { path: ^/token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
