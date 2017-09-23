@@ -14,10 +14,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(attributes={
- *     "normalization_context"={"groups"={"user", "user-read"}},
- *     "denormalization_context"={"groups"={"user", "user-write"}},
+ *     "normalization_context"={"groups"={"Read"}},
+ *     "denormalization_context"={"groups"={"Write"}},
  * },
  * collectionOperations={
+ *     "hack"={
+ *          "method"="GET",
+ *          "route_name"="hack_do_not_use",
+ *          "normalization_context"={"groups"={"Write"}},
+ *     },
  *     "get"={
  *          "method"="GET",
  *          "access_control"="is_granted('ROLE_USER_READER')",
@@ -51,7 +56,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                       "name"="user",
  *                       "in"="body",
  *                       "description"="The new User resource",
- *                       "schema"={"$ref"="#/definitions/User-user_user-write"},
+ *                       "schema"={"$ref"="#/definitions/User-Write"},
  *                   },
  *               },
  *          },
@@ -107,7 +112,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                       "name"="user",
  *                       "in"="body",
  *                       "description"="The new User resource",
- *                       "schema"={"$ref"="#/definitions/User-user_user-write"},
+ *                       "schema"={"$ref"="#/definitions/User-Write"},
  *                   },
  *               },
  *          },
@@ -138,7 +143,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  * })
  *
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="users")
  *
  * @method Uuid getId
@@ -153,14 +158,14 @@ class User extends Base
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
-     * @Groups({"user-read"})
+     * @Groups({"Read"})
      */
     protected $id;
 
     /**
      * @var string
      *
-     * @Groups({"user"})
+     * @Groups({"Read","Write"})
      */
     protected $email;
 
@@ -169,21 +174,21 @@ class User extends Base
      *
      * @ORM\Column(type="string",nullable=true)
      *
-     * @Groups({"user"})
+     * @Groups({"Read","Write"})
      */
     protected $fullname;
 
     /**
      * @var string
      *
-     * @Groups({"user-write"})
+     * @Groups({"Write"})
      */
     protected $plainPassword;
 
     /**
      * @var string
      *
-     * @Groups({"user"})
+     * @Groups({"Read","Write"})
      */
     protected $username;
 
@@ -194,7 +199,7 @@ class User extends Base
      *
      * @Gedmo\Timestampable(on="create")
      *
-     * @Groups({"user-read"})
+     * @Groups({"Read"})
      */
     protected $createdAt;
 
@@ -205,21 +210,17 @@ class User extends Base
      *
      * @Gedmo\Timestampable(on="update")
      *
-     * @Groups({"user-read"})
+     * @Groups({"Read"})
      */
     protected $updatedAt;
 
 
     /**
      * @param string|null $fullname
-     *
-     * @return $this
      */
     public function setFullname(?string $fullname)
     {
         $this->fullname = $fullname;
-
-        return $this;
     }
 
 
@@ -255,7 +256,7 @@ class User extends Base
      *
      * @return bool
      */
-    public function isUser(UserInterface $user = null): bool
+    public function isUser(?UserInterface $user): bool
     {
         return $user instanceof self && $user->id === $this->id;
     }

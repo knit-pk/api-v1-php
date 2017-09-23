@@ -49,3 +49,8 @@ services:
             class: App\EventListener\JWTCreatedListener
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+    'App\Swagger\SwaggerDecorator':
+            decorates: 'api_platform.swagger.normalizer.documentation'
+            arguments: [ '@App\Swagger\SwaggerDecorator.inner' ]
+            autoconfigure: false

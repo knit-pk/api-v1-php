@@ -78,6 +78,7 @@ security:
             security: false
 
     access_control:
+        - { path: ^/__, roles: ROLE_SUPER_ADMIN }
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/v1/\w+, roles: ROLE_USER }

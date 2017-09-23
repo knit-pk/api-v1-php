@@ -1,3 +1,7 @@
 api_login_check:
     path: /token
     methods: ['POST']
+
+hack_do_not_use:
+    methods: ['GET']
+    path: /__users
