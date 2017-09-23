@@ -19,21 +19,25 @@ class ProjectFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $projectAuthor = new User();
-        $projectAuthor->setFullname('Project Author');
+        $projectAuthor->setFullname('Projects Author');
         $projectAuthor->setUsername('author');
         $projectAuthor->setEmail('author@author.pl');
         $projectAuthor->setEnabled(true);
         $projectAuthor->setRoles(['ROLE_USER']);
         $projectAuthor->setPlainPassword('author');
+
         $manager->persist($projectAuthor);
 
+        for($i = 1; $i <= 10; ++$i) {
+            $projectName = sprintf('Project %d', $i);
 
-        $project = new Project();
-        $project->setName('Project');
-        $project->setDescription('Fantastic project description');
-        $project->setUrl('http://github.com/author/project');
-        $project->setAuthor($projectAuthor);
-        $manager->persist($project);
+            $project = new Project();
+            $project->setName($projectName);
+            $project->setDescription(sprintf('Fantastic %s description.', $projectName));
+            $project->setAuthor($projectAuthor);
+            $project->setUrl(sprintf('https://github.com/%s/%s', strtolower($projectAuthor->getUsername()), strtolower(str_replace(' ', '-', $projectName))));
+            $manager->persist($project);
+        }
 
         $manager->flush();
     }

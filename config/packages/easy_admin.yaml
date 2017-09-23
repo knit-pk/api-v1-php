@@ -39,7 +39,7 @@ easy_admin:
             list:
                 fields:
                     - name
-                    - { property: 'author', type_options: { by_reference: false } }
+                    - author
                     - url
                     - createdAt
             form:
@@ -47,4 +47,4 @@ easy_admin:
                     - name
                     - description
                     - url
-                    - { property: 'author', type_options: { by_reference: true } }
+                    - author
