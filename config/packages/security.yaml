@@ -5,10 +5,9 @@ security:
             cost: 12
 
     role_hierarchy:
-        ROLE_USER: [ROLE_SINGLE_USER_READER]
-        ROLE_READER: [ROLE_USER]
-        ROLE_WRITER: [ROLE_READER]
-        ROLE_ADMIN: [ROLE_READER, ROLE_WRITER, ROLE_USER_READER, ROLE_USER_WRITER]
+        ROLE_USER: [ROLE_READER]
+        ROLE_WRITER: [ROLE_USER]
+        ROLE_ADMIN: [ROLE_WRITER, ROLE_USER_WRITER]
         ROLE_SUPER_ADMIN: [ROLE_ADMIN]
 
     providers:
@@ -55,7 +54,7 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         docs:
-            pattern: ^/v1/(docs|index)
+            pattern: ^/v1/(?:docs|index|contexts)(?:\..*)?
             anonymous: true
 
         v1:
@@ -84,7 +83,7 @@ security:
     access_control:
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/v1/(docs|index), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/v1/(?:docs|index|contexts)(?:\..*)?, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/v1/\w+, roles: ROLE_USER }
         - { path: ^/token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }

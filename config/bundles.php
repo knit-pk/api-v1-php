@@ -14,4 +14,5 @@ return [
     'Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle' => ['all' => true],
     'Gesdinet\JWTRefreshTokenBundle\GesdinetJWTRefreshTokenBundle' => ['all' => true],
     'Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle' => ['dev' => true, 'test' => true],
+    'Nelmio\CorsBundle\NelmioCorsBundle' => ['all' => true],
 ];

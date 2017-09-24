@@ -10,6 +10,7 @@
     "gedmo/doctrine-extensions": "^2.4",
     "gesdinet/jwt-refresh-token-bundle": "^0.2.1",
     "lexik/jwt-authentication-bundle": "^2.4",
+    "nelmio/cors-bundle": "^1.5",
     "ramsey/uuid-doctrine": "^1.4",
     "roave/security-advisories": "dev-master",
     "symfony/flex": "^1.0",

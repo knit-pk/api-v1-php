@@ -16,11 +16,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(attributes={
  *     "normalization_context"={"groups"={"Read"}},
  *     "denormalization_context"={"groups"={"Write"}},
+ *     "access_control"="is_granted('ROLE_READER')",
  * },
  * collectionOperations={
  *     "get"={
  *          "method"="GET",
- *          "access_control"="is_granted('ROLE_USER_READER')",
  *     },
  *     "post"={
  *          "method"="POST",
@@ -30,7 +30,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * itemOperations={
  *     "get"={
  *          "method"="GET",
- *          "access_control"="is_granted('ROLE_SINGLE_USER_READER') or (user and object.isUser(user))",
  *     },
  *     "put"={
  *          "method"="PUT",
