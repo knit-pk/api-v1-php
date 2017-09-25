@@ -57,10 +57,6 @@ security:
             pattern: ^/(?:docs|index|contexts)(?:\..*)?
             anonymous: true
 
-        dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
         api:
             pattern: ^/\w+
             provider: fos_userbundle
@@ -70,9 +66,6 @@ security:
                 authorization_header:
                     enabled: true
                     prefix: Bearer
-#               query_parameter:
-#                   enabled: true
-#                   name: token
                 throw_exceptions: false
                 create_entry_point: true
 
