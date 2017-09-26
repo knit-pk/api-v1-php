@@ -1,4 +1,5 @@
 
+.env.mydevil
 
 ###> symfony/framework-bundle ###
 .env
