@@ -1,4 +1,6 @@
 {
+  "name": "knit-pk/api-v1-php",
+  "description": "KNIT API PHP",
   "type": "project",
   "license": "proprietary",
   "prefer-stable": true,
@@ -23,6 +25,7 @@
     "phpunit/phpunit": "^6.3",
     "symfony/console": "^3.3",
     "symfony/dotenv": "^3.3",
+    "symfony/profiler-pack": "^1.0",
     "symfony/web-server-bundle": "^3.3"
   },
   "config": {
@@ -47,8 +50,7 @@
       "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
     },
     "post-install-cmd": [
-      "@auto-scripts",
-      "bin/console doctrine:fixtures:load -n"
+      "@auto-scripts"
     ],
     "post-update-cmd": [
       "@auto-scripts"

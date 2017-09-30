@@ -54,7 +54,7 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         docs:
-            pattern: ^/(?:docs|index|contexts)(?:\..*)?
+            pattern: ^/(?:docs|index|contexts|_profiler|_wdt)(?:\..*)?
             anonymous: true
 
         api:
@@ -76,7 +76,7 @@ security:
     access_control:
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/(?:docs|index|contexts)(?:\..*)?, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(?:docs|index|contexts|_profiler|_wdt)(?:\..*)?, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/\w+, roles: ROLE_USER }
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }

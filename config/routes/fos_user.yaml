@@ -5,7 +5,7 @@ fos_user_security_login:
 
 fos_user_security_check:
     path: /admin/login_check
-    methods: ['POST']
+    methods: ['POST','GET']
     defaults: { _controller: FOSUserBundle:Security:check }
 
 fos_user_security_logout:

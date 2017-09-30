@@ -5,10 +5,9 @@ php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece38
 php composer-setup.php
 php -r "unlink('composer-setup.php');"
 
-mv .env.mydevil .env
+cp .env.mydevil .env
 php71 composer.phar install -o --no-scripts
 php71 bin/console cache:clear
 php71 bin/console cache:warmup
 gmake generate-jwt-keys
 php71 bin/console assets:install --symlink --relative ../public_html
-php71 bin/console doctrine:fixtures:load -n

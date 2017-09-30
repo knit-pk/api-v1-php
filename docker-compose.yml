@@ -1,0 +1,52 @@
+version: "2"
+services:
+  db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=database
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+
+  php:
+    build:
+      context: ./server/php-fpm
+      args:
+        TIMEZONE: Europe/Warsaw
+    volumes:
+      - .:/var/www/symfony
+    links:
+      - db
+
+  nginx:
+    build: ./server/nginx
+    ports:
+      - "80:80"
+    volumes_from:
+      - php
+    volumes:
+      - ./logs/nginx:/var/log/nginx
+
+#  elk:
+#    build: ./.docker/elk
+#    ports:
+#      - "8080:80"
+#    volumes:
+#      - ./server/elk/logstash:/etc/logstash
+#      - ./server/elk/logstash/patterns:/opt/logstash/patterns
+#    volumes_from:
+#      - php
+#      - nginx
+
+  pma:
+    build: server/pma
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=user
+      - PMA_PASSWORD=password
+    ports:
+      - "37680:80"
+    links:
+      - db
