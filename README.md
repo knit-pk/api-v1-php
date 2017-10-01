@@ -18,41 +18,39 @@ Requirements to work with project: `git`, `docker`, `docker-compose`, `composer`
    ```
 2. Run project
    ```bash
-   docker-compose up -d # Build and run docker containers
+   docker-compose -p api up -d # Build and run docker containers
    ```
 3. (Recommended) Prepare enviroment
-   ```bash
-   chmod +x start.sh # Make start.sh executable
-   bash start.sh     # Run script
    ```
-4. (Recommended) Create database schema and load fixtures
-    ```bash
-    bin/console doctrine:schema:create    # Create database schema
-    bin/console doctrine:fixtures:load -n # Seed database with generated data
-    ```
+   docker exec -it api_php_1 sh -c "start.sh"
+   ```
 
 ## Useful commands
 
-- Stop project (doesnt destroy data)
+- Stop project (does not destroy data)
     ```bash
-    docker-compose stop
+    docker-compose -p api stop
+    ```
+
+- Down project (destroys data)
+    ```bash
+    docker-compose -p api down
     ```
 
 - Rebuild images
     ```bash
-    docker-compose build
-    docker-compose up -d 
+    docker-compose -p api build
+    docker-compose -p api up -d 
     ```
 
 ## Informations
-Used docker images:
-- PHP 7.1 FastCGI
-- Nginx
-- Mysql 5.7
-- ELK 1.x (Elasticsearch, Logstash, Kibana)
-- PhpMyAdmin
+Docker images:
+- PHP (php:7.1-fpm-alpine)
+- Nginx (nginx:alpine)
+- Mysql (mysql:5.7)
+- PhpMyAdmin (phpmyadmin/phpmyadmin:latest)
 
-Main (php):
+PHP Stack:
 - Symfony (Flex)
 - Api Platform
 

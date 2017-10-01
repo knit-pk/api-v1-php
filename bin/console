@@ -18,12 +18,6 @@ if (!class_exists(Application::class)) {
 
 if (!isset($_SERVER['APP_ENV'])) {
     (new Dotenv())->load(__DIR__.'/../.env');
-
-    // Locally cannot use docker container host
-    if(isset($_ENV['DATABASE_URL_CONSOLE'])) {
-        $_ENV['DATABASE_URL'] = $_ENV['DATABASE_URL_CONSOLE'];
-        $_SERVER['DATABASE_URL'] = $_ENV['DATABASE_URL_CONSOLE'];
-    }
 }
 
 $input = new ArgvInput();

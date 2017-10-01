@@ -1,4 +1,7 @@
-version: "2"
+version: "3"
+volumes:
+  app_var:
+
 services:
   db:
     image: mysql:5.7
@@ -12,22 +15,21 @@ services:
 
   php:
     build:
-      context: ./server/php-fpm
-      args:
-        TIMEZONE: Europe/Warsaw
+      context: ./docker/php-fpm-alpine
     volumes:
-      - .:/var/www/symfony
-    links:
-      - db
+      - .:/var/www/app
+      - ./logs/app:/var/www/app/var/logs
+      - app_var:/var/www/app/var
 
   nginx:
-    build: ./server/nginx
+    build:
+      context: ./docker/nginx-alpine
     ports:
       - "80:80"
-    volumes_from:
-      - php
     volumes:
       - ./logs/nginx:/var/log/nginx
+      - ./public:/var/www/app/public
+      - ./vendor:/var/www/app/vendor
 
 #  elk:
 #    build: ./.docker/elk
@@ -41,12 +43,10 @@ services:
 #      - nginx
 
   pma:
-    build: server/pma
+    build: docker/pma
     environment:
       - PMA_HOST=db
       - PMA_USER=user
       - PMA_PASSWORD=password
     ports:
       - "37680:80"
-    links:
-      - db

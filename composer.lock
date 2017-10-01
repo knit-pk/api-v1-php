@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "977114595e2493e1282c257a10e0996b",
+    "content-hash": "136fed5aa25099417562e265f6ac981e",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -4945,16 +4945,16 @@
         },
         {
             "name": "javiereguiluz/easyadmin-bundle",
-            "version": "v1.17.1",
+            "version": "v1.17.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/javiereguiluz/EasyAdminBundle.git",
-                "reference": "4d330c1da3a05f2e30e5e62d80123a2e6fdcf6c0"
+                "reference": "8e0142534dfa94d59f55314818bbdaca76937d70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/javiereguiluz/EasyAdminBundle/zipball/4d330c1da3a05f2e30e5e62d80123a2e6fdcf6c0",
-                "reference": "4d330c1da3a05f2e30e5e62d80123a2e6fdcf6c0",
+                "url": "https://api.github.com/repos/javiereguiluz/EasyAdminBundle/zipball/8e0142534dfa94d59f55314818bbdaca76937d70",
+                "reference": "8e0142534dfa94d59f55314818bbdaca76937d70",
                 "shasum": ""
             },
             "require": {
@@ -5030,7 +5030,7 @@
                 "backend",
                 "generator"
             ],
-            "time": "2017-09-29T18:31:39+00:00"
+            "time": "2017-10-01T16:48:33+00:00"
         },
         {
             "name": "myclabs/deep-copy",
