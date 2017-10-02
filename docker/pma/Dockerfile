@@ -1,1 +1,7 @@
-FROM phpmyadmin/phpmyadmin:latest
+FROM phpmyadmin/phpmyadmin:4.7
+
+RUN apk update && apk upgrade && \
+    apk add curl
+RUN curl https://files.phpmyadmin.net/themes/fallen/0.5/fallen-0.5.zip --output /www/themes/fallen.zip && \
+    unzip /www/themes/fallen.zip -d /www/themes && \
+    rm /www/themes/fallen.zip

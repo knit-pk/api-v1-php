@@ -1,5 +1,7 @@
 logs
 .env.mydevil
+config/jwt
+supervisord.pid
 
 ###> symfony/framework-bundle ###
 .env

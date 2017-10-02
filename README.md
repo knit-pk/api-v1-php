@@ -7,7 +7,7 @@ Development configuration of KNIT API written in PHP, deployed using docker.
 - [Postman Collection](#postman-collection)
 
 ## Run project
-Requirements to work with project: `git`, `docker`, `docker-compose`, `composer`
+Requirements to work with project: `git`, `docker`, `docker-compose`
 
 ### Installation
 
@@ -44,8 +44,8 @@ Requirements to work with project: `git`, `docker`, `docker-compose`, `composer`
 Docker images:
 - PHP (php:7.1-fpm-alpine)
 - Nginx (nginx:alpine)
-- Mysql (mysql:5.7)
-- PhpMyAdmin (phpmyadmin/phpmyadmin:latest)
+- MySQL (mysql:5.7)
+- PhpMyAdmin (phpmyadmin/phpmyadmin:4.7)
 
 PHP Stack:
 - Symfony (Flex)
