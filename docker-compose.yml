@@ -19,6 +19,8 @@ services:
     volumes:
       - .:/var/www/app
       - ./logs/app:/var/www/app/var/logs
+      - ./logs/php:/var/log/php
+      - ./logs/supervisor:/var/log/supervisor
       - app_var:/var/www/app/var
 
   nginx:
@@ -32,15 +34,13 @@ services:
       - ./vendor:/var/www/app/vendor
 
 #  elk:
-#    build: ./.docker/elk
+#    build: ./docker/elk
 #    ports:
 #      - "8080:80"
 #    volumes:
-#      - ./server/elk/logstash:/etc/logstash
-#      - ./server/elk/logstash/patterns:/opt/logstash/patterns
-#    volumes_from:
-#      - php
-#      - nginx
+#      - ./docker/elk/logstash:/etc/logstash
+#      - ./docker/elk/logstash/patterns:/opt/logstash/patterns
+#      - ./logs:/var/log
 
   pma:
     build: docker/pma

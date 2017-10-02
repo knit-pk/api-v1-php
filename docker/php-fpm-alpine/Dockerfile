@@ -6,7 +6,7 @@ ENV TZ=${TIMEZONE}
 # Update packages
 RUN apk update && \
     apk upgrade && \
-    apk add tzdata g++ icu-dev make zip git autoconf && \
+    apk add tzdata g++ icu-dev make zip git autoconf supervisor && \
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
     echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  && \
@@ -30,7 +30,21 @@ RUN apk del tzdata
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Run start.sh
-COPY start.sh /usr/local/bin
+# Move startup.sh for local scripts run one time
+COPY app_startup.sh /usr/local/bin
+
+# Supervisor configuration
+COPY supervisord.conf /etc/supervisord.conf
+
+# Make structure for logs
+RUN mkdir -p /var/www/app/var/logs && \
+    touch /var/www/app/var/logs/startup.log
+RUN mkdir -p /var/log/supervisor && \
+    touch /var/log/supervisor/supervisor.log
+RUN mkdir -p /var/log/php && \
+    touch /var/log/php/fpm.log 
+
+# Run supervisor
+ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf"]
 
 WORKDIR /var/www/app

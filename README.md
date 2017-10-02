@@ -13,34 +13,31 @@ Requirements to work with project: `git`, `docker`, `docker-compose`, `composer`
 
 1. Clone repository
    ```bash
-   git clone https://github.com/knit-pk/api-v1-php.git
-   cd api-v1-php
+   $ git clone https://github.com/knit-pk/api-v1-php.git
+   $ cd api-v1-php
    ```
 2. Run project
    ```bash
-   docker-compose -p api up -d # Build and run docker containers
+   $ docker-compose up -d # Build and run docker containers
    ```
-3. (Recommended) Prepare enviroment
-   ```
-   docker exec -it api_php_1 sh -c "start.sh"
-   ```
+3. (Recommended) Verify that containers started without errors and check log files under `/logs`.
 
 ## Useful commands
 
 - Stop project (does not destroy data)
     ```bash
-    docker-compose -p api stop
+    $ docker-compose stop
     ```
 
 - Down project (destroys data)
     ```bash
-    docker-compose -p api down
+    $ docker-compose down
     ```
 
-- Rebuild images
+- Rebuild docker images
     ```bash
-    docker-compose -p api build
-    docker-compose -p api up -d 
+    $ docker-compose build
+    $ docker-compose up -d 
     ```
 
 ## Informations
