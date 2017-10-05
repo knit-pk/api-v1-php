@@ -12,5 +12,7 @@ php71 composer.phar install -o --no-scripts
 php71 bin/console cache:clear
 php71 bin/console cache:warmup
 gmake generate-jwt-keys
-php71 bin/console assets:install --symlink --relative public
-cp -a public/* ../public_html
+rm -rf ../public_html/bundles
+php71 bin/console assets:install --symlink --relative ../public_html
+cp public/index.php ../public_html
+cp public/.htaccess ../public_html
