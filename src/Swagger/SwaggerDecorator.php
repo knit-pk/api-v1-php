@@ -11,9 +11,12 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 final class SwaggerDecorator implements NormalizerInterface
 {
     /**
-     * Prefix of secured urls to api resources
+     * Unsecured api docs paths
      */
-    private const SECURED_API_URL_PREFIX = '/v1/';
+    private const NOT_SECURED_PATHS = [
+        '/token' => ['post'],
+        '/token/refresh' => ['post'],
+    ];
 
     /**
      * Authorization parameter to secured routes
@@ -54,17 +57,16 @@ final class SwaggerDecorator implements NormalizerInterface
 
         // Prepend authorization parameter to paths
         foreach ($paths as $path => $methods) {
-            if (
-                0 === strpos($path, self::SECURED_API_URL_PREFIX) &&
-                0 !== count($methods)
-            ) {
-                /** @var array $methods */
-                /** @var ArrayObject $swagger */
-                foreach ($methods as $method => $swagger) {
+            /** @var array $methods */
+            /** @var ArrayObject $swagger */
+            foreach ($methods as $method => $swagger) {
+                if (
+                    !array_key_exists($path, self::NOT_SECURED_PATHS) ||
+                    !in_array($method, self::NOT_SECURED_PATHS[$path], true)
+                ) {
                     if (!$swagger instanceof ArrayObject) {
                         throw new RuntimeException(sprintf('[Swagger Documentation] Item `swagger.paths[%s][%s]` expected to be represented by an ArrayObject.', $path, $method));
                     }
-
                     $this->addAuthorizationParameter($swagger);
                 }
             }
