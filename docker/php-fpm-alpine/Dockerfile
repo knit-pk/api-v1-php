@@ -3,13 +3,24 @@ FROM php:7.1-fpm-alpine
 ARG TIMEZONE="Europe/Warsaw"
 ENV TZ=${TIMEZONE}
 
-# Update packages
-RUN apk update && \
-    apk upgrade && \
-    apk add tzdata g++ icu-dev make zip git autoconf supervisor && \
+# Install custom packages
+RUN apk update && apk upgrade && \
+    apk add --update --no-cache tzdata zip supervisor make
+
+# Install xdebug via pecl
+RUN docker-php-source extract && \
+    apk add --no-cache --virtual .phpize-deps-configure $PHPIZE_DEPS && \
     pecl install xdebug && \
-    docker-php-ext-enable xdebug && \
-    echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  && \
+    pecl install apcu && \
+    docker-php-ext-enable xdebug apcu && \
+    apk del .phpize-deps-configure && \
+    docker-php-source delete
+
+# Install php extensions available by docker-php-ext-install command
+RUN docker-php-ext-install pdo_mysql opcache
+
+# Configure xdebug
+RUN echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  && \
     echo "xdebug.remote_autostart=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
@@ -20,9 +31,6 @@ RUN apk update && \
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone && \
     printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini && \
     "date"
-
-# Install php extensions
-RUN docker-php-ext-install pdo pdo_mysql
 
 # Remove unneded packages
 RUN apk del tzdata

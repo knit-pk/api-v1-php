@@ -4945,16 +4945,16 @@
         },
         {
             "name": "javiereguiluz/easyadmin-bundle",
-            "version": "v1.17.2",
+            "version": "v1.17.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/javiereguiluz/EasyAdminBundle.git",
-                "reference": "8e0142534dfa94d59f55314818bbdaca76937d70"
+                "reference": "53b72b066b0372733b5538d985e1fcb526417847"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/javiereguiluz/EasyAdminBundle/zipball/8e0142534dfa94d59f55314818bbdaca76937d70",
-                "reference": "8e0142534dfa94d59f55314818bbdaca76937d70",
+                "url": "https://api.github.com/repos/javiereguiluz/EasyAdminBundle/zipball/53b72b066b0372733b5538d985e1fcb526417847",
+                "reference": "53b72b066b0372733b5538d985e1fcb526417847",
                 "shasum": ""
             },
             "require": {
@@ -5030,7 +5030,7 @@
                 "backend",
                 "generator"
             ],
-            "time": "2017-10-01T16:48:33+00:00"
+            "time": "2017-10-02T10:53:07+00:00"
         },
         {
             "name": "myclabs/deep-copy",
