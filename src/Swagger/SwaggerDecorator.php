@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Swagger;
 
-use ApiPlatform\Core\Swagger\Serializer\DocumentationNormalizer;
 use ArrayObject;
 use RuntimeException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -14,7 +13,7 @@ final class SwaggerDecorator implements NormalizerInterface
      * Unsecured api docs paths
      */
     private const NOT_SECURED_PATHS = [
-        '/token' => ['post'],
+        '/token'         => ['post'],
         '/token/refresh' => ['post'],
     ];
 
@@ -32,17 +31,27 @@ final class SwaggerDecorator implements NormalizerInterface
     ];
 
     /**
-     * @var DocumentationNormalizer
+     * @var \Symfony\Component\Serializer\Normalizer\NormalizerInterface
      */
     private $decorated;
 
 
+    /**
+     * SwaggerDecorator constructor.
+     *
+     * @param \Symfony\Component\Serializer\Normalizer\NormalizerInterface $decorated
+     */
     public function __construct(NormalizerInterface $decorated)
     {
         $this->decorated = $decorated;
     }
 
 
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \RuntimeException
+     */
     public function normalize($object, $format = null, array $context = [])
     {
         $docs = $this->decorated->normalize($object, $format, $context);
@@ -76,12 +85,20 @@ final class SwaggerDecorator implements NormalizerInterface
     }
 
 
+    /**
+     * @inheritdoc
+     */
     public function supportsNormalization($data, $format = null): bool
     {
         return $this->decorated->supportsNormalization($data, $format);
     }
 
 
+    /**
+     * Add additional paths to swagger documentation
+     *
+     * @param \ArrayObject $paths
+     */
     private function appendAdditionalPaths(ArrayObject $paths)
     {
         $additionalPaths = [

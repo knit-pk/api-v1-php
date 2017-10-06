@@ -49,7 +49,14 @@ services:
             tags:
                 - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
+    ### Modify swagger documentation
     'App\Swagger\SwaggerDecorator':
             decorates: 'api_platform.swagger.normalizer.documentation'
             arguments: [ '@App\Swagger\SwaggerDecorator.inner' ]
+            autoconfigure: false
+
+    ### Dynamically inject serialization groups for admins
+    'App\Serializer\AdminContextBuilder':
+            decorates: 'api_platform.serializer.context_builder'
+            arguments: [ '@App\Serializer\AdminContextBuilder.inner' ]
             autoconfigure: false

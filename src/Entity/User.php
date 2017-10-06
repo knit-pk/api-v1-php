@@ -112,6 +112,21 @@ class User extends Base
      */
     protected $updatedAt;
 
+    /**
+     * @Groups({"Admin", "Read", "Write"})
+     */
+    protected $roles;
+
+    /**
+     * @Groups({"Admin", "Read", "Write"})
+     */
+    protected $enabled;
+
+    /**
+     * @Groups({"Admin", "Read"})
+     */
+    protected $lastLogin;
+
 
     /**
      * @param string|null $fullname
