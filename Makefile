@@ -2,6 +2,14 @@ ifndef APP_ENV
 	include .env
 endif
 
+fix-easy-admin-cache:
+	@printf "Fixing easy admin cache.\n"
+	@chmod 777 ${APP_VAR_PATH}/cache/${APP_ENV}/easy_admin
+.PHONY: fix-easy-admin-cache
+
+cache-warmup-docker: cache-warmup
+	@${MAKE} fix-easy-admin-cache
+.PHONY: cache-warmup-docker
 
 ###> symfony/framework-bundle ###
 CONSOLE := $(shell which bin/console)

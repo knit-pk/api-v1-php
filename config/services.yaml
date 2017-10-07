@@ -56,7 +56,7 @@ services:
             autoconfigure: false
 
     ### Dynamically inject serialization groups for admins
-    'App\Serializer\AdminContextBuilder':
+    'App\Serializer\UserContextBuilder':
             decorates: 'api_platform.serializer.context_builder'
-            arguments: [ '@App\Serializer\AdminContextBuilder.inner' ]
+            arguments: [ '@App\Serializer\UserContextBuilder.inner' ]
             autoconfigure: false

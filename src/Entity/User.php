@@ -14,8 +14,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(attributes={
- *     "normalization_context"={"groups"={"Read"}},
- *     "denormalization_context"={"groups"={"Write"}},
+ *     "normalization_context"={"groups"={"UserRead"}},
+ *     "denormalization_context"={"groups"={"UserWrite"}},
  *     "access_control"="is_granted('ROLE_READER')",
  * },
  * collectionOperations={
@@ -56,14 +56,14 @@ class User extends Base
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
-     * @Groups({"Read"})
+     * @Groups({"UserRead"})
      */
     protected $id;
 
     /**
      * @var string
      *
-     * @Groups({"Read","Write"})
+     * @Groups({"UserRead","UserWrite"})
      */
     protected $email;
 
@@ -72,21 +72,21 @@ class User extends Base
      *
      * @ORM\Column(type="string",nullable=true)
      *
-     * @Groups({"Read","Write"})
+     * @Groups({"UserRead","UserWrite"})
      */
     protected $fullname;
 
     /**
      * @var string
      *
-     * @Groups({"Write"})
+     * @Groups({"UserWrite"})
      */
     protected $plainPassword;
 
     /**
      * @var string
      *
-     * @Groups({"Read","Write"})
+     * @Groups({"UserRead","UserWrite"})
      */
     protected $username;
 
@@ -97,7 +97,7 @@ class User extends Base
      *
      * @Gedmo\Timestampable(on="create")
      *
-     * @Groups({"Read"})
+     * @Groups({"UserRead"})
      */
     protected $createdAt;
 
@@ -108,22 +108,22 @@ class User extends Base
      *
      * @Gedmo\Timestampable(on="update")
      *
-     * @Groups({"Read"})
+     * @Groups({"UserRead"})
      */
     protected $updatedAt;
 
     /**
-     * @Groups({"Admin", "Read", "Write"})
+     * @Groups({"AdminWrite", "AdminRead"})
      */
     protected $roles;
 
     /**
-     * @Groups({"Admin", "Read", "Write"})
+     * @Groups({"AdminWrite", "AdminRead"})
      */
     protected $enabled;
 
     /**
-     * @Groups({"Admin", "Read"})
+     * @Groups({"AdminRead"})
      */
     protected $lastLogin;
 

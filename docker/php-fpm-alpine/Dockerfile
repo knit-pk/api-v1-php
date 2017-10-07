@@ -44,11 +44,14 @@ COPY app_startup.sh /usr/local/bin
 # Supervisor configuration
 COPY supervisord.conf /etc/supervisord.conf
 
-# Make structure for logs
-RUN mkdir -p /var/www/app/var/logs && \
-    touch /var/www/app/var/logs/startup.log
+# Make structure with proper permissions for application and logs
+RUN mkdir -p /var/app/cache && \
+    mkdir /var/app/log && \
+    chown -R www-data:www-data /var/app && \
+    chmod 777 /var/app/cache
 RUN mkdir -p /var/log/supervisor && \
-    touch /var/log/supervisor/supervisor.log
+    touch /var/log/supervisor/supervisor.log && \
+    touch /var/log/supervisor/startup.log
 RUN mkdir -p /var/log/php && \
     touch /var/log/php/fpm.log 
 

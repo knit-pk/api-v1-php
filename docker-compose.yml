@@ -1,6 +1,4 @@
 version: "3"
-volumes:
-  app_var:
 
 services:
   db:
@@ -16,12 +14,13 @@ services:
   php:
     build:
       context: ./docker/php-fpm-alpine
+    environment:
+      - APP_VAR_PATH=/var/app
     volumes:
       - .:/var/www/app
-      - ./logs/app:/var/www/app/var/logs
+      - ./logs/app:/var/app/log
       - ./logs/php:/var/log/php
       - ./logs/supervisor:/var/log/supervisor
-      - app_var:/var/www/app/var
 
   nginx:
     build:

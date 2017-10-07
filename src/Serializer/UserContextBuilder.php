@@ -5,10 +5,11 @@ namespace App\Serializer;
 
 use ApiPlatform\Core\Exception\RuntimeException;
 use ApiPlatform\Core\Serializer\SerializerContextBuilderInterface;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-final class AdminContextBuilder implements SerializerContextBuilderInterface
+final class UserContextBuilder implements SerializerContextBuilderInterface
 {
     /**
      * @var \ApiPlatform\Core\Serializer\SerializerContextBuilderInterface
@@ -33,6 +34,7 @@ final class AdminContextBuilder implements SerializerContextBuilderInterface
         $this->authorizationChecker = $authorizationChecker;
     }
 
+
     /**
      * Creates a serialization context from a Request.
      *
@@ -47,9 +49,14 @@ final class AdminContextBuilder implements SerializerContextBuilderInterface
     public function createFromRequest(Request $request, bool $normalization, array $extractedAttributes = null): array
     {
         $context = $this->decorated->createFromRequest($request, $normalization, $extractedAttributes);
+        $subject = $request->attributes->get('data');
 
-        if(isset($context['groups']) && $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-            $context['groups'][] = 'Admin';
+        if (
+            $subject instanceof User &&
+            isset($context['groups']) &&
+            $this->authorizationChecker->isGranted('ROLE_ADMIN')
+        ) {
+            $context['groups'][] = $normalization ? 'AdminRead' : 'AdminWrite';
         }
 
         return $context;

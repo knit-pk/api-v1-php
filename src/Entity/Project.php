@@ -10,6 +10,7 @@ use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(attributes={
@@ -46,6 +47,8 @@ class Project
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     *
+     * @Assert\NotBlank()
      */
     protected $author;
 
@@ -79,6 +82,7 @@ class Project
      *
      * @ORM\Column(type="string")
      *
+     * @Assert\NotBlank()
      * @Assert\Length(max="200")
      */
     protected $url;

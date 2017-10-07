@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 # Run local scripts
+chmod 777 /var/app/log
 cd /var/www/app
 
 # Copy default dotenv file
@@ -11,9 +12,7 @@ make generate-jwt-keys
 
 # Install vendor packages, and publish public/bundles
 composer install -n -o --no-progress --no-ansi --no-suggest
-
-# Var needs to be writable by user and application
-chmod 777 -R var
+make fix-easy-admin-cache
 
 # Update/create database schema and seed with data
 bin/console doctrine:schema:drop --force
