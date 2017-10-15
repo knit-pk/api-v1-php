@@ -55,7 +55,15 @@ security:
 
         docs:
             pattern: ^/(?:docs|index|contexts|_profiler|_wdt)(?:\..*)?
+            stateless: true
             anonymous: true
+            provider: fos_userbundle
+            lexik_jwt:
+                authorization_header:
+                    enabled: true
+                    prefix: Bearer
+                throw_exceptions: false
+                create_entry_point: true
 
         api:
             pattern: ^/\w+
