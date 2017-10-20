@@ -1,51 +1,62 @@
 version: "3"
 
 services:
-  db:
-    image: mysql:5.7
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
-      - MYSQL_DATABASE=database
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
+    # Database
+    db:
+        image: mysql:5.7
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_RANDOM_ROOT_PASSWORD=yes
+            - MYSQL_DATABASE=database
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=password
 
-  php:
-    build:
-      context: ./docker/php-fpm-alpine
-    environment:
-      - APP_VAR_PATH=/var/app
-    volumes:
-      - .:/var/www/app
-      - ./logs/app:/var/app/log
-      - ./logs/php:/var/log/php
-      - ./logs/supervisor:/var/log/supervisor
+    # PHP-FPM
+    php:
+        depends_on:
+            - db
+        build:
+            context: ./docker/php
+        environment:
+            - APP_VAR_PATH=/var/app
+        volumes:
+            - .:/var/www/app
+            - ./logs/app:/var/app/log
+            - ./logs/php:/var/log/php
+            - ./logs/supervisor:/var/log/supervisor
 
-  nginx:
-    build:
-      context: ./docker/nginx-alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./logs/nginx:/var/log/nginx
-      - ./public:/var/www/app/public
-      - ./vendor:/var/www/app/vendor
+    # Nginx
+    api:
+        depends_on:
+            - php
+        build:
+            context: ./docker/api
+        ports:
+            - "8080:80"
+        volumes:
+            - ./logs/nginx:/var/log/nginx
+            - ./public:/var/www/app/public
+            - ./vendor:/var/www/app/vendor
 
-#  elk:
-#    build: ./docker/elk
-#    ports:
-#      - "8080:80"
-#    volumes:
-#      - ./docker/elk/logstash:/etc/logstash
-#      - ./docker/elk/logstash/patterns:/opt/logstash/patterns
-#      - ./logs:/var/log
+    # Varnish (Http Cache)
+    cache:
+        build:
+            context: ./docker/cache
+        depends_on:
+            - api
+        ports:
+            - "80:80"
 
-  pma:
-    build: docker/pma
-    environment:
-      - PMA_HOST=db
-      - PMA_USER=user
-      - PMA_PASSWORD=password
-    ports:
-      - "37680:80"
+    # Debug/Development tools
+    pma:
+        build:
+            context: ./docker/pma
+        depends_on:
+            - db
+        environment:
+            - PMA_HOST=db
+            - PMA_USER=user
+            - PMA_PASSWORD=password
+        ports:
+            - "8000:80"
