@@ -47,7 +47,7 @@ api_platform:
         etag: true
 
         # Default value for the response max age.
-        max_age: 3600
+        max_age: 0
 
         # Default value for the response shared (proxy) max age.
         shared_max_age: 3600
