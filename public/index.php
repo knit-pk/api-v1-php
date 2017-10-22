@@ -15,7 +15,7 @@ if (!isset($_SERVER['APP_ENV'])) {
     (new Dotenv())->load(FULL_APP_PATH . '.env');
 }
 
-if ($_SERVER['APP_DEBUG'] ?? false) {
+if ($debug = $_SERVER['APP_DEBUG'] ?? false) {
     // WARNING: You should setup permissions the proper way!
     // REMOVE the following PHP line and read
     // https://symfony.com/doc/current/book/installation.html#checking-symfony-application-configuration-and-setup
@@ -24,9 +24,17 @@ if ($_SERVER['APP_DEBUG'] ?? false) {
     Debug::enable();
 }
 
-// Request::setTrustedProxies(['0.0.0.0/0'], Request::HEADER_FORWARDED);
+if ($trustedHosts = $_SERVER['APP_TRUSTED_HOSTS'] ?? false) {
+    $trustedHosts = explode(',', trim($trustedHosts, '[]'));
+    Request::setTrustedHosts($trustedHosts);
+}
 
-$kernel = new Kernel($_SERVER['APP_ENV'] ?? 'dev', $_SERVER['APP_DEBUG'] ?? false);
+if ($trustedProxies = $_SERVER['APP_TRUSTED_PROXIES'] ?? false) {
+    $trustedProxies = explode(',', trim($trustedProxies, '[]'));
+    Request::setTrustedProxies($trustedProxies, Request::HEADER_X_FORWARDED_ALL);
+}
+
+$kernel = new Kernel($_SERVER['APP_ENV'] ?? 'dev', $debug);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
