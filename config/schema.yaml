@@ -1,0 +1,22 @@
+namespaces:
+    entity: Entity
+
+types:
+    Person:
+        properties:
+            name: ~
+            alternateName: ~
+            email: ~
+#            gender: ~
+#            birthDate: ~
+#            telephone: ~
+    Article:
+        properties:
+            articleBody: ~
+            articleSection: ~
+            about: { range: "Text" }
+            author: { range: "Person" }
+            datePublished: { range: "DateTime" }
+            dateModified: { range: "DateTime" }
+            dateCreated: { range: "DateTime" }
+            name: ~
