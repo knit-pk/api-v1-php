@@ -1,6 +1,5 @@
 nelmio_cors:
     defaults:
-        origin_regex: true
         allow_credentials: false
         allow_origin: ['http://localhost:[0-9]+']
         allow_headers: ['Content-type', 'Authorization']
