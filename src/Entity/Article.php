@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource(iri="http://schema.org/Article",
  * attributes={
  *   "normalization_context"={"groups"={"ArticleRead"}},
+ *   "filters"={"article.search_filter"},
  * },
  * collectionOperations={
  *     "get"={
