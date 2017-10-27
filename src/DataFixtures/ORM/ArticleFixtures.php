@@ -33,11 +33,11 @@ class ArticleFixtures extends Fixture
 
             $article = new Article();
             $article->setTitle($articleTitle);
-            $article->setBody(sprintf('Awesome short %s about.', $articleTitle));
-            $article->setAbout(sprintf('Awesome %s content.', $articleTitle));
+            $article->setContent(sprintf('Awesome short %s about.', $articleTitle));
+            $article->setDescription(sprintf('Awesome %s content.', $articleTitle));
             $article->setAuthor($projectAuthor);
             for ($j = 1; $j <= 10 % $i; ++$j) {
-                $article->addSection('category-' . $j);
+                $article->addCategory('category-' . $j);
             }
 
             $manager->persist($article);

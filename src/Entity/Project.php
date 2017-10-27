@@ -14,6 +14,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource(attributes={
  *   "access_control"="is_granted('ROLE_READER')",
+ * },
+ * itemOperations={
+ *     "get"={
+ *          "method"="GET",
+ *     },
+ *     "put"={
+ *          "method"="PUT",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     },
+ *     "delete"={
+ *          "method"="DELETE",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     },
  * })
  *
  * @ORM\Entity()

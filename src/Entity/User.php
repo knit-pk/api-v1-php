@@ -24,11 +24,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * attributes={
  *     "normalization_context"={"groups"={"UserRead"}},
  *     "denormalization_context"={"groups"={"UserWrite"}},
- *     "access_control"="is_granted('ROLE_READER')",
  * },
  * collectionOperations={
  *     "get"={
  *          "method"="GET",
+ *          "access_control"="is_granted('ROLE_READER')",
  *     },
  *     "post"={
  *          "method"="POST",
@@ -38,10 +38,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * itemOperations={
  *     "get"={
  *          "method"="GET",
+ *          "access_control"="is_granted('ROLE_READER')",
  *     },
  *     "put"={
  *          "method"="PUT",
- *          "access_control"="is_granted('ROLE_USER_WRITER') or (user and object.isUser(user))",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isUser(user))",
  *     },
  *     "delete"={
  *          "method"="DELETE",
@@ -129,17 +130,17 @@ class User extends Base
     protected $updatedAt;
 
     /**
-     * @Groups({"AdminWrite", "AdminRead"})
+     * @Groups({"UserAdminWrite", "UserAdminRead"})
      */
     protected $roles;
 
     /**
-     * @Groups({"AdminWrite", "AdminRead"})
+     * @Groups({"UserAdminWrite", "UserAdminRead"})
      */
     protected $enabled;
 
     /**
-     * @Groups({"AdminRead"})
+     * @Groups({"UserAdminRead"})
      */
     protected $lastLogin;
 

@@ -61,12 +61,6 @@ services:
             arguments: [ '@App\Serializer\AdminContextBuilder.inner' ]
             autoconfigure: false
 
-    'App\Metadata\Property\Factory\AdminPropertyNameCollectionFactory':
-            decorates: 'api_platform.metadata.property.name_collection_factory'
-            decoration_priority: -20
-            arguments: [ '@App\Metadata\Property\Factory\AdminPropertyNameCollectionFactory.inner' ]
-            autoconfigure: false
-
     'App\Metadata\Resource\Factory\AdminResourceMetadataFactory':
             decorates: 'api_platform.metadata.resource.metadata_factory'
             decoration_priority: -20

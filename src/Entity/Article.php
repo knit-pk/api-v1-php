@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,7 +22,33 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(iri="http://schema.org/Article",
  * attributes={
- *   "access_control"="is_granted('ROLE_READER')",
+ *   "normalization_context"={"groups"={"ArticleRead"}},
+ * },
+ * collectionOperations={
+ *     "get"={
+ *          "method"="GET",
+ *          "access_control"="is_granted('ROLE_READER')",
+ *     },
+ *     "post"={
+ *          "method"="POST",
+ *          "access_control"="is_granted('ROLE_READER')",
+ *          "denormalization_context"={"groups"={"ArticleWrite"}},
+ *     },
+ * },
+ * itemOperations={
+ *     "get"={
+ *          "method"="GET",
+ *          "access_control"="is_granted('ROLE_READER')",
+ *     },
+ *     "put"={
+ *          "method"="PUT",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *          "denormalization_context"={"groups"={"ArticleWrite"}},
+ *     },
+ *     "delete"={
+ *          "method"="DELETE",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     },
  * })
  *
  * @ORM\Entity()
@@ -36,6 +63,8 @@ class Article
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     *
+     * @Groups({"ArticleRead"})
      */
     protected $id;
 
@@ -45,6 +74,8 @@ class Article
      * @ORM\Column(type="string", unique=true)
      *
      * @Gedmo\Slug(fields={"createdAt", "title"},separator="-",updatable=true,unique=true,dateFormat="Y/m")
+     *
+     * @Groups({"ArticleRead"})
      */
     protected $code;
 
@@ -56,6 +87,8 @@ class Article
      * @ApiProperty(iri="http://schema.org/name")
      *
      * @Assert\NotBlank()
+     *
+     * @Groups({"ArticleRead", "ArticleWrite"})
      */
     protected $title;
 
@@ -67,17 +100,21 @@ class Article
      * @ApiProperty(iri="http://schema.org/articleBody")
      *
      * @Assert\NotBlank()
+     *
+     * @Groups({"ArticleRead", "ArticleWrite"})
      */
-    protected $body;
+    protected $content;
 
     /**
-     * @var string[]|null articles may belong to one or more 'sections' in a magazine or newspaper, such as Sports, Lifestyle, etc
+     * @var string[]|null articles may belong to one or more categories in a magazine or newspaper, such as Sports, Lifestyle, etc.
      *
      * @ORM\Column(type="array")
      *
      * @ApiProperty(iri="http://schema.org/articleSection")
+     *
+     * @Groups({"ArticleRead", "ArticleWrite"})
      */
-    protected $sections;
+    protected $categories;
 
     /**
      * @var string|null the subject matter of the content
@@ -87,8 +124,10 @@ class Article
      * @ApiProperty(iri="http://schema.org/about")
      *
      * @Assert\NotBlank()
+     *
+     * @Groups({"ArticleRead", "ArticleWrite"})
      */
-    protected $about;
+    protected $description;
 
     /**
      * @var \App\Entity\User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
@@ -99,6 +138,8 @@ class Article
      * @ApiProperty(iri="http://schema.org/author")
      *
      * @Assert\NotBlank()
+     *
+     * @Groups({"ArticleRead", "ArticleWrite"})
      */
     protected $author;
 
@@ -111,7 +152,9 @@ class Article
      *
      * @Assert\DateTime()
      *
-     * @Gedmo\Timestampable(on="change",field="published",value="true")
+     * @Gedmo\Timestampable(on="change",field="published",value=true)
+     *
+     * @Groups({"ArticleRead"})
      */
     protected $publishedAt;
 
@@ -119,6 +162,8 @@ class Article
      * @var bool determines whether article was published
      *
      * @ORM\Column(type="boolean")
+     *
+     * @Groups({"ArticleRead", "ArticleAdminUpdate"})
      */
     protected $published;
 
@@ -132,6 +177,8 @@ class Article
      * @Gedmo\Timestampable(on="update")
      *
      * @Assert\DateTime()
+     *
+     * @Groups({"ArticleRead"})
      */
     protected $updatedAt;
 
@@ -145,13 +192,15 @@ class Article
      * @Gedmo\Timestampable(on="create")
      *
      * @Assert\DateTime()
+     *
+     * @Groups({"ArticleRead"})
      */
     protected $createdAt;
 
 
     public function __construct()
     {
-        $this->sections = new ArrayCollection();
+        $this->categories = new ArrayCollection();
         $this->published = false;
     }
 
@@ -174,45 +223,45 @@ class Article
     }
 
 
-    public function setBody(?string $body): void
+    public function setContent(?string $content): void
     {
-        $this->body = $body;
+        $this->content = $content;
     }
 
 
-    public function getBody(): ?string
+    public function getContent(): ?string
     {
-        return $this->body;
+        return $this->content;
     }
 
 
-    public function addSection(string $section): void
+    public function addCategory(string $category): void
     {
-        $this->sections[] = $section;
+        $this->categories[] = $category;
     }
 
 
-    public function removeSection(string $section): void
+    public function removeCategory(string $category): void
     {
-        $this->sections->removeElement($section);
+        $this->categories->removeElement($category);
     }
 
 
-    public function getSections(): Collection
+    public function getCategories(): Collection
     {
-        return $this->sections;
+        return $this->categories;
     }
 
 
-    public function setAbout(?string $about): void
+    public function setDescription(?string $description): void
     {
-        $this->about = $about;
+        $this->description = $description;
     }
 
 
-    public function getAbout(): ?string
+    public function getDescription(): ?string
     {
-        return $this->about;
+        return $this->description;
     }
 
 
