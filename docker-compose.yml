@@ -49,14 +49,14 @@ services:
             - "80:80"
 
     # Debug/Development tools
-    pma:
-        build:
-            context: ./docker/pma
-        depends_on:
-            - db
-        environment:
-            - PMA_HOST=db
-            - PMA_USER=user
-            - PMA_PASSWORD=password
-        ports:
-            - "8000:80"
+#    pma:
+#        build:
+#            context: ./docker/pma
+#        depends_on:
+#            - db
+#        environment:
+#            - PMA_HOST=db
+#            - PMA_USER=user
+#            - PMA_PASSWORD=password
+#        ports:
+#            - "8000:80"

@@ -48,3 +48,22 @@ easy_admin:
                     - description
                     - url
                     - author
+        Article:
+            class: App\Entity\Article
+            list:
+                fields:
+                    - title
+                    - author
+                    - createdAt
+                    - published
+                    - publishedAt
+            form:
+                fields:
+                    - title
+                    - description
+                    - content
+                    - categories
+                    - author
+            edit:
+                fields:
+                    - published

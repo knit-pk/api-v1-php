@@ -30,45 +30,48 @@ services:
 
     ### Gedmo doctrine extensions
     gedmo.listener.sluggable:
-            class: Gedmo\Sluggable\SluggableListener
-            tags:
-                - { name: doctrine.event_subscriber, connection: default }
-            calls:
-                - [ setAnnotationReader, [ "@annotation_reader" ] ]
+        class: Gedmo\Sluggable\SluggableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
 
     gedmo.listener.timestampable:
-            class: Gedmo\Timestampable\TimestampableListener
-            tags:
-                - { name: doctrine.event_subscriber, connection: default }
-            calls:
-                - [ setAnnotationReader, [ "@annotation_reader" ] ]
+        class: Gedmo\Timestampable\TimestampableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
 
     ### Add custom payload to JWT Access Token
     acme_api.event.jwt_created_listener:
-            class: App\EventListener\JWTCreatedListener
-            tags:
-                - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+        class: App\EventListener\JWTCreatedListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
     ### Modify swagger documentation
     'App\Swagger\SwaggerDecorator':
-            decorates: 'api_platform.swagger.normalizer.documentation'
-            arguments: [ '@App\Swagger\SwaggerDecorator.inner' ]
-            autoconfigure: false
+        decorates: 'api_platform.swagger.normalizer.documentation'
+        arguments: [ '@App\Swagger\SwaggerDecorator.inner' ]
+        autoconfigure: false
 
     ### Dynamically inject serialization groups for admins
     'App\Serializer\AdminContextBuilder':
-            decorates: 'api_platform.serializer.context_builder'
-            arguments: [ '@App\Serializer\AdminContextBuilder.inner' ]
-            autoconfigure: false
-
-    'App\Metadata\Property\Factory\AdminPropertyNameCollectionFactory':
-            decorates: 'api_platform.metadata.property.name_collection_factory'
-            decoration_priority: -20
-            arguments: [ '@App\Metadata\Property\Factory\AdminPropertyNameCollectionFactory.inner' ]
-            autoconfigure: false
+        decorates: 'api_platform.serializer.context_builder'
+        arguments: [ '@App\Serializer\AdminContextBuilder.inner' ]
+        autoconfigure: false
 
     'App\Metadata\Resource\Factory\AdminResourceMetadataFactory':
-            decorates: 'api_platform.metadata.resource.metadata_factory'
-            decoration_priority: -20
-            arguments: [ '@App\Metadata\Resource\Factory\AdminResourceMetadataFactory.inner' ]
-            autoconfigure: false
+        decorates: 'api_platform.metadata.resource.metadata_factory'
+        decoration_priority: -20
+        arguments: [ '@App\Metadata\Resource\Factory\AdminResourceMetadataFactory.inner' ]
+        autoconfigure: false
+
+    ### API PLATFORM FILTERS
+    article.search_filter:
+        autoconfigure: false
+        autowire: false
+        public: false
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { code: 'exact', author: 'exact', title: 'partial' } ]
+        tags: [ 'api_platform.filter' ]

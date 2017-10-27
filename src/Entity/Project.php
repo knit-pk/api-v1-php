@@ -10,11 +10,23 @@ use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(attributes={
  *   "access_control"="is_granted('ROLE_READER')",
+ * },
+ * itemOperations={
+ *     "get"={
+ *          "method"="GET",
+ *     },
+ *     "put"={
+ *          "method"="PUT",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     },
+ *     "delete"={
+ *          "method"="DELETE",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     },
  * })
  *
  * @ORM\Entity()
@@ -93,6 +105,8 @@ class Project
      * @ORM\Column(type="datetime")
      *
      * @Gedmo\Timestampable(on="create")
+     *
+     * @Assert\DateTime()
      */
     protected $createdAt;
 
@@ -102,6 +116,8 @@ class Project
      * @ORM\Column(type="datetime")
      *
      * @Gedmo\Timestampable(on="update")
+     *
+     * @Assert\DateTime()
      */
     protected $updatedAt;
 
@@ -213,13 +229,20 @@ class Project
         return $this->updatedAt;
     }
 
+
     /**
      * @param UserInterface|null $user
      *
      * @return bool
      */
-    public function isAuthor(UserInterface $user = null): bool
+    public function isAuthor(?UserInterface $user): bool
     {
-        return $user instanceof self && $user->id === $this->id;
+        $author = $this->getAuthor();
+
+        if (!$author instanceof User) {
+            return false;
+        }
+
+        return $author->isUser($user);
     }
 }

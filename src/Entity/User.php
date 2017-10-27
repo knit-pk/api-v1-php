@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,16 +12,23 @@ use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(attributes={
+ * An User of KNIT api, concrete type of Person.
+ *
+ * @see http://schema.org/Person Documentation on Schema.org
+ *
+ *
+ * @ApiResource(iri="http://schema.org/Person",
+ * attributes={
  *     "normalization_context"={"groups"={"UserRead"}},
  *     "denormalization_context"={"groups"={"UserWrite"}},
- *     "access_control"="is_granted('ROLE_READER')",
  * },
  * collectionOperations={
  *     "get"={
  *          "method"="GET",
+ *          "access_control"="is_granted('ROLE_READER')",
  *     },
  *     "post"={
  *          "method"="POST",
@@ -30,10 +38,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * itemOperations={
  *     "get"={
  *          "method"="GET",
+ *          "access_control"="is_granted('ROLE_READER')",
  *     },
  *     "put"={
  *          "method"="PUT",
- *          "access_control"="is_granted('ROLE_USER_WRITER') or (user and object.isUser(user))",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isUser(user))",
  *     },
  *     "delete"={
  *          "method"="DELETE",
@@ -61,14 +70,20 @@ class User extends Base
     protected $id;
 
     /**
-     * @var string
+     * @var string email address
+     *
+     * @ApiProperty(iri="http://schema.org/email")
+     *
+     * @Assert\Email()
      *
      * @Groups({"UserRead","UserWrite"})
      */
     protected $email;
 
     /**
-     * @var string
+     * @var string real full name
+     *
+     * @ApiProperty(iri="http://schema.org/name")
      *
      * @ORM\Column(type="string",nullable=true)
      *
@@ -84,7 +99,9 @@ class User extends Base
     protected $plainPassword;
 
     /**
-     * @var string
+     * @var string nickname, an unique alias of the name
+     *
+     * @ApiProperty(iri="http://schema.org/alternateName")
      *
      * @Groups({"UserRead","UserWrite"})
      */
@@ -113,17 +130,17 @@ class User extends Base
     protected $updatedAt;
 
     /**
-     * @Groups({"AdminWrite", "AdminRead"})
+     * @Groups({"UserAdminWrite", "UserAdminRead"})
      */
     protected $roles;
 
     /**
-     * @Groups({"AdminWrite", "AdminRead"})
+     * @Groups({"UserAdminWrite", "UserAdminRead"})
      */
     protected $enabled;
 
     /**
-     * @Groups({"AdminRead"})
+     * @Groups({"UserAdminRead"})
      */
     protected $lastLogin;
 

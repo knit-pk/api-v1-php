@@ -29,3 +29,7 @@ rm -rf ../public_html/bundles
 php71 bin/console assets:install --symlink --relative ../public_html
 cp public/* ../public_html
 sed -i _backup "s~^const APP_PATH.*$~const APP_PATH = \"../${PWD##*/}/\";~g" ../public_html/index.php && rm ../public_html/index.php_backup
+
+php71 bin/console doctrine:schema:drop --force
+php71 bin/console doctrine:schema:create
+php71 bin/console doctrine:fixtures:load -n
