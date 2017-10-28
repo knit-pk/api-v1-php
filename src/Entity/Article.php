@@ -23,12 +23,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource(iri="http://schema.org/Article",
  * attributes={
  *   "normalization_context"={"groups"={"ArticleRead"}},
- *   "filters"={"article.search_filter"},
+ *   "filters"={"article.search_filter","article.boolean_filter","article.group_filter"},
  * },
  * collectionOperations={
  *     "get"={
  *          "method"="GET",
- *          "access_control"="is_granted('ROLE_READER')",
  *     },
  *     "post"={
  *          "method"="POST",
@@ -39,7 +38,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * itemOperations={
  *     "get"={
  *          "method"="GET",
- *          "access_control"="is_granted('ROLE_READER')",
  *     },
  *     "put"={
  *          "method"="PUT",
@@ -88,6 +86,7 @@ class Article
      * @ApiProperty(iri="http://schema.org/name")
      *
      * @Assert\NotBlank()
+     * @Assert\Length(min="3",max="100")
      *
      * @Groups({"ArticleRead", "ArticleWrite"})
      */
@@ -125,6 +124,7 @@ class Article
      * @ApiProperty(iri="http://schema.org/about")
      *
      * @Assert\NotBlank()
+     * @Assert\Length(max="300")
      *
      * @Groups({"ArticleRead", "ArticleWrite"})
      */

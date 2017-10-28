@@ -65,7 +65,7 @@ class User extends Base
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
-     * @Groups({"UserRead"})
+     * @Groups({"UserRead","UserReadLess"})
      */
     protected $id;
 
@@ -76,7 +76,7 @@ class User extends Base
      *
      * @Assert\Email()
      *
-     * @Groups({"UserRead","UserWrite"})
+     * @Groups({"UserRead","UserReadLess","UserWrite"})
      */
     protected $email;
 
@@ -103,7 +103,7 @@ class User extends Base
      *
      * @ApiProperty(iri="http://schema.org/alternateName")
      *
-     * @Groups({"UserRead","UserWrite"})
+     * @Groups({"UserRead","UserReadLess","UserWrite"})
      */
     protected $username;
 
