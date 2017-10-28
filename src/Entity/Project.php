@@ -13,7 +13,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(attributes={
- *   "access_control"="is_granted('ROLE_READER')",
+ *     "filters"={"project.group_filter"},
+ * },
+ * collectionOperations={
+ *     "get"={
+ *          "method"="GET",
+ *     },
+ *     "post"={
+ *          "method"="POST",
+ *          "access_control"="is_granted('ROLE_USER_WRITER')",
+ *     },
  * },
  * itemOperations={
  *     "get"={
