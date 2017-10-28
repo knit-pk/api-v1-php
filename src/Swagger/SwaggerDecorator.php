@@ -15,6 +15,10 @@ final class SwaggerDecorator implements NormalizerInterface
     private const NOT_SECURED_PATHS = [
         '/token'         => ['post'],
         '/token/refresh' => ['post'],
+        '/articles'      => ['get'],
+        '/articles/{id}' => ['get'],
+        '/projects'      => ['get'],
+        '/projects/{id}' => ['get'],
     ];
 
     /**
@@ -25,7 +29,7 @@ final class SwaggerDecorator implements NormalizerInterface
         'name'        => 'Authorization',
         'description' => 'JWT Access Token',
         'in'          => 'header',
-        'default'     => 'Bearer <jwt_access_token>',
+        'default'     => 'Bearer <%JWTAccessToken%>',
         'required'    => true,
         'type'        => 'string',
     ];
