@@ -5,6 +5,7 @@ namespace App\Serializer;
 
 use ApiPlatform\Core\Exception\RuntimeException;
 use ApiPlatform\Core\Serializer\SerializerContextBuilderInterface;
+use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
 use DomainException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -22,7 +23,7 @@ final class AdminContextBuilder implements SerializerContextBuilderInterface
     private $authorizationChecker;
 
     /**
-     * @var \App\Serializer\AdminSerializerGroupFactory
+     * @var \App\Serializer\Group\Factory\AdminSerializerGroupFactory
      */
     private $adminSerializerGroupFactory;
 
@@ -74,7 +75,7 @@ final class AdminContextBuilder implements SerializerContextBuilderInterface
                     $group = 'create';
                     break;
                 default:
-                    throw new DomainException(sprintf('Unsupported http method by AdminContextBuilder: %s.', $request->getMethod()));
+                    throw new DomainException(sprintf('Unsupported HTTP method for Admin context denormalization: %s.', $request->getMethod()));
             }
             $context['groups'][] = $this->adminSerializerGroupFactory->createAdminGroup($context['resource_class'], $group);
         }
