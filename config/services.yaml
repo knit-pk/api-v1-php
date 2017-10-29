@@ -89,7 +89,7 @@ services:
         autowire: false
         public: false
         parent: 'api_platform.serializer.group_filter'
-        arguments: [ 'group', false, ['UserReadLess'] ]
+        arguments: [ 'group', false, ['UserReadLess', 'TagRead'] ]
         tags: [ 'api_platform.filter' ]
 
     project.group_filter:
@@ -98,4 +98,12 @@ services:
         public: false
         parent: 'api_platform.serializer.group_filter'
         arguments: [ 'group', false, ['UserReadLess'] ]
+        tags: [ 'api_platform.filter' ]
+
+    tag.search_filter:
+        autoconfigure: false
+        autowire: false
+        public: false
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { name: 'partial' } ]
         tags: [ 'api_platform.filter' ]
