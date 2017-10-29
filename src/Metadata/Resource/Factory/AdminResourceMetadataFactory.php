@@ -6,7 +6,7 @@ namespace App\Metadata\Resource\Factory;
 use ApiPlatform\Core\Exception\ResourceClassNotFoundException;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use ApiPlatform\Core\Metadata\Resource\ResourceMetadata;
-use App\Serializer\AdminSerializerGroupFactory;
+use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
@@ -24,7 +24,7 @@ final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInter
     private $authorizationChecker;
 
     /**
-     * @var \App\Serializer\AdminSerializerGroupFactory
+     * @var \App\Serializer\Group\Factory\AdminSerializerGroupFactory
      */
     private $adminSerializerGroupFactory;
 
@@ -34,7 +34,7 @@ final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInter
      *
      * @param \ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface $decorated
      * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
-     * @param \App\Serializer\AdminSerializerGroupFactory                                  $adminSerializerGroupFactory
+     * @param \App\Serializer\Group\Factory\AdminSerializerGroupFactory                    $adminSerializerGroupFactory
      */
     public function __construct(ResourceMetadataFactoryInterface $decorated, AuthorizationCheckerInterface $authorizationChecker, AdminSerializerGroupFactory $adminSerializerGroupFactory)
     {
@@ -64,6 +64,8 @@ final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInter
         $attributes = $resourceMetadata->getAttributes();
         if (isset($attributes['normalization_context']['groups'])) {
             $attributes['normalization_context']['groups'][] = $this->adminSerializerGroupFactory->createAdminGroup($resourceClass, 'read');
+
+            $resourceMetadata = $resourceMetadata->withAttributes($attributes);
         }
 
         if (isset($attributes['denormalization_context']['groups'])) {

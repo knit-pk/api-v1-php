@@ -2,10 +2,17 @@ FROM php:7.1-fpm-alpine
 
 ARG TIMEZONE="Europe/Warsaw"
 ENV TZ=${TIMEZONE}
+ENV DOCKERIZE_VERSION v0.5.0
+ENV DOCKERIZE_WAIT_FOR tcp://db:3306
 
 # Install custom packages
 RUN apk update && apk upgrade && \
-    apk add --no-cache tzdata zip supervisor make
+    apk add --no-cache tzdata zip supervisor make openssl
+
+# Install dockerize
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Install xdebug via pecl
 RUN docker-php-source extract && \
