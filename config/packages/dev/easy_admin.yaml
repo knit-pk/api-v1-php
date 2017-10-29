@@ -30,6 +30,7 @@ easy_admin:
                             choices: {
                                 USER: 'ROLE_USER',
                                 READER: 'ROLE_READER',
+                                WRITER: 'ROLE_WRITER',
                                 ADMIN: 'ROLE_ADMIN',
                                 SUPER_ADMIN: 'ROLE_SUPER_ADMIN',
                             } } }
@@ -55,15 +56,25 @@ easy_admin:
                     - title
                     - author
                     - createdAt
+                    - tags
                     - published
-                    - publishedAt
             form:
                 fields:
                     - title
                     - description
                     - content
                     - categories
+                    - tags
                     - author
             edit:
                 fields:
                     - published
+        Tag:
+            class: App\Entity\Tag
+            list:
+                fields:
+                    - name
+                    - code
+            form:
+                fields:
+                    - name

@@ -22,8 +22,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(iri="http://schema.org/Article",
  * attributes={
- *   "normalization_context"={"groups"={"ArticleRead"}},
- *   "filters"={"article.search_filter","article.boolean_filter","article.group_filter"},
+ *     "normalization_context"={"groups"={"ArticleRead"}},
+ *     "filters"={"article.search_filter","article.boolean_filter","article.group_filter"},
  * },
  * collectionOperations={
  *     "get"={
@@ -79,7 +79,7 @@ class Article
     protected $code;
 
     /**
-     * @var string|null the name of the item
+     * @var string|null the title of the article
      *
      * @ORM\Column(type="string", nullable=false)
      *
@@ -115,6 +115,17 @@ class Article
      * @Groups({"ArticleRead", "ArticleWrite"})
      */
     protected $categories;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Tag")
+     * @ORM\JoinTable(name="articles_tags",
+     *      joinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")},
+     * )
+     *
+     * @Groups({"ArticleRead", "ArticleWrite"})
+     */
+    protected $tags;
 
     /**
      * @var string|null the subject matter of the content
@@ -202,6 +213,7 @@ class Article
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->published = false;
     }
 
@@ -251,6 +263,23 @@ class Article
     public function getCategories(): Collection
     {
         return $this->categories;
+    }
+
+    public function addTags(string $tag): void
+    {
+        $this->tags[] = $tag;
+    }
+
+
+    public function removeTag(Tag $tag): void
+    {
+        $this->tags->removeElement($tag);
+    }
+
+
+    public function getTags(): Collection
+    {
+        return $this->tags;
     }
 
 
