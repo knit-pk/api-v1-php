@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Tests\Serializer;
+namespace App\Tests\Serializer\Group\Factory;
 
 use App\Entity\User;
-use App\Serializer\AdminSerializerGroupFactory;
+use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
 use PHPUnit\Framework\TestCase;
 
 class AdminSerializerGroupFactoryTest extends TestCase
 {
 
     /**
-     * @var AdminSerializerGroupFactory
+     * @var \App\Serializer\Group\Factory\AdminSerializerGroupFactory
      */
     private $adminSerializerGroupFactory;
 
@@ -49,6 +49,6 @@ class AdminSerializerGroupFactoryTest extends TestCase
 
     protected function setUp()
     {
-        $this->adminSerializerGroupFactory = new AdminSerializerGroupFactory();
+        $this->adminSerializerGroupFactory = new \App\Serializer\Group\Factory\AdminSerializerGroupFactory();
     }
 }
