@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(attributes={
- *      "filters"={"tag.search_filter"},
+ *      "filters"={"app.tag.search_filter"},
  *      "normalization_context"={"groups"={"TagRead"}},
  *      "denormalization_context"={"groups"={"TagWrite"}},
  * },
