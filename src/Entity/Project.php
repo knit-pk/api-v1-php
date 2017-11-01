@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(attributes={
- *     "filters"={"project.group_filter"},
+ *     "filters"={"app.project.group_filter"},
  * },
  * collectionOperations={
  *     "get"={

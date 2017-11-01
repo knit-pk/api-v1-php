@@ -7,7 +7,7 @@ use ArrayObject;
 use RuntimeException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-final class SwaggerDecorator implements NormalizerInterface
+final class SwaggerDocumentation implements NormalizerInterface
 {
     /**
      * Unsecured api docs paths
@@ -19,6 +19,8 @@ final class SwaggerDecorator implements NormalizerInterface
         '/articles/{id}' => ['get'],
         '/projects'      => ['get'],
         '/projects/{id}' => ['get'],
+        '/tags'          => ['get'],
+        '/tags/{id}'     => ['get'],
     ];
 
     /**

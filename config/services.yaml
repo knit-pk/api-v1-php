@@ -49,10 +49,76 @@ services:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
+    ### API PLATFORM FILTERS
+    app.article.search_filter:
+        autoconfigure: false
+        autowire: false
+        public: false
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { code: 'exact', author: 'exact', title: 'partial' } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.article.boolean_filter:
+        autoconfigure: false
+        autowire: false
+        public: false
+        parent: 'api_platform.doctrine.orm.boolean_filter'
+        arguments: [ { published: ~ } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.article.group_filter:
+        autoconfigure: false
+        autowire: false
+        public: false
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['UserReadLess', 'TagRead'] ]
+        tags: [ 'api_platform.filter' ]
+
+    app.project.group_filter:
+        autoconfigure: false
+        autowire: false
+        public: false
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['UserReadLess'] ]
+        tags: [ 'api_platform.filter' ]
+
+    app.tag.search_filter:
+        autoconfigure: false
+        autowire: false
+        public: false
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { name: 'partial' } ]
+        tags: [ 'api_platform.filter' ]
+
     ### Modify swagger documentation
-    'App\Swagger\SwaggerDecorator':
+    app.swagger.article.boolean_filter:
+        class: App\Swagger\Filter\SwaggerBooleanFilter
+        decorates: 'app.article.boolean_filter'
+        arguments: [ '@app.swagger.article.boolean_filter.inner' ]
+
+    app.swagger.article.search_filter:
+        class: App\Swagger\Filter\SwaggerSearchFilter
+        decorates: 'app.article.search_filter'
+        arguments: [ '@app.swagger.article.search_filter.inner' ]
+
+    app.swagger.article.group_filter:
+        class: App\Swagger\Filter\SwaggerGroupFilter
+        decorates: 'app.article.group_filter'
+        arguments: [ '@app.swagger.article.group_filter.inner' ]
+
+    app.swagger.tag.search_filter:
+        class: App\Swagger\Filter\SwaggerSearchFilter
+        decorates: 'app.tag.search_filter'
+        arguments: [ '@app.swagger.tag.search_filter.inner' ]
+
+    app.swagger.project.group_filter:
+        class: App\Swagger\Filter\SwaggerGroupFilter
+        decorates: 'app.project.group_filter'
+        arguments: [ '@app.swagger.project.group_filter.inner' ]
+
+    'App\Swagger\SwaggerDocumentation':
         decorates: 'api_platform.swagger.normalizer.documentation'
-        arguments: [ '@App\Swagger\SwaggerDecorator.inner' ]
+        arguments: [ '@App\Swagger\SwaggerDocumentation.inner' ]
         autoconfigure: false
 
     ### Dynamically inject serialization groups for admins
@@ -66,44 +132,3 @@ services:
         decoration_priority: -20
         arguments: [ '@App\Metadata\Resource\Factory\AdminResourceMetadataFactory.inner' ]
         autoconfigure: false
-
-    ### API PLATFORM FILTERS
-    article.search_filter:
-        autoconfigure: false
-        autowire: false
-        public: false
-        parent: 'api_platform.doctrine.orm.search_filter'
-        arguments: [ { code: 'exact', author: 'exact', title: 'partial' } ]
-        tags: [ 'api_platform.filter' ]
-
-    article.boolean_filter:
-        autoconfigure: false
-        autowire: false
-        public: false
-        parent: 'api_platform.doctrine.orm.boolean_filter'
-        arguments: [ { published: ~ } ]
-        tags: [ 'api_platform.filter' ]
-
-    article.group_filter:
-        autoconfigure: false
-        autowire: false
-        public: false
-        parent: 'api_platform.serializer.group_filter'
-        arguments: [ 'group', false, ['UserReadLess', 'TagRead'] ]
-        tags: [ 'api_platform.filter' ]
-
-    project.group_filter:
-        autoconfigure: false
-        autowire: false
-        public: false
-        parent: 'api_platform.serializer.group_filter'
-        arguments: [ 'group', false, ['UserReadLess'] ]
-        tags: [ 'api_platform.filter' ]
-
-    tag.search_filter:
-        autoconfigure: false
-        autowire: false
-        public: false
-        parent: 'api_platform.doctrine.orm.search_filter'
-        arguments: [ { name: 'partial' } ]
-        tags: [ 'api_platform.filter' ]
