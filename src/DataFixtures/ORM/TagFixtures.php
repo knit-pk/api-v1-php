@@ -36,7 +36,6 @@ class TagFixtures extends Fixture
             ['name' => 'Computer Security'],
             ['name' => 'Programming'],
             ['name' => 'Development'],
-            ['name' => 'Event'],
             ['name' => 'Conference'],
             ['name' => 'Hackathon'],
             ['name' => 'Party'],

@@ -54,6 +54,7 @@ easy_admin:
             list:
                 fields:
                     - title
+                    - category
                     - author
                     - createdAt
                     - tags
@@ -61,9 +62,9 @@ easy_admin:
             form:
                 fields:
                     - title
+                    - category
                     - description
                     - content
-                    - categories
                     - tags
                     - author
             edit:
@@ -71,6 +72,15 @@ easy_admin:
                     - published
         Tag:
             class: App\Entity\Tag
+            list:
+                fields:
+                    - name
+                    - code
+            form:
+                fields:
+                    - name
+        Category:
+            class: App\Entity\Category
             list:
                 fields:
                     - name

@@ -21,6 +21,8 @@ final class SwaggerDocumentation implements NormalizerInterface
         '/projects/{id}' => ['get'],
         '/tags'          => ['get'],
         '/tags/{id}'     => ['get'],
+        '/categories'    => ['get'],
+        '/category/{id}' => ['get'],
     ];
 
     /**

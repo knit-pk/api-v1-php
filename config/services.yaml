@@ -71,7 +71,7 @@ services:
         autowire: false
         public: false
         parent: 'api_platform.serializer.group_filter'
-        arguments: [ 'group', false, ['UserReadLess', 'TagRead'] ]
+        arguments: [ 'group', false, ['UserReadLess', 'TagRead', 'CategoryRead'] ]
         tags: [ 'api_platform.filter' ]
 
     app.project.group_filter:
@@ -83,6 +83,14 @@ services:
         tags: [ 'api_platform.filter' ]
 
     app.tag.search_filter:
+        autoconfigure: false
+        autowire: false
+        public: false
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { name: 'partial' } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.category.search_filter:
         autoconfigure: false
         autowire: false
         public: false
@@ -110,6 +118,11 @@ services:
         class: App\Swagger\Filter\SwaggerSearchFilter
         decorates: 'app.tag.search_filter'
         arguments: [ '@app.swagger.tag.search_filter.inner' ]
+
+    app.swagger.category.search_filter:
+        class: App\Swagger\Filter\SwaggerSearchFilter
+        decorates: 'app.category.search_filter'
+        arguments: [ '@app.swagger.category.search_filter.inner' ]
 
     app.swagger.project.group_filter:
         class: App\Swagger\Filter\SwaggerGroupFilter

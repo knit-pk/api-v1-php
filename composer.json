@@ -25,7 +25,7 @@
     "api-platform/schema-generator": "^2.0",
     "doctrine/doctrine-fixtures-bundle": "^2.4",
     "javiereguiluz/easyadmin-bundle": "^1.17",
-    "phpunit/phpunit": "^6.3",
+    "phpunit/phpunit": "^6.4",
     "symfony/console": "^3.3",
     "symfony/dotenv": "^3.3",
     "symfony/profiler-pack": "^1.0",

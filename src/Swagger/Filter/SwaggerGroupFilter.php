@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace App\Swagger\Filter;
 
-use ApiPlatform\Core\Api\FilterInterface;
+use ApiPlatform\Core\Serializer\Filter\FilterInterface;
 use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 use DomainException;
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\Request;
 
 final class SwaggerGroupFilter implements FilterInterface
 {
@@ -51,5 +52,11 @@ final class SwaggerGroupFilter implements FilterInterface
         }
 
         return $description;
+    }
+
+
+    public function apply(Request $request, bool $normalization, array $attributes, array &$context)
+    {
+        $this->decorated->apply($request, $normalization, $attributes, $context);
     }
 }
