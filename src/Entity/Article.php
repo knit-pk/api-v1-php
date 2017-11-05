@@ -106,17 +106,22 @@ class Article
     protected $content;
 
     /**
-     * @var string[]|null articles may belong to one or more categories in a magazine or newspaper, such as Sports, Lifestyle, etc.
+     * @var Category articles may belong to one category
      *
-     * @ORM\Column(type="array")
+     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      *
      * @ApiProperty(iri="http://schema.org/articleSection")
      *
+     * @Assert\NotBlank()
+     *
      * @Groups({"ArticleRead", "ArticleWrite"})
      */
-    protected $categories;
+    protected $category;
 
     /**
+     * @var ArrayCollection|Tag[] tags that defines article
+     *
      * @ORM\ManyToMany(targetEntity="Tag")
      * @ORM\JoinTable(name="articles_tags",
      *      joinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")},
@@ -212,7 +217,6 @@ class Article
 
     public function __construct()
     {
-        $this->categories = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->published = false;
     }
@@ -248,24 +252,25 @@ class Article
     }
 
 
-    public function addCategory(string $category): void
+    /**
+     * @return Category
+     */
+    public function getCategory(): Category
     {
-        $this->categories[] = $category;
+        return $this->category;
     }
 
 
-    public function removeCategory(string $category): void
+    /**
+     * @param Category $category
+     */
+    public function setCategory(Category $category): void
     {
-        $this->categories->removeElement($category);
+        $this->category = $category;
     }
 
 
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    public function addTags(string $tag): void
+    public function addTag(Tag $tag): void
     {
         $this->tags[] = $tag;
     }

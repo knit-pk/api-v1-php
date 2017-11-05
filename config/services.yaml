@@ -90,6 +90,14 @@ services:
         arguments: [ { name: 'partial' } ]
         tags: [ 'api_platform.filter' ]
 
+    app.category.search_filter:
+        autoconfigure: false
+        autowire: false
+        public: false
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { name: 'partial' } ]
+        tags: [ 'api_platform.filter' ]
+
     ### Modify swagger documentation
     app.swagger.article.boolean_filter:
         class: App\Swagger\Filter\SwaggerBooleanFilter
@@ -110,6 +118,11 @@ services:
         class: App\Swagger\Filter\SwaggerSearchFilter
         decorates: 'app.tag.search_filter'
         arguments: [ '@app.swagger.tag.search_filter.inner' ]
+
+    app.swagger.category.search_filter:
+        class: App\Swagger\Filter\SwaggerSearchFilter
+        decorates: 'app.category.search_filter'
+        arguments: [ '@app.swagger.category.search_filter.inner' ]
 
     app.swagger.project.group_filter:
         class: App\Swagger\Filter\SwaggerGroupFilter
