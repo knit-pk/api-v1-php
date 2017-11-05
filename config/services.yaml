@@ -71,7 +71,7 @@ services:
         autowire: false
         public: false
         parent: 'api_platform.serializer.group_filter'
-        arguments: [ 'group', false, ['UserReadLess', 'TagRead'] ]
+        arguments: [ 'group', false, ['UserReadLess', 'TagRead', 'CategoryRead'] ]
         tags: [ 'api_platform.filter' ]
 
     app.project.group_filter:

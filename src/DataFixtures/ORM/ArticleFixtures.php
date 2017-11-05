@@ -5,6 +5,7 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Entity\Tag;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -30,9 +31,14 @@ class ArticleFixtures extends Fixture
         $manager->persist($author);
 
         $category = new Category();
-        $category->setName('Test');
+        $category->setName('ArticleTest');
 
         $manager->persist($category);
+
+        $tag = new Tag();
+        $tag->setName('ArticleTest');
+
+        $manager->persist($tag);
 
         for ($i = 1; $i <= 10; ++$i) {
             $articleTitle = sprintf('Article %d', $i);
@@ -43,6 +49,7 @@ class ArticleFixtures extends Fixture
             $article->setDescription(sprintf('Awesome %s content.', $articleTitle));
             $article->setAuthor($author);
             $article->setCategory($category);
+            $article->addTag($tag);
 
             $manager->persist($article);
         }
