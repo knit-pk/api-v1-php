@@ -490,5 +490,23 @@
             "version": "3.3",
             "ref": "c72d107d077f1654428edaed69415d0228c1aefe"
         }
+    },
+    "predis/predis": {
+        "version": "v1.1.1"
+    },
+    "react/promise": {
+        "version": "v2.5.1"
+    },
+    "guzzlehttp/streams": {
+        "version": "3.0.0"
+    },
+    "guzzlehttp/ringphp": {
+        "version": "1.1.0"
+    },
+    "elasticsearch/elasticsearch": {
+        "version": "v5.3.0"
+    },
+    "ruflin/elastica": {
+        "version": "5.3.0"
     }
 }

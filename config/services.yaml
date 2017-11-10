@@ -28,6 +28,25 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    ### Redis client
+    redis:
+        class: Predis\Client
+        arguments: [ { host: 'redis' } ]
+
+    logstash_formatter:
+        class: Monolog\Formatter\LogstashFormatter
+        arguments:
+            - 'api'
+
+    redis_handler:
+        class: Monolog\Handler\RedisHandler
+        arguments:
+            - '@redis'
+            - 'monolog'
+            - 'info'
+        calls:
+            - [setFormatter, ['@logstash_formatter']]
+
     ### Gedmo doctrine extensions
     gedmo.listener.sluggable:
         class: Gedmo\Sluggable\SluggableListener
