@@ -1,5 +1,6 @@
 api_platform:
     http_cache:
+        shared_max_age: 3600
         invalidation:
             # To enable the tags-based cache invalidation system.
             enabled: true

@@ -50,7 +50,7 @@ api_platform:
         max_age: 0
 
         # Default value for the response shared (proxy) max age.
-        shared_max_age: 3600
+        shared_max_age: 60
 
         # Default values of the "Vary" HTTP header.
         vary: ['Content-Type', 'Authorization']
