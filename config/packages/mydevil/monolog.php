@@ -10,11 +10,6 @@ $handlers = [
         'level'    => 'debug',
         'channels' => ['!event'],
     ],
-    'redis'         => [
-        'id'    => 'monolog.handler.redis_handler',
-        'type'  => 'service',
-        'level' => 'info',
-    ],
 ];
 
 $container->addResource(new ClassExistenceResource(Application::class));

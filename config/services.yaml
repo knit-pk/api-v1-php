@@ -28,130 +28,26 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    ### Redis client
-    redis:
-        class: Predis\Client
-        arguments: [ { host: 'redis' } ]
-
-    logstash_formatter:
-        class: Monolog\Formatter\LogstashFormatter
-        arguments:
-            - 'api'
-
-    redis_handler:
-        class: Monolog\Handler\RedisHandler
-        arguments:
-            - '@redis'
-            - 'monolog'
-            - 'info'
-        calls:
-            - [setFormatter, ['@logstash_formatter']]
-
     ### Gedmo doctrine extensions
     gedmo.listener.sluggable:
         class: Gedmo\Sluggable\SluggableListener
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
-            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+            - [ setAnnotationReader, ['@annotation_reader']]
 
     gedmo.listener.timestampable:
         class: Gedmo\Timestampable\TimestampableListener
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
-            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+            - [ setAnnotationReader, ['@annotation_reader']]
 
     ### Add custom payload to JWT Access Token
     acme_api.event.jwt_created_listener:
         class: App\EventListener\JWTCreatedListener
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
-
-    ### API PLATFORM FILTERS
-    app.article.search_filter:
-        autoconfigure: false
-        autowire: false
-        public: false
-        parent: 'api_platform.doctrine.orm.search_filter'
-        arguments: [ { code: 'exact', author: 'exact', title: 'partial' } ]
-        tags: [ 'api_platform.filter' ]
-
-    app.article.boolean_filter:
-        autoconfigure: false
-        autowire: false
-        public: false
-        parent: 'api_platform.doctrine.orm.boolean_filter'
-        arguments: [ { published: ~ } ]
-        tags: [ 'api_platform.filter' ]
-
-    app.article.group_filter:
-        autoconfigure: false
-        autowire: false
-        public: false
-        parent: 'api_platform.serializer.group_filter'
-        arguments: [ 'group', false, ['UserReadLess', 'TagRead', 'CategoryRead'] ]
-        tags: [ 'api_platform.filter' ]
-
-    app.project.group_filter:
-        autoconfigure: false
-        autowire: false
-        public: false
-        parent: 'api_platform.serializer.group_filter'
-        arguments: [ 'group', false, ['UserReadLess'] ]
-        tags: [ 'api_platform.filter' ]
-
-    app.tag.search_filter:
-        autoconfigure: false
-        autowire: false
-        public: false
-        parent: 'api_platform.doctrine.orm.search_filter'
-        arguments: [ { name: 'partial' } ]
-        tags: [ 'api_platform.filter' ]
-
-    app.category.search_filter:
-        autoconfigure: false
-        autowire: false
-        public: false
-        parent: 'api_platform.doctrine.orm.search_filter'
-        arguments: [ { name: 'partial' } ]
-        tags: [ 'api_platform.filter' ]
-
-    ### Modify swagger documentation
-    app.swagger.article.boolean_filter:
-        class: App\Swagger\Filter\SwaggerBooleanFilter
-        decorates: 'app.article.boolean_filter'
-        arguments: [ '@app.swagger.article.boolean_filter.inner' ]
-
-    app.swagger.article.search_filter:
-        class: App\Swagger\Filter\SwaggerSearchFilter
-        decorates: 'app.article.search_filter'
-        arguments: [ '@app.swagger.article.search_filter.inner' ]
-
-    app.swagger.article.group_filter:
-        class: App\Swagger\Filter\SwaggerGroupFilter
-        decorates: 'app.article.group_filter'
-        arguments: [ '@app.swagger.article.group_filter.inner' ]
-
-    app.swagger.tag.search_filter:
-        class: App\Swagger\Filter\SwaggerSearchFilter
-        decorates: 'app.tag.search_filter'
-        arguments: [ '@app.swagger.tag.search_filter.inner' ]
-
-    app.swagger.category.search_filter:
-        class: App\Swagger\Filter\SwaggerSearchFilter
-        decorates: 'app.category.search_filter'
-        arguments: [ '@app.swagger.category.search_filter.inner' ]
-
-    app.swagger.project.group_filter:
-        class: App\Swagger\Filter\SwaggerGroupFilter
-        decorates: 'app.project.group_filter'
-        arguments: [ '@app.swagger.project.group_filter.inner' ]
-
-    'App\Swagger\SwaggerDocumentation':
-        decorates: 'api_platform.swagger.normalizer.documentation'
-        arguments: [ '@App\Swagger\SwaggerDocumentation.inner' ]
-        autoconfigure: false
 
     ### Dynamically inject serialization groups for admins
     'App\Serializer\AdminContextBuilder':
@@ -163,4 +59,9 @@ services:
         decorates: 'api_platform.metadata.resource.metadata_factory'
         decoration_priority: -20
         arguments: [ '@App\Metadata\Resource\Factory\AdminResourceMetadataFactory.inner' ]
+        autoconfigure: false
+
+    'App\Swagger\SwaggerDocumentation':
+        decorates: 'api_platform.swagger.normalizer.documentation'
+        arguments: [ '@App\Swagger\SwaggerDocumentation.inner' ]
         autoconfigure: false

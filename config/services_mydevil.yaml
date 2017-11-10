@@ -1,0 +1,4 @@
+imports:
+    - { resource: '%kernel.project_dir%/config/packages/dev/easy_admin.yaml' }
+    - { resource: '%kernel.project_dir%/config/packages/dev/routing.yaml' }
+    - { resource: '%kernel.project_dir%/config/packages/dev/web_profiler.yaml' }
