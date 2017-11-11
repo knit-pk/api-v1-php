@@ -1,7 +1,9 @@
 version: "3"
 
+volumes:
+  mysql_data:
+
 services:
-    # Database
     db:
         image: mysql:5.7
         ports:
@@ -11,11 +13,22 @@ services:
             - MYSQL_DATABASE=database
             - MYSQL_USER=user
             - MYSQL_PASSWORD=password
+        volumes:
+          - mysql_data:/var/lib/mysql
+
+    redis:
+        build:
+            context: ./docker/redis
+        environment:
+            - REDIS_PASSWORD=redis
+        ports:
+            - "6379:6379"
 
     # PHP-FPM
     php:
         depends_on:
             - db
+            - redis
         build:
             context: ./docker/php
         environment:
@@ -39,16 +52,44 @@ services:
             - ./public:/var/www/app/public
             - ./vendor:/var/www/app/vendor
 
+    ## Debug/DevOps
+
     # Varnish (Http Cache)
     cache:
-        build:
-            context: ./docker/cache
         depends_on:
             - api
+        build:
+            context: ./docker/cache
         ports:
             - "80:80"
 
-    # Debug/Development tools
+#    elasticsearch:
+#        build:
+#            context: docker/elasticsearch
+#        ports:
+#            - "9200:9200"
+#
+#    logstash:
+#        build:
+#            context: docker/logstash
+#        environment:
+#            - xpack.monitoring.enabled=false
+#        ports:
+#            - "9600:9600"
+#        depends_on:
+#            - redis
+#            - elasticsearch
+#
+#    kibana:
+#        build:
+#            context: docker/kibana
+#        environment:
+#            - xpack.monitoring.enabled=false
+#        depends_on:
+#            - elasticsearch
+#        ports:
+#            - "5601:5601"
+
 #    pma:
 #        build:
 #            context: ./docker/pma

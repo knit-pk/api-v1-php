@@ -1,0 +1,4 @@
+imports:
+    - { resource: '../dev/easy_admin.yaml' }
+    - { resource: '../dev/routing.yaml' }
+    - { resource: '../dev/web_profiler.yaml' }
