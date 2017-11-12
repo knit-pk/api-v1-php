@@ -59,7 +59,7 @@ services:
         depends_on:
             - api
         build:
-            context: ./docker/cache
+            context: ./docker/varnish
         ports:
             - "80:80"
 
