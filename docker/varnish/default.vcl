@@ -42,6 +42,9 @@ sub vcl_deliver {
     # Uncomment the following line to NOT send the "Cache-Tags" header to the client (prevent using CloudFlare cache tags)
     #unset resp.http.Cache-Tags;
 
+    // CORS
+    set req.http.Access-Control-Allow-Origin = "*";
+
     # Insert Diagnostic header to show Hit or Miss
     if (obj.hits > 0) {
         set resp.http.X-Cache = "Hit";
@@ -117,5 +120,5 @@ sub vcl_hit {
     // No valid object to deliver
     // No healthy backend to handle request
     // Return error
-    return (synth(503, "API is down"));
+    return (synth(503, "Cannot get response from API. It is due to connection problem, or it is down."));
 }
