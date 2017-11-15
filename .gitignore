@@ -2,6 +2,10 @@ logs
 mydevil.env
 config/jwt
 supervisord.pid
+docker/oracle/instantclient-12c
+docker/oracle/database-12c
+docker/php/instantclient
+
 
 ###> symfony/framework-bundle ###
 .env

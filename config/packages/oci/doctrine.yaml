@@ -1,0 +1,12 @@
+doctrine:
+    dbal:
+        url: ~
+        charset: utf8mb4
+        default_table_options:
+            user: '%env(DATABASE_USER)%'
+            password: '%env(DATABASE_PASSWORD)%'
+            host: '%env(DATABASE_HOST)%'
+            port: '%env(DATABASE_PORT)%'
+            dbname: '%env(DATABASE_DBNAME)%'
+            charset: utf8mb4
+            collate: utf8mb4_general_ci

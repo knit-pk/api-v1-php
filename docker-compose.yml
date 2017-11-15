@@ -14,7 +14,13 @@ services:
             - MYSQL_USER=user
             - MYSQL_PASSWORD=password
         volumes:
-          - mysql_data:/var/lib/mysql
+            - mysql_data:/var/lib/mysql
+
+    oracle:
+        image: k911/oracle-12c:0.0.1
+        ports:
+            - "1521:1521"
+            - "5500:5500"
 
     redis:
         build:
@@ -24,15 +30,33 @@ services:
         ports:
             - "6379:6379"
 
-    # PHP-FPM
-    php:
+    # PHP Application running on PHP-FPM (MySQL)
+#    backend:
+#        depends_on:
+#            - db
+#            - redis
+#        build:
+#            context: ./docker/php
+#            dockerfile: Dockerfile.mysql
+#        environment:
+#            - APP_VAR_PATH=/var/app
+#            - DOT_ENV=.env.dist
+#        volumes:
+#            - .:/var/www/app
+#            - ./logs/app:/var/app/log
+#            - ./logs/php:/var/log/php
+#            - ./logs/supervisor:/var/log/supervisor
+
+    backend:
         depends_on:
-            - db
+            - oracle
             - redis
         build:
             context: ./docker/php
+            dockerfile: Dockerfile.oci
         environment:
             - APP_VAR_PATH=/var/app
+            - DOT_ENV=.env.oci
         volumes:
             - .:/var/www/app
             - ./logs/app:/var/app/log
@@ -42,7 +66,7 @@ services:
     # Nginx
     api:
         depends_on:
-            - php
+            - backend
         build:
             context: ./docker/api
         ports:

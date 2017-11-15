@@ -18,7 +18,7 @@ backend default {
 # Hosts allowed to send BAN requests
 acl ban {
     "localhost";
-    "php";
+    "backend";
 }
 
 sub vcl_backend_response {

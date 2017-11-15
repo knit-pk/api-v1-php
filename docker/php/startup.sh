@@ -5,7 +5,7 @@ chmod 777 /var/app/log
 cd /var/www/app
 
 # Copy default dotenv file
-cp .env.dist .env
+cp ${DOT_ENV} .env
 
 # Generate jwt keys using paraphrase from .env
 make generate-jwt-keys

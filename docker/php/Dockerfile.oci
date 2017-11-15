@@ -1,37 +1,42 @@
-FROM php:7.1-fpm-alpine
+FROM php:7.1-fpm
 
 ARG TIMEZONE="Europe/Warsaw"
 ENV TZ=${TIMEZONE}
-ENV DOCKERIZE_VERSION v0.5.0
-ENV DOCKERIZE_WAIT_FOR tcp://db:3306
+ENV DOT_ENV .env.oci
+ENV DOCKERIZE_VERSION=v0.5.0 \
+    DOCKERIZE_WAIT_FOR=tcp://db:3306
+
+ENV INSTANT_CLIENT_SRC=instantclient \
+    INSTANT_CLIENT_DEST=/usr/local/lib/oracle/instantclient
 
 # Install custom packages
-RUN apk update && apk upgrade && \
-    apk add --no-cache tzdata zip supervisor make openssl
+RUN apt-get update && apt-get install -y \
+    tzdata zip supervisor make openssl libaio-dev build-essential wget
 
 # Install dockerize
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-# Install xdebug via pecl
-RUN docker-php-source extract && \
-    apk add --no-cache --virtual .phpize-deps-configure $PHPIZE_DEPS && \
-    pecl install apcu && \
-    docker-php-ext-enable apcu && \
-    apk del .phpize-deps-configure && \
-    docker-php-source delete
+# Configure oci8 php extensions for Oracle Database
+COPY $INSTANT_CLIENT_SRC $INSTANT_CLIENT_DEST
+RUN ln -s $INSTANT_CLIENT_DEST/libclntsh.so.12.1 $INSTANT_CLIENT_DEST/libclntsh.so
+RUN docker-php-ext-configure oci8 --with-oci8=instantclient,$INSTANT_CLIENT_DEST
 
 # Install php extensions available by docker-php-ext-install command
-RUN docker-php-ext-install pdo_mysql opcache
+RUN docker-php-ext-install opcache oci8
+
+# Install extensions via pecl
+RUN pecl install apcu
+RUN docker-php-ext-enable apcu
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone && \
     printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini && \
     "date"
 
-# Remove unneded packages
-RUN apk del tzdata
+# Clean
+RUN apt-get clean -y
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
