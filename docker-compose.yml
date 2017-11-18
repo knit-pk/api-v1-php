@@ -1,26 +1,30 @@
 version: "3"
 
 volumes:
-  mysql_data:
+    mysql_data:
+    oracle_data:
 
 services:
-    db:
+    mysql:
         image: mysql:5.7
         ports:
-            - "3306:3306"
+           - "3306:3306"
         environment:
-            - MYSQL_RANDOM_ROOT_PASSWORD=yes
-            - MYSQL_DATABASE=database
-            - MYSQL_USER=user
-            - MYSQL_PASSWORD=password
+           - MYSQL_RANDOM_ROOT_PASSWORD=yes
+           - MYSQL_DATABASE=database
+           - MYSQL_USER=user
+           - MYSQL_PASSWORD=password
         volumes:
-            - mysql_data:/var/lib/mysql
+           - mysql_data:/var/lib/mysql
 
     oracle:
-        image: k911/oracle-12c:0.0.1
+        image: k911/oracle-12c:0.1.1-prebuilt
         ports:
             - "1521:1521"
-            - "5500:5500"
+        shm_size: 1G
+        volumes:
+            - ./docker/oracle/scripts:/docker-entrypoint-initdb.d
+            - oracle_data:/opt/oracle/oradata
 
     redis:
         build:
@@ -31,31 +35,18 @@ services:
             - "6379:6379"
 
     # PHP Application running on PHP-FPM (MySQL)
-#    backend:
-#        depends_on:
-#            - db
-#            - redis
-#        build:
-#            context: ./docker/php
-#            dockerfile: Dockerfile.mysql
-#        environment:
-#            - APP_VAR_PATH=/var/app
-#            - DOT_ENV=.env.dist
-#        volumes:
-#            - .:/var/www/app
-#            - ./logs/app:/var/app/log
-#            - ./logs/php:/var/log/php
-#            - ./logs/supervisor:/var/log/supervisor
-
     backend:
         depends_on:
+            - mysql
             - oracle
             - redis
         build:
             context: ./docker/php
+#            dockerfile: Dockerfile.mysql
             dockerfile: Dockerfile.oci
         environment:
             - APP_VAR_PATH=/var/app
+#            - DOT_ENV=.env.mysql
             - DOT_ENV=.env.oci
         volumes:
             - .:/var/www/app
@@ -63,7 +54,7 @@ services:
             - ./logs/php:/var/log/php
             - ./logs/supervisor:/var/log/supervisor
 
-    # Nginx
+    # # Nginx
     api:
         depends_on:
             - backend
@@ -81,11 +72,11 @@ services:
     # Varnish (Http Cache)
     cache:
         depends_on:
-            - api
+           - api
         build:
-            context: ./docker/cache
+           context: ./docker/cache
         ports:
-            - "80:80"
+           - "80:80"
 
 #    elasticsearch:
 #        build:
@@ -118,9 +109,9 @@ services:
 #        build:
 #            context: ./docker/pma
 #        depends_on:
-#            - db
+#            - mysql
 #        environment:
-#            - PMA_HOST=db
+#            - PMA_HOST=mysql
 #            - PMA_USER=user
 #            - PMA_PASSWORD=password
 #        ports:

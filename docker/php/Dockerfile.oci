@@ -2,9 +2,9 @@ FROM php:7.1-fpm
 
 ARG TIMEZONE="Europe/Warsaw"
 ENV TZ=${TIMEZONE}
-ENV DOT_ENV .env.oci
+ENV DOT_ENV=.env.oci
 ENV DOCKERIZE_VERSION=v0.5.0 \
-    DOCKERIZE_WAIT_FOR=tcp://db:3306
+    DOCKERIZE_WAIT_FOR=tcp://oracle:1521
 
 ENV INSTANT_CLIENT_SRC=instantclient \
     INSTANT_CLIENT_DEST=/usr/local/lib/oracle/instantclient
