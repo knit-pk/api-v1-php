@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 if [[ ! -f composer.lock || ! -d src ]]; then
-    if [ ! -f mydevil.env ]; then
+    if [ ! -f .env.mydevil ]; then
         echo "Env file not found."
         exit 2
     fi;
@@ -9,7 +9,8 @@ if [[ ! -f composer.lock || ! -d src ]]; then
     exit 1
 fi;
 
-rm -rf .idea .git .env .directory .gitignore .env.dist vendor logs public/bundles config/jwt var supervisord.pid
+mv .env.mydevil .env
+rm -rf .idea .git .env.* .directory .gitignore vendor logs public/bundles config/jwt var supervisord.pid
 
 if [ ! -f composer.phar ]; then
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -20,7 +21,6 @@ else
     echo "Found composer.phar.."
 fi
 
-cp mydevil.env .env
 php71 composer.phar install -o --no-scripts
 php71 bin/console cache:clear
 php71 bin/console cache:warmup
