@@ -2,7 +2,7 @@ version: "3"
 
 volumes:
     mysql_data:
-    oracle_data:
+#    oracle_data:
 
 services:
     mysql:
@@ -17,14 +17,14 @@ services:
         volumes:
            - mysql_data:/var/lib/mysql
 
-    oracle:
-        image: k911/oracle-12c:0.1.1-prebuilt
-        ports:
-            - "1521:1521"
-        shm_size: 1G
-        volumes:
-            - ./docker/oracle/scripts:/docker-entrypoint-initdb.d
-            - oracle_data:/opt/oracle/oradata
+#    oracle:
+#        image: k911/oracle-12c:0.1.1-prebuilt
+#        ports:
+#            - "1521:1521"
+#        shm_size: 1G
+#        volumes:
+#            - ./docker/oracle/scripts:/docker-entrypoint-initdb.d
+#            - oracle_data:/opt/oracle/oradata
 
     redis:
         build:
@@ -38,16 +38,16 @@ services:
     backend:
         depends_on:
             - mysql
-            - oracle
+#            - oracle
             - redis
         build:
             context: ./docker/php
-#            dockerfile: Dockerfile.mysql
-            dockerfile: Dockerfile.oci
+            dockerfile: Dockerfile.mysql
+#            dockerfile: Dockerfile.oci
         environment:
             - APP_VAR_PATH=/var/app
-#            - DOT_ENV=.env.mysql
-            - DOT_ENV=.env.oci
+            - DOT_ENV=.env.mysql
+#            - DOT_ENV=.env.oci
         volumes:
             - .:/var/www/app
             - ./logs/app:/var/app/log
