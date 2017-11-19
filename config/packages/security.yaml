@@ -58,15 +58,18 @@ security:
             stateless: true
             anonymous: true
             provider: fos_userbundle
-            lexik_jwt:
-                authorization_header:
-                    enabled: true
-                    prefix: Bearer
-                query_parameter:
-                    enabled: true
-                    name: token
-                throw_exceptions: false
-                create_entry_point: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+#            lexik_jwt:
+#                authorization_header:
+#                    enabled: true
+#                    prefix: Bearer
+#                query_parameter:
+#                    enabled: true
+#                    name: token
+#                throw_exceptions: false
+#                create_entry_point: true
 
     access_control:
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }

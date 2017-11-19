@@ -3,3 +3,20 @@ lexik_jwt_authentication:
     public_key_path:  '%kernel.project_dir%/%env(JWT_PUBLIC_KEY_PATH)%'
     pass_phrase:      '%env(JWT_PASSPHRASE)%'
     token_ttl:        '%env(JWT_TOKEN_TTL)%'
+
+    encoder:
+        service: lexik_jwt_authentication.encoder.default
+        crypto_engine: openssl
+        signature_algorithm: RS256
+
+    token_extractors:
+        authorization_header:
+            enabled: true
+            prefix: Bearer
+            name: Authorization
+        query_parameter:
+            enabled: true
+            name: token
+        cookie:
+            enabled: false
+            name: TOKEN
