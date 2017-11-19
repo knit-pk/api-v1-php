@@ -29,3 +29,7 @@ services:
             - 'info'
         calls:
             - [ setFormatter, ['@monolog.formatter.logstash_formatter']]
+    database.oracle.listener:
+        class: Doctrine\DBAL\Event\Listeners\OracleSessionInit
+        tags:
+            - { name: doctrine.event_listener, event: postConnect, connection: default }
