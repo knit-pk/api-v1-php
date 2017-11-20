@@ -17,8 +17,7 @@ make fix-easy-admin-cache
 # Wait until database is ready
 if dockerize -wait ${DOCKERIZE_WAIT_FOR} -timeout 30s; then
     # Update/create database schema and seed with data
-    bin/console doctrine:schema:drop --force
-    bin/console doctrine:schema:create
+    bin/console doctrine:migrations:migrate --no-interaction
     bin/console doctrine:fixtures:load -n
 else
     echo "Could not migrate data to database"
