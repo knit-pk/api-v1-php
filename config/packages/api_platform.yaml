@@ -16,14 +16,14 @@ api_platform:
 
     # The list of enabled formats. The first one will be the default.
     formats:
-            json:
-                mime_types: ['application/json']
-            jsonld:
-                mime_types: ['application/ld+json']
-            xml:
-                mime_types: ['application/xml', 'text/xml']
-            html:
-                mime_types: ['text/html']
+        json:
+            mime_types: ['application/json']
+        jsonld:
+            mime_types: ['application/ld+json']
+        xml:
+            mime_types: ['application/xml', 'text/xml']
+        html:
+            mime_types: ['text/html']
 
     # Enable the Swagger documentation and export.
     enable_swagger: true
@@ -32,6 +32,28 @@ api_platform:
     enable_swagger_ui: true
 
     collection:
+        # The default order of results.
+        order: 'ASC'
+
+        # The name of the query parameter to order results.
+        order_parameter_name: 'order'
+
         pagination:
             client_items_per_page: true
             items_per_page_parameter_name: limit
+
+    http_cache:
+        # Automatically generate etags for API responses.
+        etag: true
+
+        # Default value for the response max age.
+        max_age: 0
+
+        # Default value for the response shared (proxy) max age.
+        shared_max_age: 60
+
+        # Default values of the "Vary" HTTP header.
+        vary: ['Content-Type', 'Authorization']
+
+        # To make all responses public by default.
+        public: true

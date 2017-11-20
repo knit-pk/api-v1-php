@@ -30,6 +30,7 @@ easy_admin:
                             choices: {
                                 USER: 'ROLE_USER',
                                 READER: 'ROLE_READER',
+                                WRITER: 'ROLE_WRITER',
                                 ADMIN: 'ROLE_ADMIN',
                                 SUPER_ADMIN: 'ROLE_SUPER_ADMIN',
                             } } }
@@ -48,3 +49,42 @@ easy_admin:
                     - description
                     - url
                     - author
+        Article:
+            class: App\Entity\Article
+            list:
+                fields:
+                    - title
+                    - category
+                    - author
+                    - createdAt
+                    - tags
+                    - published
+            form:
+                fields:
+                    - title
+                    - category
+                    - description
+                    - content
+                    - tags
+                    - author
+            edit:
+                fields:
+                    - published
+        Tag:
+            class: App\Entity\Tag
+            list:
+                fields:
+                    - name
+                    - code
+            form:
+                fields:
+                    - name
+        Category:
+            class: App\Entity\Category
+            list:
+                fields:
+                    - name
+                    - code
+            form:
+                fields:
+                    - name

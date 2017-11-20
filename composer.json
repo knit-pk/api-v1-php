@@ -9,20 +9,31 @@
     "php": ">= 7.1",
     "api-platform/api-pack": "^1.0",
     "friendsofsymfony/user-bundle": "^2.0",
-    "gedmo/doctrine-extensions": "^2.4",
+    "gedmo/doctrine-extensions": "^2.4.32",
     "gesdinet/jwt-refresh-token-bundle": "^0.2.1",
+    "guzzlehttp/guzzle": "^6.3",
     "lexik/jwt-authentication-bundle": "^2.4",
     "nelmio/cors-bundle": "^1.5",
+    "predis/predis": "^1.1",
     "ramsey/uuid-doctrine": "^1.4",
     "roave/security-advisories": "dev-master",
+    "ruflin/Elastica": "^5.3",
     "symfony/flex": "^1.0",
     "symfony/framework-bundle": "^3.3",
+    "symfony/monolog-bundle": "^3.1",
     "symfony/yaml": "^3.3"
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/k911/DoctrineExtensions"
+    }
+  ],
   "require-dev": {
+    "api-platform/schema-generator": "^2.0",
     "doctrine/doctrine-fixtures-bundle": "^2.4",
     "javiereguiluz/easyadmin-bundle": "^1.17",
-    "phpunit/phpunit": "^6.3",
+    "phpunit/phpunit": "^6.4",
     "symfony/console": "^3.3",
     "symfony/dotenv": "^3.3",
     "symfony/profiler-pack": "^1.0",
@@ -46,7 +57,7 @@
   },
   "scripts": {
     "auto-scripts": {
-      "make cache-warmup": "script",
+      "cache:clear": "symfony-cmd",
       "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
     },
     "post-install-cmd": [

@@ -1,0 +1,32 @@
+services:
+
+    ### API PLATFORM FILTERS
+    app.article.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { code: 'exact', author: 'exact', title: 'partial' } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.article.boolean_filter:
+        parent: 'api_platform.doctrine.orm.boolean_filter'
+        arguments: [ { published: ~ } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.article.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['UserReadLess', 'TagRead', 'CategoryRead'] ]
+        tags: [ 'api_platform.filter' ]
+
+    app.project.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['UserReadLess'] ]
+        tags: [ 'api_platform.filter' ]
+
+    app.tag.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { name: 'partial' } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.category.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { name: 'partial' } ]
+        tags: [ 'api_platform.filter' ]

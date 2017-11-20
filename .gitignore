@@ -1,7 +1,12 @@
 logs
-mydevil.env
 config/jwt
 supervisord.pid
+docker/oracle/instantclient-12c
+docker/oracle/database-12c
+docker/php/instantclient
+
+.env.mydevil
+.env.debug
 
 ###> symfony/framework-bundle ###
 .env
@@ -13,3 +18,8 @@ supervisord.pid
 ###> symfony/web-server-bundle ###
 .web-server-pid
 ###< symfony/web-server-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+.php_cs
+.php_cs.cache
+###< friendsofphp/php-cs-fixer ###

@@ -13,7 +13,29 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(attributes={
- *   "access_control"="is_granted('ROLE_READER')",
+ *     "filters"={"app.project.group_filter"},
+ * },
+ * collectionOperations={
+ *     "get"={
+ *          "method"="GET",
+ *     },
+ *     "post"={
+ *          "method"="POST",
+ *          "access_control"="is_granted('ROLE_USER_WRITER')",
+ *     },
+ * },
+ * itemOperations={
+ *     "get"={
+ *          "method"="GET",
+ *     },
+ *     "put"={
+ *          "method"="PUT",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     },
+ *     "delete"={
+ *          "method"="DELETE",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     },
  * })
  *
  * @ORM\Entity()
@@ -46,6 +68,8 @@ class Project
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     *
+     * @Assert\NotBlank()
      */
     protected $author;
 
@@ -79,6 +103,7 @@ class Project
      *
      * @ORM\Column(type="string")
      *
+     * @Assert\NotBlank()
      * @Assert\Length(max="200")
      */
     protected $url;
@@ -89,6 +114,8 @@ class Project
      * @ORM\Column(type="datetime")
      *
      * @Gedmo\Timestampable(on="create")
+     *
+     * @Assert\DateTime()
      */
     protected $createdAt;
 
@@ -98,6 +125,8 @@ class Project
      * @ORM\Column(type="datetime")
      *
      * @Gedmo\Timestampable(on="update")
+     *
+     * @Assert\DateTime()
      */
     protected $updatedAt;
 
@@ -209,13 +238,20 @@ class Project
         return $this->updatedAt;
     }
 
+
     /**
      * @param UserInterface|null $user
      *
      * @return bool
      */
-    public function isAuthor(UserInterface $user = null): bool
+    public function isAuthor(?UserInterface $user): bool
     {
-        return $user instanceof self && $user->id === $this->id;
+        $author = $this->getAuthor();
+
+        if (!$author instanceof User) {
+            return false;
+        }
+
+        return $author->isUser($user);
     }
 }
