@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
-use FOS\UserBundle\Model\User as FOSUser;
 use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
@@ -55,10 +54,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity()
  * @ORM\Table(name="users")
- *
- * @method Uuid getId
  */
-class User extends FOSUser
+class User implements UserInterface
 {
     public const ROLE_USER = 'ROLE_USER';
 
@@ -73,7 +70,7 @@ class User extends FOSUser
     /**
      * @var Uuid
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -87,20 +84,38 @@ class User extends FOSUser
      *
      * @ApiProperty(iri="http://schema.org/alternateName")
      *
+     * @ORM\Column(name="username",type="string",length=180)
+     *
      * @Groups({"UserRead","UserReadLess","UserWrite"})
      */
     protected $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username_canonical",type="string",length=180,unique=true)
+     */
+    protected $usernameCanonical;
 
     /**
      * @var string email address
      *
      * @ApiProperty(iri="http://schema.org/email")
      *
+     * @ORM\Column(name="email",type="string",length=180)
+     *
      * @Assert\Email()
      *
      * @Groups({"UserRead","UserReadLess","UserWrite"})
      */
     protected $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email_canonical",type="string",length=180,unique=true)
+     */
+    protected $emailCanonical;
 
     /**
      * @var string real full name
@@ -114,7 +129,18 @@ class User extends FOSUser
     protected $fullname;
 
     /**
+     * Encrypted password. Must be persisted.
+     *
+     * @ORM\Column(name="hash",type="string")
+     *
      * @var string
+     */
+    protected $hash;
+
+    /**
+     * Plain password. Used for model validation. Must not be persisted.
+     *
+     * @var string|null
      *
      * @Groups({"UserWrite"})
      */
@@ -161,16 +187,45 @@ class User extends FOSUser
     /**
      * @var bool
      *
+     * @ORM\Column(name="enabled",type="boolean")
+     *
      * @Groups({"UserAdminWrite", "UserAdminRead"})
      */
     protected $enabled;
 
     /**
-     * @var \DateTime
+     * @var DateTime
+     *
+     * @ORM\Column(name="last_login",type="datetime",nullable=true)
      *
      * @Groups({"UserAdminRead"})
      */
     protected $lastLogin;
+
+    /**
+     * Random string sent to the user email address in order to verify it.
+     *
+     * @ORM\Column(name="confirmation_token",type="string",length=180,unique=true,nullable=true)
+     *
+     * @var string
+     */
+    protected $confirmationToken;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="password_requested_at",type="datetime",nullable=true)
+     */
+    protected $passwordRequestedAt;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="super_admin",type="boolean")
+     *
+     * @Groups({"UserAdminRead"})
+     */
+    private $superAdmin;
 
 
     /**
@@ -178,10 +233,9 @@ class User extends FOSUser
      */
     public function __construct()
     {
-        parent::__construct();
-        $this->salt = '';
+        $this->enabled = false;
+        $this->superAdmin = false;
         $this->securityRoles = new ArrayCollection();
-        $this->groups = new ArrayCollection();
     }
 
 
@@ -191,14 +245,14 @@ class User extends FOSUser
     public function serialize()
     {
         return serialize([
-            $this->password,
-            $this->salt,
-            $this->usernameCanonical,
-            $this->username,
-            $this->enabled,
             $this->id,
+            $this->username,
+            $this->usernameCanonical,
             $this->email,
             $this->emailCanonical,
+            $this->hash,
+            $this->enabled,
+            $this->superAdmin,
         ]);
     }
 
@@ -206,19 +260,26 @@ class User extends FOSUser
     /**
      * {@inheritdoc}
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         [
-            $this->password,
-            $this->salt,
-            $this->usernameCanonical,
-            $this->username,
-            $this->enabled,
             $this->id,
+            $this->username,
+            $this->usernameCanonical,
             $this->email,
             $this->emailCanonical,
+            $this->hash,
+            $this->enabled,
+            $this->superAdmin,
         ] = unserialize($serialized, ['allowed_classes' => true]);
     }
+
+
+    public function getId(): ?Uuid
+    {
+        return $this->id;
+    }
+
 
     /**
      * @param string $role
@@ -235,6 +296,22 @@ class User extends FOSUser
 
         return null;
     }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \DomainException
+     */
+    public function setRoles(array $roles)
+    {
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
+    }
+
 
     /**
      * {@inheritdoc}
@@ -258,12 +335,17 @@ class User extends FOSUser
      */
     public function getRoles(): array
     {
-        $roles = [];
+        $roles = [static::ROLE_DEFAULT];
+
+        if ($this->superAdmin) {
+            $roles[] = static::ROLE_SUPER_ADMIN;
+        }
+
         foreach ($this->securityRoles as $securityRole) {
             $roles[] = $securityRole->getRole();
         }
 
-        return $roles;
+        return array_unique($roles);
     }
 
 
@@ -274,6 +356,7 @@ class User extends FOSUser
     {
         return $this->getRole($role) instanceof SecurityRole;
     }
+
 
     /**
      * @inheritdoc
@@ -363,4 +446,298 @@ class User extends FOSUser
     {
         return $user instanceof self && $user->id === $this->id;
     }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function isAccountNonExpired(): bool
+    {
+        return true;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function isAccountNonLocked(): bool
+    {
+        return true;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function isCredentialsNonExpired(): bool
+    {
+        return true;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUsernameCanonical($usernameCanonical)
+    {
+        $this->usernameCanonical = $usernameCanonical;
+
+        return $this;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setSalt($salt)
+    {
+        return $this;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getEmailCanonical(): string
+    {
+        return $this->emailCanonical;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setEmailCanonical($emailCanonical)
+    {
+        $this->emailCanonical = $emailCanonical;
+
+        return $this;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setPassword($hash)
+    {
+        $this->hash = $hash;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->superAdmin || $this->hasRole(static::ROLE_SUPER_ADMIN);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setEnabled($boolean)
+    {
+        $this->enabled = (bool) $boolean;
+
+        return $this;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setSuperAdmin($boolean)
+    {
+        $this->superAdmin = (bool) $boolean;
+
+        return $this;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setConfirmationToken($confirmationToken)
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setPasswordRequestedAt(?DateTime $date = null)
+    {
+        $this->passwordRequestedAt = $date;
+
+        return $this;
+    }
+
+
+    /**
+     * Gets the timestamp that the user requested a password reset.
+     *
+     * @return DateTime|null
+     */
+    public function getPasswordRequestedAt(): ?DateTime
+    {
+        return $this->passwordRequestedAt;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function isPasswordRequestNonExpired($ttl)
+    {
+        $passwordRequestedAt = $this->getPasswordRequestedAt();
+
+        return $passwordRequestedAt instanceof DateTime &&
+            $passwordRequestedAt->getTimestamp() + $ttl > time();
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setLastLogin(?DateTime $time = null)
+    {
+        $this->lastLogin = $time;
+
+        return $this;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getPassword(): string
+    {
+        return $this->hash;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getHash(): string
+    {
+        return $this->hash;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsernameCanonical(): string
+    {
+        return $this->usernameCanonical;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials(): void
+    {
+        $this->plainPassword = null;
+    }
+
+
+    /**
+     * @return DateTime|null
+     */
+    public function getLastLogin(): ?DateTime
+    {
+        return $this->lastLogin;
+    }
+
 }
