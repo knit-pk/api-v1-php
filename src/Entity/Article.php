@@ -109,7 +109,7 @@ class Article
      * @var Category articles may belong to one category
      *
      * @ORM\ManyToOne(targetEntity="Category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="category_id",referencedColumnName="id",onDelete="CASCADE")
      *
      * @ApiProperty(iri="http://schema.org/articleSection")
      *
@@ -124,8 +124,11 @@ class Article
      *
      * @ORM\ManyToMany(targetEntity="Tag")
      * @ORM\JoinTable(name="articles_tags",
-     *      joinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")},
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="article_id",referencedColumnName="id",onDelete="CASCADE")
+     *      },inverseJoinColumns={
+     *          @ORM\JoinColumn(name="tag_id",referencedColumnName="id",onDelete="CASCADE")
+     *      },
      * )
      *
      * @Groups({"ArticleRead", "ArticleWrite"})
@@ -150,7 +153,7 @@ class Article
      * @var \App\Entity\User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE")
      *
      * @ApiProperty(iri="http://schema.org/author")
      *

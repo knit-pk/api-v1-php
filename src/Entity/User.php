@@ -146,7 +146,13 @@ class User extends FOSUser
      * @var SecurityRole[]|ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="SecurityRole",inversedBy="users")
-     * @ORM\JoinTable(name="users_security_roles")
+     * @ORM\JoinTable(name="users_security_roles",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="user_id",referencedColumnName="id",onDelete="CASCADE")
+     *      },inverseJoinColumns={
+     *          @ORM\JoinColumn(name="security_role_id",referencedColumnName="id",onDelete="CASCADE")
+     *      }
+     * )
      *
      * @Groups({"UserAdminWrite", "UserAdminRead"})
      */

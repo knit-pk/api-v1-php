@@ -35,8 +35,7 @@ class SecurityRole extends Role
     /**
      * @var User[]|Collection
      *
-     * @ORM\ManyToMany(targetEntity="User",mappedBy="securityRoles")
-     * @ORM\JoinTable(name="users_security_roles")
+     * @ORM\ManyToMany(targetEntity="User",mappedBy="securityRoles",cascade={"persist"})
      */
     protected $users;
 
