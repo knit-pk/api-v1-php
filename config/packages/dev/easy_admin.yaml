@@ -9,6 +9,7 @@ easy_admin:
                     - fullname
                     - username
                     - email
+                    - securityRoles
                     - enabled
             form:
                 fields:
@@ -17,23 +18,24 @@ easy_admin:
                     - email
                     - enabled
                     - lastLogin
+                    - securityRoles
                     - { property: plainPassword,
                         type: 'text',
                         type_options: {
                             required: false
                         } }
 
-                    - { property: roles,
-                        type: 'choice',
-                        type_options: {
-                            multiple: true,
-                            choices: {
-                                USER: 'ROLE_USER',
-                                READER: 'ROLE_READER',
-                                WRITER: 'ROLE_WRITER',
-                                ADMIN: 'ROLE_ADMIN',
-                                SUPER_ADMIN: 'ROLE_SUPER_ADMIN',
-                            } } }
+#                    - { property: roles,
+#                        type: 'choice',
+#                        type_options: {
+#                            multiple: true,
+#                            choices: {
+#                                USER: 'ROLE_USER',
+#                                READER: 'ROLE_READER',
+#                                WRITER: 'ROLE_WRITER',
+#                                ADMIN: 'ROLE_ADMIN',
+#                                SUPER_ADMIN: 'ROLE_SUPER_ADMIN',
+#                            } } }
 
         Project:
             class: App\Entity\Project
@@ -88,3 +90,14 @@ easy_admin:
             form:
                 fields:
                     - name
+        SecurityRole:
+            class: App\Entity\SecurityRole
+            list:
+                fields:
+                    - id
+                    - role
+                    - users
+            form:
+                fields:
+                    - role
+                    - { property: 'users', type_options: { by_reference: false } }
