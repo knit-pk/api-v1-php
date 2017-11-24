@@ -6,8 +6,11 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\User as Base;
+use DomainException;
+use FOS\UserBundle\Model\User as FOSUser;
 use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
@@ -55,8 +58,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @method Uuid getId
  */
-class User extends Base
+class User extends FOSUser
 {
+    public const ROLE_USER = 'ROLE_USER';
+
+    public const ROLE_READER = 'ROLE_READER';
+
+    public const ROLE_WRITER = 'ROLE_WRITER';
+
+    public const ROLE_USER_WRITER = 'ROLE_USER_WRITER';
+
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
+
     /**
      * @var Uuid
      *
@@ -68,6 +81,15 @@ class User extends Base
      * @Groups({"UserRead","UserReadLess"})
      */
     protected $id;
+
+    /**
+     * @var string nickname, an unique alias of the name
+     *
+     * @ApiProperty(iri="http://schema.org/alternateName")
+     *
+     * @Groups({"UserRead","UserReadLess","UserWrite"})
+     */
+    protected $username;
 
     /**
      * @var string email address
@@ -99,15 +121,6 @@ class User extends Base
     protected $plainPassword;
 
     /**
-     * @var string nickname, an unique alias of the name
-     *
-     * @ApiProperty(iri="http://schema.org/alternateName")
-     *
-     * @Groups({"UserRead","UserReadLess","UserWrite"})
-     */
-    protected $username;
-
-    /**
      * @var DateTime
      *
      * @ORM\Column(type="datetime")
@@ -130,19 +143,173 @@ class User extends Base
     protected $updatedAt;
 
     /**
+     * @var SecurityRole[]|ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="SecurityRole",inversedBy="users")
+     * @ORM\JoinTable(name="users_security_roles")
+     *
      * @Groups({"UserAdminWrite", "UserAdminRead"})
      */
-    protected $roles;
+    protected $securityRoles;
 
     /**
+     * @var bool
+     *
      * @Groups({"UserAdminWrite", "UserAdminRead"})
      */
     protected $enabled;
 
     /**
+     * @var \DateTime
+     *
      * @Groups({"UserAdminRead"})
      */
     protected $lastLogin;
+
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->salt = '';
+        $this->securityRoles = new ArrayCollection();
+        $this->groups = new ArrayCollection();
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize([
+            $this->password,
+            $this->salt,
+            $this->usernameCanonical,
+            $this->username,
+            $this->enabled,
+            $this->id,
+            $this->email,
+            $this->emailCanonical,
+        ]);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        [
+            $this->password,
+            $this->salt,
+            $this->usernameCanonical,
+            $this->username,
+            $this->enabled,
+            $this->id,
+            $this->email,
+            $this->emailCanonical,
+        ] = unserialize($serialized, ['allowed_classes' => true]);
+    }
+
+    /**
+     * @param string $role
+     *
+     * @return \App\Entity\SecurityRole|null
+     */
+    public function getRole(string $role): ?SecurityRole
+    {
+        foreach ($this->securityRoles as $securityRole) {
+            if ($role === $securityRole->getRole()) {
+                return $securityRole;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \DomainException
+     */
+    public function addRole($role): User
+    {
+        if (!$role instanceof SecurityRole) {
+            throw new DomainException('Can add only SecurityRole object as User role.');
+        }
+
+        $this->addSecurityRole($role);
+
+        return $this;
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function getRoles(): array
+    {
+        $roles = [];
+        foreach ($this->securityRoles as $securityRole) {
+            $roles[] = $securityRole->getRole();
+        }
+
+        return $roles;
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function hasRole($role): bool
+    {
+        return $this->getRole($role) instanceof SecurityRole;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function removeRole($role): User
+    {
+        $securityRole = $this->getRole($role);
+        if ($securityRole instanceof SecurityRole) {
+            $this->removeSecurityRole($securityRole);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSecurityRoles(): Collection
+    {
+        return $this->securityRoles;
+    }
+
+
+    /**
+     * @param \App\Entity\SecurityRole $role
+     */
+    public function addSecurityRole(SecurityRole $role): void
+    {
+        if (!$this->securityRoles->contains($role)) {
+            $this->securityRoles[] = $role;
+        }
+    }
+
+
+    /**
+     * @param \App\Entity\SecurityRole $role
+     */
+    public function removeSecurityRole(SecurityRole $role): void
+    {
+        $this->securityRoles->removeElement($role);
+    }
 
 
     /**
