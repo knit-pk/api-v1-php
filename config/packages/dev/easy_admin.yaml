@@ -11,12 +11,14 @@ easy_admin:
                     - email
                     - securityRoles
                     - enabled
+                    - superAdmin
             form:
                 fields:
                     - fullname
                     - username
                     - email
                     - enabled
+                    - superAdmin
                     - lastLogin
                     - securityRoles
                     - { property: plainPassword,
@@ -24,18 +26,6 @@ easy_admin:
                         type_options: {
                             required: false
                         } }
-
-#                    - { property: roles,
-#                        type: 'choice',
-#                        type_options: {
-#                            multiple: true,
-#                            choices: {
-#                                USER: 'ROLE_USER',
-#                                READER: 'ROLE_READER',
-#                                WRITER: 'ROLE_WRITER',
-#                                ADMIN: 'ROLE_ADMIN',
-#                                SUPER_ADMIN: 'ROLE_SUPER_ADMIN',
-#                            } } }
 
         Project:
             class: App\Entity\Project
