@@ -27,8 +27,13 @@ class SecurityRoleFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        foreach (self::SECURITY_ROLES as $role) {
+        foreach ($this->getSecurityRolesData() as [
+                'role' => $role,
+                'name' => $name,
+            ]) {
+
             $securityRole = new SecurityRole($role);
+            $securityRole->setName($name);
 
             $this->setReference(sprintf('security-%s', strtolower($role)), $securityRole);
 
@@ -39,8 +44,33 @@ class SecurityRoleFixtures extends Fixture
     }
 
 
-    public function isSecurityRole()
+    public function getSecurityRolesData(): array
     {
-
+        return [
+            [
+                'name' => 'User',
+                'role' => User::ROLE_USER,
+            ],
+            [
+                'name' => 'Reader',
+                'role' => User::ROLE_READER,
+            ],
+            [
+                'name' => 'Writer',
+                'role' => User::ROLE_WRITER,
+            ],
+            [
+                'name' => 'User Writer',
+                'role' => User::ROLE_USER_WRITER,
+            ],
+            [
+                'name' => 'Admin',
+                'role' => User::ROLE_ADMIN,
+            ],
+            [
+                'name' => 'Super Admin',
+                'role' => User::ROLE_SUPER_ADMIN,
+            ],
+        ];
     }
 }

@@ -84,10 +84,11 @@ easy_admin:
             class: App\Entity\SecurityRole
             list:
                 fields:
-                    - id
+                    - name
                     - role
                     - users
             form:
                 fields:
+                    - name
                     - role
                     - { property: 'users', type_options: { by_reference: false } }
