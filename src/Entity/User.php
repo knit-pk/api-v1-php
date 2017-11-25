@@ -607,7 +607,9 @@ class User implements UserInterface
      */
     public function setSuperAdmin($boolean)
     {
-        $this->superAdmin = (bool) $boolean;
+        if(!$this->superAdmin = (bool) $boolean) {
+            $this->removeRole(static::ROLE_SUPER_ADMIN);
+        }
 
         return $this;
     }
@@ -738,6 +740,12 @@ class User implements UserInterface
     public function getLastLogin(): ?DateTime
     {
         return $this->lastLogin;
+    }
+
+
+    public function __toString()
+    {
+        return $this->getUsername();
     }
 
 }

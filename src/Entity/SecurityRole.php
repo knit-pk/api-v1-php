@@ -3,13 +3,31 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * @ApiResource(attributes={
+ *     "normalization_context"={"groups"={"SecurityRoleRead"}},
+ *     "denormalization_context"={"groups"={"SecurityRoleWrite"}},
+ * },
+ * collectionOperations={
+ *     "get"={
+ *          "method"="GET",
+ *     },
+ * },
+ * itemOperations={
+ *     "get"={
+ *          "method"="GET",
+ *     },
+ * })
+ *
  * @ORM\Entity()
  * @ORM\Table(name="security_roles")
  */
@@ -22,13 +40,30 @@ class SecurityRole extends Role
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     *
+     * @Groups({"SecurityRoleRead"})
      */
     protected $id;
 
     /**
      * @var string
      *
+     * @ApiProperty(iri="http://schema.org/name")
+     *
+     * @ORM\Column(name="name",type="string",length=70)
+     *
+     * @Groups({"SecurityRoleAdminRead"})
+     */
+    protected $name;
+
+    /**
+     * @var string
+     *
+     * @ApiProperty(iri="http://schema.org/alternateName")
+     *
      * @ORM\Column(name="role",type="string",unique=true,length=70)
+     *
+     * @Groups({"SecurityRoleAdminRead"})
      */
     protected $role;
 
@@ -47,9 +82,8 @@ class SecurityRole extends Role
      */
     public function __construct(?string $role = null)
     {
-        parent::__construct($role);
-        $this->role = $role;
         $this->users = new ArrayCollection();
+        $this->setRole($role);
     }
 
 
@@ -63,7 +97,7 @@ class SecurityRole extends Role
 
 
     /**
-     * @return string|null
+     * @inheritdoc
      */
     public function getRole(): ?string
     {
@@ -71,9 +105,30 @@ class SecurityRole extends Role
     }
 
 
-    public function setRole(string $role)
+    /**
+     * @param string|null $role
+     */
+    public function setRole(?string $role)
     {
-        $this->role= $role;
+        $this->role = $role;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
     }
 
 
@@ -101,6 +156,7 @@ class SecurityRole extends Role
         $this->users->removeElement($user);
     }
 
+
     /**
      * @param Role|null $role
      *
@@ -117,6 +173,6 @@ class SecurityRole extends Role
      */
     public function __toString()
     {
-        return (string) ($this->getRole() ?? '');
+        return $this->getName();
     }
 }
