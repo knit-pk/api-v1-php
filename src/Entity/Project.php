@@ -46,7 +46,7 @@ class Project
     /**
      * @var Uuid
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -67,7 +67,7 @@ class Project
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE")
      *
      * @Assert\NotBlank()
      */

@@ -9,31 +9,23 @@ easy_admin:
                     - fullname
                     - username
                     - email
+                    - securityRoles
                     - enabled
+                    - superAdmin
             form:
                 fields:
                     - fullname
                     - username
                     - email
                     - enabled
+                    - superAdmin
                     - lastLogin
+                    - securityRoles
                     - { property: plainPassword,
                         type: 'text',
                         type_options: {
                             required: false
                         } }
-
-                    - { property: roles,
-                        type: 'choice',
-                        type_options: {
-                            multiple: true,
-                            choices: {
-                                USER: 'ROLE_USER',
-                                READER: 'ROLE_READER',
-                                WRITER: 'ROLE_WRITER',
-                                ADMIN: 'ROLE_ADMIN',
-                                SUPER_ADMIN: 'ROLE_SUPER_ADMIN',
-                            } } }
 
         Project:
             class: App\Entity\Project
@@ -88,3 +80,15 @@ easy_admin:
             form:
                 fields:
                     - name
+        SecurityRole:
+            class: App\Entity\SecurityRole
+            list:
+                fields:
+                    - name
+                    - role
+                    - users
+            form:
+                fields:
+                    - name
+                    - role
+                    - { property: 'users', type_options: { by_reference: false } }

@@ -9,15 +9,36 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class UserFixtures extends Fixture
 {
-    /**
-     * Users to create for tests
-     */
-    private const DEFAULT_USERS = [
-        'Super Admin',
-        'Admin',
-        'Reader',
-        'Writer',
-        'User',
+    public const DEFAULT_USERS = [
+        'Super Admin'     => [
+            USER::ROLE_SUPER_ADMIN,
+        ],
+        'Admin'           => [
+            USER::ROLE_ADMIN,
+        ],
+        'Reader'          => [
+            USER::ROLE_READER,
+        ],
+        'Writer'          => [
+            USER::ROLE_WRITER,
+        ],
+        'User'            => [
+            USER::ROLE_USER,
+        ],
+        'User Writer'     => [
+            USER::ROLE_USER_WRITER,
+        ],
+        'Articles Author' => [
+            USER::ROLE_USER,
+        ],
+    ];
+
+    public const PUBLIC_USERNAMES = [
+        'reader',
+        'writer',
+        'user',
+        'user_writer',
+        'articles_author',
     ];
 
 
@@ -25,25 +46,47 @@ class UserFixtures extends Fixture
      * Load data fixtures with the passed EntityManager
      *
      * @param ObjectManager $manager
+     *
+     * @throws \DomainException
      */
     public function load(ObjectManager $manager): void
     {
-        foreach (self::DEFAULT_USERS as $defaultUser) {
-            $username = strtolower(str_replace(' ', '_', $defaultUser));
+        $publicUsers = array_flip(self::PUBLIC_USERNAMES);
+
+        foreach (self::DEFAULT_USERS as $fullname => $roles) {
+            $username = strtolower(str_replace(' ', '_', $fullname));
             $email = sprintf('%s@%s.pl', $username, $username);
-            $role = sprintf('ROLE_%s', strtoupper($username));
 
             $user = new User();
-            $user->setFullname($defaultUser);
+            $user->setFullname($fullname);
             $user->setUsername($username);
             $user->setEmail($email);
             $user->setEnabled(true);
-            $user->setRoles([$role]);
             $user->setPlainPassword($username);
+
+            foreach ($roles as $role) {
+                $securityRole = $this->getReference(sprintf('security-%s', strtolower($role)));
+                $user->addSecurityRole($securityRole);
+            }
+
+            // Add default role
+            $user->addSecurityRole($this->getReference(sprintf('security-%s', strtolower(USER::ROLE_DEFAULT))));
+
+            if (isset($publicUsers[$username])) {
+                $this->setReference(sprintf('user-%s', $username), $user);
+            }
 
             $manager->persist($user);
         }
 
         $manager->flush();
+    }
+
+
+    public function getDependencies(): array
+    {
+        return [
+            SecurityRoleFixtures::class,
+        ];
     }
 }

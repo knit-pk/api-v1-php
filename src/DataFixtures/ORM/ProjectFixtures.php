@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\DataFixtures\ORM;
 
 use App\Entity\Project;
-use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -18,27 +17,28 @@ class ProjectFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        $projectAuthor = new User();
-        $projectAuthor->setFullname('Projects Author');
-        $projectAuthor->setUsername('author');
-        $projectAuthor->setEmail('author@author.pl');
-        $projectAuthor->setEnabled(true);
-        $projectAuthor->setRoles(['ROLE_USER']);
-        $projectAuthor->setPlainPassword('author');
+        $author = $this->getReference('user-reader');
 
-        $manager->persist($projectAuthor);
-
-        for($i = 1; $i <= 10; ++$i) {
-            $projectName = sprintf('Project %d', $i);
+        for ($i = 1; $i <= 10; ++$i) {
+            $name = sprintf('Project %d', $i);
 
             $project = new Project();
-            $project->setName($projectName);
-            $project->setDescription(sprintf('Fantastic %s description.', $projectName));
-            $project->setAuthor($projectAuthor);
-            $project->setUrl(sprintf('https://github.com/%s/%s', strtolower($projectAuthor->getUsername()), strtolower(str_replace(' ', '-', $projectName))));
+            $project->setName($name);
+            $project->setDescription(sprintf('Fantastic %s description.', $name));
+            $project->setAuthor($author);
+            $project->setUrl(sprintf('https://github.com/%s/%s', strtolower($author->getUsername()), strtolower(str_replace(' ', '-', $name))));
+
             $manager->persist($project);
         }
 
         $manager->flush();
+    }
+
+
+    public function getDependencies(): array
+    {
+        return [
+            UserFixtures::class,
+        ];
     }
 }
