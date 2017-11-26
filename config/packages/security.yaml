@@ -20,6 +20,7 @@ security:
         admin_login:
             pattern: ^/admin/login$
             anonymous: true
+            logout_on_user_change: true
 
         admin:
             pattern:  ^/admin
@@ -31,6 +32,7 @@ security:
                 check_path: fos_user_security_check
                 always_use_default_target_path: true
                 default_target_path: /admin
+            logout_on_user_change: true
 
             remember_me:
                 secret: '%kernel.secret%'

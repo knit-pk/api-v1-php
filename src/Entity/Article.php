@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -164,13 +165,11 @@ class Article
     protected $author;
 
     /**
-     * @var \DateTimeInterface|null date of first broadcast/publication
+     * @var DateTime|null date of first broadcast/publication
      *
      * @ORM\Column(type="datetime",nullable=true)
      *
      * @ApiProperty(iri="http://schema.org/datePublished")
-     *
-     * @Assert\DateTime()
      *
      * @Gedmo\Timestampable(on="change",field="published",value=true)
      *
@@ -188,7 +187,7 @@ class Article
     protected $published;
 
     /**
-     * @var \DateTimeInterface|null the date on which the CreativeWork was most recently modified or when the item's entry was modified within a DataFeed
+     * @var DateTime|null the date on which the CreativeWork was most recently modified or when the item's entry was modified within a DataFeed
      *
      * @ORM\Column(type="datetime")
      *
@@ -196,22 +195,18 @@ class Article
      *
      * @Gedmo\Timestampable(on="update")
      *
-     * @Assert\DateTime()
-     *
      * @Groups({"ArticleRead"})
      */
     protected $updatedAt;
 
     /**
-     * @var \DateTimeInterface|null the date on which the CreativeWork was created or the item was added to a DataFeed
+     * @var DateTime|null the date on which the CreativeWork was created or the item was added to a DataFeed
      *
      * @ORM\Column(type="datetime")
      *
      * @ApiProperty(iri="http://schema.org/dateCreated")
      *
      * @Gedmo\Timestampable(on="create")
-     *
-     * @Assert\DateTime()
      *
      * @Groups({"ArticleRead"})
      */
@@ -225,18 +220,12 @@ class Article
     }
 
 
-    /**
-     * @return null|\Ramsey\Uuid\Uuid
-     */
     public function getId(): ?Uuid
     {
         return $this->id;
     }
 
 
-    /**
-     * @return string
-     */
     public function getCode(): string
     {
         return $this->code;
@@ -255,18 +244,12 @@ class Article
     }
 
 
-    /**
-     * @return Category
-     */
     public function getCategory(): Category
     {
         return $this->category;
     }
 
 
-    /**
-     * @param Category $category
-     */
     public function setCategory(Category $category): void
     {
         $this->category = $category;
@@ -315,19 +298,19 @@ class Article
     }
 
 
-    public function getPublishedAt(): ?\DateTimeInterface
+    public function getPublishedAt(): ?DateTime
     {
         return $this->publishedAt;
     }
 
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
@@ -345,33 +328,18 @@ class Article
     }
 
 
-    /**
-     * @return bool
-     */
     public function isPublished(): bool
     {
         return $this->published;
     }
 
 
-    /**
-     * @param bool $published
-     *
-     * @return Article
-     */
-    public function setPublished($published): Article
+    public function setPublished($published): void
     {
         $this->published = (bool) $published;
-
-        return $this;
     }
 
 
-    /**
-     * @param UserInterface|null $user
-     *
-     * @return bool
-     */
     public function isAuthor(?UserInterface $user): bool
     {
         $author = $this->getAuthor();
