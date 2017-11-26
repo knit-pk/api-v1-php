@@ -17,11 +17,11 @@
     "predis/predis": "^1.1",
     "ramsey/uuid-doctrine": "^1.4",
     "roave/security-advisories": "dev-master",
-    "ruflin/Elastica": "^5.3",
     "symfony/flex": "^1.0",
-    "symfony/framework-bundle": "^3.3",
+    "symfony/framework-bundle": "^3.4",
     "symfony/monolog-bundle": "^3.1",
-    "symfony/yaml": "^3.3"
+    "symfony/yaml": "^3.4",
+    "vich/uploader-bundle": "^1.6"
   },
   "repositories": [
     {
@@ -34,10 +34,10 @@
     "doctrine/doctrine-fixtures-bundle": "^2.4",
     "javiereguiluz/easyadmin-bundle": "^1.17",
     "phpunit/phpunit": "^6.4",
-    "symfony/console": "^3.3",
-    "symfony/dotenv": "^3.3",
+    "symfony/console": "^3.4",
+    "symfony/dotenv": "^3.4",
     "symfony/profiler-pack": "^1.0",
-    "symfony/web-server-bundle": "^3.3"
+    "symfony/web-server-bundle": "^3.4"
   },
   "config": {
     "preferred-install": {

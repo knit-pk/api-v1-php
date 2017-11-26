@@ -18,7 +18,7 @@ services:
            - mysql_data:/var/lib/mysql
 
 #    oracle:
-#        image: k911/oracle-12c:0.1.1-prebuilt
+#        image: k911/oracle-12c:0.2.0-ee-prebuilt
 #        ports:
 #            - "1521:1521"
 #        shm_size: 1G
