@@ -13,16 +13,18 @@ final class SwaggerDocumentation implements NormalizerInterface
      * Unsecured api docs paths
      */
     private const NOT_SECURED_PATHS = [
-        '/token'         => ['post'],
-        '/token/refresh' => ['post'],
-        '/articles'      => ['get'],
-        '/articles/{id}' => ['get'],
-        '/projects'      => ['get'],
-        '/projects/{id}' => ['get'],
-        '/tags'          => ['get'],
-        '/tags/{id}'     => ['get'],
-        '/categories'    => ['get'],
-        '/category/{id}' => ['get'],
+        '/token'               => ['post'],
+        '/token/refresh'       => ['post'],
+        '/articles'            => ['get'],
+        '/articles/{id}'       => ['get'],
+        '/projects'            => ['get'],
+        '/projects/{id}'       => ['get'],
+        '/tags'                => ['get'],
+        '/tags/{id}'           => ['get'],
+        '/categories'          => ['get'],
+        '/category/{id}'       => ['get'],
+        '/security_roles'      => ['get'],
+        '/security_roles/{id}' => ['get'],
     ];
 
     /**

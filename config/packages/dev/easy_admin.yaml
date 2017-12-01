@@ -98,11 +98,13 @@ easy_admin:
             list:
                 fields:
                     - originalName
+                    - author
                     - createdAt
                     - updatedAt
             show:
                 fields:
                     - id
+                    - author
                     - originalName
                     - { property: 'url', type: 'url' }
                     - createdAt
@@ -110,4 +112,5 @@ easy_admin:
                     - { property: 'name', type: 'image', base_path: '/media/upload' }
             form:
                 fields:
+                    - author
                     - { property: 'file', type: 'vich_image' }
