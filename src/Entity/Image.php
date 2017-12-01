@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @Vich\Uploadable()
@@ -57,7 +57,7 @@ class Image
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
-     * @Groups({"ImageRead"})
+     * @Groups({"ImageRead","ImageReadLess"})
      */
     protected $id;
 
@@ -66,9 +66,7 @@ class Image
      *
      * @ORM\Column(type="string")
      *
-     * @Assert\NotBlank()
-     *
-     * @Groups({"ImageRead", "ImageWrite"})
+     * @Groups({"ImageRead","ImageWrite","ImageReadLess","UserReadLess"})
      */
     protected $url;
 
@@ -84,7 +82,7 @@ class Image
      *
      * @ORM\Column(type="string",nullable=true)
      *
-     * @Groups({"ImageRead", "ImageWrite"})
+     * @Groups({"ImageRead","ImageWrite"})
      */
     private $originalName;
 
@@ -103,7 +101,7 @@ class Image
      *
      * @Assert\NotBlank()
      *
-     * @Groups({"ImageRead", "ImageWrite"})
+     * @Groups({"ImageRead","ImageWrite"})
      */
     protected $author;
 
@@ -217,5 +215,11 @@ class Image
         }
 
         return $author->isUser($user);
+    }
+
+
+    public function __toString(): string
+    {
+        return (string) $this->getUrl();
     }
 }
