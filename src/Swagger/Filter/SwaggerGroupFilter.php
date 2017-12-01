@@ -40,7 +40,7 @@ final class SwaggerGroupFilter implements FilterInterface
     {
         $description = $this->decorated->getDescription($resourceClass);
 
-        $groups = array_slice($this->whitelist, 0, 3) + ['Group', 'Group'];
+        $groups = \array_slice($this->whitelist, 0, 3) + ['Group', 'Group'];
         $descriptionText = sprintf('Add group to serialization context. Example usage: ?group[]=%s', implode('&group[]=', $groups));
 
         foreach ($description as $property => $data) {

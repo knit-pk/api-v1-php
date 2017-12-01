@@ -5,13 +5,44 @@ namespace App\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Vich\Uploadable()
+ *
+ * @ApiResource(attributes={
+ *      "normalization_context"={"groups"={"ImageRead"}},
+ *      "denormalization_context"={"groups"={"ImageWrite"}},
+ * },
+ * collectionOperations={
+ *     "get"={
+ *          "method"="GET",
+ *     },
+ *     "post"={
+ *          "method"="POST",
+ *          "access_control"="is_granted('ROLE_USER_WRITER')",
+ *     },
+ * },
+ * itemOperations={
+ *     "get"={
+ *          "method"="GET",
+ *     },
+ *     "put"={
+ *          "method"="PUT",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     },
+ *     "delete"={
+ *          "method"="DELETE",
+ *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     },
+ * })
  *
  * @ORM\Entity()
  * @ORM\Table(name="images")
@@ -25,6 +56,8 @@ class Image
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     *
+     * @Groups({"ImageRead"})
      */
     protected $id;
 
@@ -32,6 +65,10 @@ class Image
      * @var string
      *
      * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank()
+     *
+     * @Groups({"ImageRead", "ImageWrite"})
      */
     protected $url;
 
@@ -46,6 +83,8 @@ class Image
      * @var string
      *
      * @ORM\Column(type="string",nullable=true)
+     *
+     * @Groups({"ImageRead", "ImageWrite"})
      */
     private $originalName;
 
@@ -57,11 +96,25 @@ class Image
     private $file;
 
     /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE")
+     *
+     * @Assert\NotBlank()
+     *
+     * @Groups({"ImageRead", "ImageWrite"})
+     */
+    protected $author;
+
+    /**
      * @var DateTime|null the date on which the CreativeWork was most recently modified or when the item's entry was modified within a DataFeed
      *
      * @ORM\Column(type="datetime")
      *
      * @Gedmo\Timestampable(on="update")
+     *
+     * @Groups({"ImageRead"})
      */
     protected $updatedAt;
 
@@ -71,6 +124,8 @@ class Image
      * @ORM\Column(type="datetime")
      *
      * @Gedmo\Timestampable(on="create")
+     *
+     * @Groups({"ImageRead"})
      */
     protected $createdAt;
 
@@ -110,10 +165,12 @@ class Image
         $this->name = $name;
     }
 
+
     public function getUrl(): ?string
     {
         return $this->url;
     }
+
 
     public function setUrl(string $url): void
     {
@@ -136,5 +193,29 @@ class Image
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+
+    public function setAuthor(User $author): void
+    {
+        $this->author = $author;
+    }
+
+
+    public function isAuthor(?UserInterface $user): bool
+    {
+        $author = $this->getAuthor();
+
+        if (!$author instanceof User) {
+            return false;
+        }
+
+        return $author->isUser($user);
     }
 }
