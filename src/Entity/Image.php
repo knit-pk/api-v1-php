@@ -29,6 +29,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *          "method"="POST",
  *          "access_control"="is_granted('ROLE_USER_WRITER')",
  *     },
+ *     "upload"={
+ *          "route_name"="api_images_upload",
+ *          "access_control"="is_granted('ROLE_USER_WRITER')",
+ *      },
  * },
  * itemOperations={
  *     "get"={
