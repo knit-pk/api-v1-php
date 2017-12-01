@@ -97,11 +97,14 @@ easy_admin:
             class: App\Entity\Image
             list:
                 fields:
-                    - name
+                    - originalName
                     - createdAt
                     - updatedAt
             show:
                 fields:
+                    - id
+                    - originalName
+                    - { property: 'url', type: 'url' }
                     - createdAt
                     - updatedAt
                     - { property: 'name', type: 'image', base_path: '/media/upload' }

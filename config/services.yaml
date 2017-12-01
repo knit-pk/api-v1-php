@@ -44,10 +44,16 @@ services:
             - [ setAnnotationReader, ['@annotation_reader']]
 
     ### Add custom payload to JWT Access Token
-    acme_api.event.jwt_created_listener:
+    app.event.jwt_created_listener:
         class: App\EventListener\JWTCreatedListener
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+    ### Add custom payload to JWT Access Token
+    app.event.image_uploaded_listener:
+        class: App\EventListener\ImageUploadedListener
+        tags:
+            - { name: kernel.event_listener, event: vich_uploader.post_upload, method: onVichUploaderPostUpload }
 
     ### Dynamically inject serialization groups for admins
     'App\Serializer\AdminContextBuilder':

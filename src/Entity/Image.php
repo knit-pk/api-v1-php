@@ -31,14 +31,28 @@ class Image
     /**
      * @var string
      *
-     * @ORM\Column(type="string",unique=true)
+     * @ORM\Column(type="string")
+     */
+    protected $url;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string",unique=true,nullable=true)
      */
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string",nullable=true)
+     */
+    private $originalName;
+
+    /**
      * @var File|null
      *
-     * @Vich\UploadableField(mapping="images",fileNameProperty="name")
+     * @Vich\UploadableField(mapping="images",fileNameProperty="name",originalName="originalName")
      */
     private $file;
 
@@ -94,6 +108,28 @@ class Image
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
+    }
+
+
+    public function setOriginalName(?string $originalName): void
+    {
+        $this->originalName = $originalName;
+    }
+
+
+    public function getOriginalName(): ?string
+    {
+        return $this->originalName;
     }
 
 
