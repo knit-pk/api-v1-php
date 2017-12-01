@@ -234,6 +234,34 @@ final class SwaggerDocumentation implements NormalizerInterface
                     ],
                 ]),
             ],
+            '/images/upload' => [
+                'post' => new ArrayObject([
+                    'tags'        => ['Image'],
+                    'consumes'    => 'application/x-www-form-urlencoded',
+                    'produces'    => 'application/json',
+                    'summary'     => 'Create an Image resource from file.',
+                    'description' => 'Create an Image resource from uploaded file.',
+                    'parameters'  => [
+                        [
+                            'name'        => 'image',
+                            'in'          => 'formData',
+                            'type'        => 'file',
+                            'description' => 'Image file to create resource from.',
+                        ],
+                    ],
+                    'responses'   => [
+                        '200' => [
+                            'description' => 'Successfully generated token',
+                            'schema'      => [
+                                '$ref'       => '#/definitions/Image-ImageRead',
+                            ],
+                        ],
+                        '400' => [
+                            'description' => 'Invalid input',
+                        ],
+                    ],
+                ]),
+            ],
         ];
 
         foreach ($additionalPaths as $additionalPath => $methods) {
