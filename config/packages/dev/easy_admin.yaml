@@ -6,9 +6,10 @@ easy_admin:
             class: App\Entity\User
             list:
                 fields:
-                    - fullname
                     - username
+                    - fullname
                     - email
+                    - { property: avatar, type: 'image' }
                     - securityRoles
                     - enabled
                     - superAdmin
@@ -17,6 +18,7 @@ easy_admin:
                     - fullname
                     - username
                     - email
+                    - avatar
                     - enabled
                     - superAdmin
                     - lastLogin

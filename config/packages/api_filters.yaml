@@ -21,6 +21,11 @@ services:
         arguments: [ 'group', false, ['UserReadLess'] ]
         tags: [ 'api_platform.filter' ]
 
+    app.user.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['ImageReadLess'] ]
+        tags: [ 'api_platform.filter' ]
+
     app.tag.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
         arguments: [ { name: 'partial' } ]

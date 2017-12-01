@@ -24,6 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(iri="http://schema.org/Person",
  * attributes={
+ *     "filters"={"app.user.group_filter"},
  *     "normalization_context"={"groups"={"UserRead"}},
  *     "denormalization_context"={"groups"={"UserWrite"}},
  * },
@@ -147,6 +148,16 @@ class User implements UserInterface
     protected $plainPassword;
 
     /**
+     * @var Image
+     *
+     * @ORM\ManyToOne(targetEntity="Image")
+     * @ORM\JoinColumn(name="avatar_image_id",referencedColumnName="id",onDelete="RESTRICT")
+     *
+     * @Groups({"UserRead","UserWrite","UserReadLess"})
+     */
+    protected $avatar;
+
+    /**
      * @var DateTime
      *
      * @ORM\Column(type="datetime")
@@ -180,7 +191,7 @@ class User implements UserInterface
      *      }
      * )
      *
-     * @Groups({"UserAdminWrite", "UserAdminRead"})
+     * @Groups({"UserAdminWrite","UserAdminRead"})
      */
     protected $securityRoles;
 
@@ -189,7 +200,7 @@ class User implements UserInterface
      *
      * @ORM\Column(name="enabled",type="boolean")
      *
-     * @Groups({"UserAdminWrite", "UserAdminRead"})
+     * @Groups({"UserAdminWrite","UserAdminRead"})
      */
     protected $enabled;
 
@@ -278,6 +289,24 @@ class User implements UserInterface
     public function getId(): ?Uuid
     {
         return $this->id;
+    }
+
+
+    /**
+     * @return Image
+     */
+    public function getAvatar(): ?Image
+    {
+        return $this->avatar;
+    }
+
+
+    /**
+     * @param Image $avatar
+     */
+    public function setAvatar(?Image $avatar): void
+    {
+        $this->avatar = $avatar;
     }
 
 
@@ -607,7 +636,7 @@ class User implements UserInterface
      */
     public function setSuperAdmin($boolean)
     {
-        if(!$this->superAdmin = (bool) $boolean) {
+        if (!$this->superAdmin = (bool) $boolean) {
             $this->removeRole(static::ROLE_SUPER_ADMIN);
         }
 
