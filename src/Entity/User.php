@@ -148,6 +148,8 @@ class User implements UserInterface
     protected $plainPassword;
 
     /**
+     * @ApiProperty(iri="http://schema.org/image")
+     *
      * @var Image
      *
      * @ORM\ManyToOne(targetEntity="Image")
@@ -364,17 +366,18 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = [static::ROLE_DEFAULT];
-
-        if ($this->superAdmin) {
-            $roles[] = static::ROLE_SUPER_ADMIN;
-        }
+        $roles = [];
 
         foreach ($this->securityRoles as $securityRole) {
             $roles[] = $securityRole->getRole();
         }
 
-        return array_unique($roles);
+        $roles[] = static::ROLE_DEFAULT;
+        if ($this->superAdmin) {
+            $roles[] = static::ROLE_SUPER_ADMIN;
+        }
+
+        return array_values(array_unique($roles));
     }
 
 

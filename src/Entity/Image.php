@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +18,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @Vich\Uploadable()
  *
- * @ApiResource(attributes={
+ * @ApiResource(iri="http://schema.org/ImageObject",
+ * attributes={
  *      "normalization_context"={"groups"={"ImageRead"}},
  *      "denormalization_context"={"groups"={"ImageWrite"}},
  * },
@@ -66,6 +68,8 @@ class Image
     protected $id;
 
     /**
+     * @ApiProperty(iri="http://schema.org/URL")
+     *
      * @var string
      *
      * @ORM\Column(type="string")
