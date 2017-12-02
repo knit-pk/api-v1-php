@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DataFixtures\ORM;
@@ -10,22 +11,22 @@ use Doctrine\Common\Persistence\ObjectManager;
 class UserFixtures extends Fixture
 {
     public const DEFAULT_USERS = [
-        'Super Admin'     => [
+        'Super Admin' => [
             USER::ROLE_SUPER_ADMIN,
         ],
-        'Admin'           => [
+        'Admin' => [
             USER::ROLE_ADMIN,
         ],
-        'Reader'          => [
+        'Reader' => [
             USER::ROLE_READER,
         ],
-        'Writer'          => [
+        'Writer' => [
             USER::ROLE_WRITER,
         ],
-        'User'            => [
+        'User' => [
             USER::ROLE_USER,
         ],
-        'User Writer'     => [
+        'User Writer' => [
             USER::ROLE_USER_WRITER,
         ],
         'Articles Author' => [
@@ -41,9 +42,8 @@ class UserFixtures extends Fixture
         'articles_author',
     ];
 
-
     /**
-     * Load data fixtures with the passed EntityManager
+     * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
      *
@@ -81,7 +81,6 @@ class UserFixtures extends Fixture
 
         $manager->flush();
     }
-
 
     public function getDependencies(): array
     {

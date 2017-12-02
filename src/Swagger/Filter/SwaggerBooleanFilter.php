@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Swagger\Filter;
@@ -9,15 +10,12 @@ use Doctrine\ORM\QueryBuilder;
 
 final class SwaggerBooleanFilter implements FilterInterface
 {
-
     private $decorated;
-
 
     public function __construct(FilterInterface $decorated)
     {
         $this->decorated = $decorated;
     }
-
 
     public function getDescription(string $resourceClass): array
     {
@@ -25,14 +23,13 @@ final class SwaggerBooleanFilter implements FilterInterface
 
         foreach ($description as $property => $data) {
             $description[$property]['swagger'] = [
-                'type'        => 'boolean',
+                'type' => 'boolean',
                 'description' => 'Filter: Boolean',
             ];
         }
 
         return $description;
     }
-
 
     public function apply(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
     {

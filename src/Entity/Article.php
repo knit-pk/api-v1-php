@@ -165,6 +165,18 @@ class Article
     protected $author;
 
     /**
+     * @var Image|null an image of the item
+     *
+     * @ORM\ManyToOne(targetEntity="Image")
+     * @ORM\JoinColumn(name="image_id",referencedColumnName="id",onDelete="RESTRICT")
+     *
+     * @ApiProperty(iri="http://schema.org/image")
+     *
+     * @Groups({"ArticleRead", "ArticleWrite"})
+     */
+    protected $image;
+
+    /**
      * @var DateTime|null date of first broadcast/publication
      *
      * @ORM\Column(type="datetime",nullable=true)
@@ -212,133 +224,127 @@ class Article
      */
     protected $createdAt;
 
-
     public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->published = false;
     }
 
-
     public function getId(): ?Uuid
     {
         return $this->id;
     }
-
 
     public function getCode(): string
     {
         return $this->code;
     }
 
-
     public function setContent(?string $content): void
     {
         $this->content = $content;
     }
-
 
     public function getContent(): ?string
     {
         return $this->content;
     }
 
+    /**
+     * @return Image|null
+     */
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param Image|null $image
+     */
+    public function setImage(?Image $image): void
+    {
+        $this->image = $image;
+    }
 
     public function getCategory(): Category
     {
         return $this->category;
     }
 
-
     public function setCategory(Category $category): void
     {
         $this->category = $category;
     }
-
 
     public function addTag(Tag $tag): void
     {
         $this->tags[] = $tag;
     }
 
-
     public function removeTag(Tag $tag): void
     {
         $this->tags->removeElement($tag);
     }
-
 
     public function getTags(): Collection
     {
         return $this->tags;
     }
 
-
     public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
-
 
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-
     public function setAuthor(?User $author): void
     {
         $this->author = $author;
     }
-
 
     public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-
     public function getPublishedAt(): ?DateTime
     {
         return $this->publishedAt;
     }
-
 
     public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-
     public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
-
 
     public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
 
-
     public function getTitle(): ?string
     {
         return $this->title;
     }
-
 
     public function isPublished(): bool
     {
         return $this->published;
     }
 
-
     public function setPublished($published): void
     {
         $this->published = (bool) $published;
     }
-
 
     public function isAuthor(?UserInterface $user): bool
     {

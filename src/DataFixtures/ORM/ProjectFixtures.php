@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DataFixtures\ORM;
@@ -9,9 +10,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class ProjectFixtures extends Fixture
 {
-
     /**
-     * Load data fixtures with the passed EntityManager
+     * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
      */
@@ -33,7 +33,6 @@ class ProjectFixtures extends Fixture
 
         $manager->flush();
     }
-
 
     public function getDependencies(): array
     {

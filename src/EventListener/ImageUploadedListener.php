@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\EventListener;
@@ -22,13 +23,11 @@ class ImageUploadedListener
      */
     private $requestStack;
 
-
     public function __construct(StorageInterface $storage, RequestStack $requestStack)
     {
         $this->storage = $storage;
         $this->requestStack = $requestStack;
     }
-
 
     public function onVichUploaderPostUpload(Event $event): void
     {
@@ -38,7 +37,6 @@ class ImageUploadedListener
             $entity->setUrl($this->getRequest()->getUriForPath($path));
         }
     }
-
 
     private function getRequest(): Request
     {

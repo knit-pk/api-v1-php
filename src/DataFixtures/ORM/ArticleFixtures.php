@@ -1,18 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DataFixtures\ORM;
 
 use App\Entity\Article;
-use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 class ArticleFixtures extends Fixture
 {
-
     /**
-     * Load data fixtures with the passed EntityManager
+     * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
      */
@@ -24,7 +23,6 @@ class ArticleFixtures extends Fixture
         $tagCollectionTotalItems = \count($tagCollection);
 
         for ($i = 1; $i <= 10; ++$i) {
-
             shuffle($usersCollection);
             $author = $this->getReference(sprintf('user-%s', $usersCollection[0]));
 
@@ -55,7 +53,6 @@ class ArticleFixtures extends Fixture
 
         $manager->flush();
     }
-
 
     public function getDependencies(): array
     {

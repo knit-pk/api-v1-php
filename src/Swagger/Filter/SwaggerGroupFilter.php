@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Swagger\Filter;
@@ -11,11 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class SwaggerGroupFilter implements FilterInterface
 {
-
     private $decorated;
 
     private $whitelist;
-
 
     public function __construct(FilterInterface $decorated)
     {
@@ -26,7 +25,7 @@ final class SwaggerGroupFilter implements FilterInterface
         }
 
         /**
-         * Hacks
+         * Hacks.
          */
         $whitelist = $reflection->getProperty('whitelist');
         $whitelist->setAccessible(true);
@@ -34,7 +33,6 @@ final class SwaggerGroupFilter implements FilterInterface
 
         $this->decorated = $decorated;
     }
-
 
     public function getDescription(string $resourceClass): array
     {
@@ -46,14 +44,13 @@ final class SwaggerGroupFilter implements FilterInterface
         foreach ($description as $property => $data) {
             $description[$property]['swagger'] = [
                 'description' => $descriptionText,
-                'enum'        => $this->whitelist,
-                'type'        => 'string',
+                'enum' => $this->whitelist,
+                'type' => 'string',
             ];
         }
 
         return $description;
     }
-
 
     public function apply(Request $request, bool $normalization, array $attributes, array &$context)
     {

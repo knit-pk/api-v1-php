@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DataFixtures\ORM;
@@ -9,7 +10,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class CategoryFixtures extends Fixture
 {
-
     public const PUBLIC_CATEGORY_CODES = [
         'news',
         'article',
@@ -18,9 +18,11 @@ class CategoryFixtures extends Fixture
 
 
     /**
-     * Load data fixtures with the passed EntityManager
+     * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
+     *
+     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     public function load(ObjectManager $manager): void
     {
@@ -40,7 +42,6 @@ class CategoryFixtures extends Fixture
 
         $manager->flush();
     }
-
 
     private function getCategoriesData(): array
     {

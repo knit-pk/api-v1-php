@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Metadata\Resource\Factory;
@@ -12,7 +13,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundE
 
 final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInterface
 {
-
     /**
      * @var \ApiPlatform\Core\Metadata\Property\Factory\PropertyNameCollectionFactoryInterface
      */
@@ -28,7 +28,6 @@ final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInter
      */
     private $adminSerializerGroupFactory;
 
-
     /**
      * AdminResourceMetadataFactory constructor.
      *
@@ -42,7 +41,6 @@ final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInter
         $this->authorizationChecker = $authorizationChecker;
         $this->adminSerializerGroupFactory = $adminSerializerGroupFactory;
     }
-
 
     /**
      * Creates a resource metadata.
@@ -88,7 +86,6 @@ final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInter
 
         return $resourceMetadata;
     }
-
 
     /**
      * Safely check if authenticated as admin.
