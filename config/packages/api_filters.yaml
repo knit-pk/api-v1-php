@@ -13,12 +13,17 @@ services:
 
     app.article.group_filter:
         parent: 'api_platform.serializer.group_filter'
-        arguments: [ 'group', false, ['UserReadLess', 'TagRead', 'CategoryRead'] ]
+        arguments: [ 'group', false, ['UserReadLess', 'ImageReadLess', 'TagRead', 'CategoryRead'] ]
         tags: [ 'api_platform.filter' ]
 
     app.project.group_filter:
         parent: 'api_platform.serializer.group_filter'
         arguments: [ 'group', false, ['UserReadLess'] ]
+        tags: [ 'api_platform.filter' ]
+
+    app.user.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['ImageReadLess'] ]
         tags: [ 'api_platform.filter' ]
 
     app.tag.search_filter:

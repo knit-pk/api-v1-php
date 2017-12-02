@@ -1,7 +1,4 @@
 {
-    "symfony/polyfill-apcu": {
-        "version": "v1.6.0"
-    },
     "symfony/flex": {
         "version": "1.0",
         "recipe": {
@@ -494,19 +491,16 @@
     "predis/predis": {
         "version": "v1.1.1"
     },
-    "react/promise": {
-        "version": "v2.5.1"
+    "vich/uploader-bundle": {
+        "version": "1.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.5",
+            "ref": "c4f5755b37fb65b9c6a3cbdae91205c15a137ed4"
+        }
     },
-    "guzzlehttp/streams": {
-        "version": "3.0.0"
-    },
-    "guzzlehttp/ringphp": {
-        "version": "1.1.0"
-    },
-    "elasticsearch/elasticsearch": {
-        "version": "v5.3.0"
-    },
-    "ruflin/elastica": {
-        "version": "5.3.0"
+    "jms/metadata": {
+        "version": "1.6.0"
     }
 }

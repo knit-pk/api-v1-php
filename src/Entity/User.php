@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(iri="http://schema.org/Person",
  * attributes={
+ *     "filters"={"app.user.group_filter"},
  *     "normalization_context"={"groups"={"UserRead"}},
  *     "denormalization_context"={"groups"={"UserWrite"}},
  * },
@@ -147,6 +149,18 @@ class User implements UserInterface
     protected $plainPassword;
 
     /**
+     * @ApiProperty(iri="http://schema.org/image")
+     *
+     * @var Image
+     *
+     * @ORM\ManyToOne(targetEntity="Image")
+     * @ORM\JoinColumn(name="avatar_image_id",referencedColumnName="id",onDelete="RESTRICT")
+     *
+     * @Groups({"UserRead","UserWrite","UserReadLess"})
+     */
+    protected $avatar;
+
+    /**
      * @var DateTime
      *
      * @ORM\Column(type="datetime")
@@ -180,7 +194,7 @@ class User implements UserInterface
      *      }
      * )
      *
-     * @Groups({"UserAdminWrite", "UserAdminRead"})
+     * @Groups({"UserAdminWrite","UserAdminRead"})
      */
     protected $securityRoles;
 
@@ -189,7 +203,7 @@ class User implements UserInterface
      *
      * @ORM\Column(name="enabled",type="boolean")
      *
-     * @Groups({"UserAdminWrite", "UserAdminRead"})
+     * @Groups({"UserAdminWrite","UserAdminRead"})
      */
     protected $enabled;
 
@@ -227,7 +241,6 @@ class User implements UserInterface
      */
     private $superAdmin;
 
-
     /**
      * User constructor.
      */
@@ -237,7 +250,6 @@ class User implements UserInterface
         $this->superAdmin = false;
         $this->securityRoles = new ArrayCollection();
     }
-
 
     /**
      * {@inheritdoc}
@@ -256,7 +268,6 @@ class User implements UserInterface
         ]);
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -274,12 +285,26 @@ class User implements UserInterface
         ] = unserialize($serialized, ['allowed_classes' => true]);
     }
 
-
     public function getId(): ?Uuid
     {
         return $this->id;
     }
 
+    /**
+     * @return Image
+     */
+    public function getAvatar(): ?Image
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param Image $avatar
+     */
+    public function setAvatar(?Image $avatar): void
+    {
+        $this->avatar = $avatar;
+    }
 
     /**
      * @param string $role
@@ -297,9 +322,8 @@ class User implements UserInterface
         return null;
     }
 
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws \DomainException
      */
@@ -312,13 +336,12 @@ class User implements UserInterface
         return $this;
     }
 
-
     /**
      * {@inheritdoc}
      *
      * @throws \DomainException
      */
-    public function addRole($role): User
+    public function addRole($role): self
     {
         if (!$role instanceof SecurityRole) {
             throw new DomainException('Can add only SecurityRole object as User role.');
@@ -329,39 +352,37 @@ class User implements UserInterface
         return $this;
     }
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoles(): array
     {
-        $roles = [static::ROLE_DEFAULT];
-
-        if ($this->superAdmin) {
-            $roles[] = static::ROLE_SUPER_ADMIN;
-        }
+        $roles = [];
 
         foreach ($this->securityRoles as $securityRole) {
             $roles[] = $securityRole->getRole();
         }
 
-        return array_unique($roles);
+        $roles[] = static::ROLE_DEFAULT;
+        if ($this->superAdmin) {
+            $roles[] = static::ROLE_SUPER_ADMIN;
+        }
+
+        return array_values(array_unique($roles));
     }
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function hasRole($role): bool
     {
         return $this->getRole($role) instanceof SecurityRole;
     }
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function removeRole($role): User
+    public function removeRole($role): self
     {
         $securityRole = $this->getRole($role);
         if ($securityRole instanceof SecurityRole) {
@@ -371,7 +392,6 @@ class User implements UserInterface
         return $this;
     }
 
-
     /**
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -379,7 +399,6 @@ class User implements UserInterface
     {
         return $this->securityRoles;
     }
-
 
     /**
      * @param \App\Entity\SecurityRole $role
@@ -391,7 +410,6 @@ class User implements UserInterface
         }
     }
 
-
     /**
      * @param \App\Entity\SecurityRole $role
      */
@@ -399,7 +417,6 @@ class User implements UserInterface
     {
         $this->securityRoles->removeElement($role);
     }
-
 
     /**
      * @param string|null $fullname
@@ -409,7 +426,6 @@ class User implements UserInterface
         $this->fullname = $fullname;
     }
 
-
     /**
      * @return string|null
      */
@@ -417,7 +433,6 @@ class User implements UserInterface
     {
         return $this->fullname;
     }
-
 
     /**
      * @return DateTime
@@ -427,7 +442,6 @@ class User implements UserInterface
         return $this->createdAt;
     }
 
-
     /**
      * @return DateTime
      */
@@ -435,7 +449,6 @@ class User implements UserInterface
     {
         return $this->updatedAt;
     }
-
 
     /**
      * @param UserInterface|null $user
@@ -447,42 +460,37 @@ class User implements UserInterface
         return $user instanceof self && $user->id === $this->id;
     }
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isAccountNonExpired(): bool
     {
         return true;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isAccountNonLocked(): bool
     {
         return true;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isCredentialsNonExpired(): bool
     {
         return true;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isEnabled(): bool
     {
         return $this->enabled;
     }
-
 
     /**
      * {@inheritdoc}
@@ -494,7 +502,6 @@ class User implements UserInterface
         return $this;
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -505,27 +512,24 @@ class User implements UserInterface
         return $this;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setSalt($salt)
     {
         return $this;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setEmail($email)
     {
@@ -534,18 +538,16 @@ class User implements UserInterface
         return $this;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getEmailCanonical(): string
     {
         return $this->emailCanonical;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setEmailCanonical($emailCanonical)
     {
@@ -554,45 +556,40 @@ class User implements UserInterface
         return $this;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setPlainPassword($password)
     {
         $this->plainPassword = $password;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setPassword($hash)
     {
         $this->hash = $hash;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isSuperAdmin(): bool
     {
         return $this->superAdmin || $this->hasRole(static::ROLE_SUPER_ADMIN);
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setEnabled($boolean)
     {
@@ -601,31 +598,28 @@ class User implements UserInterface
         return $this;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setSuperAdmin($boolean)
     {
-        if(!$this->superAdmin = (bool) $boolean) {
+        if (!$this->superAdmin = (bool) $boolean) {
             $this->removeRole(static::ROLE_SUPER_ADMIN);
         }
 
         return $this;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getConfirmationToken(): ?string
     {
         return $this->confirmationToken;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setConfirmationToken($confirmationToken)
     {
@@ -634,9 +628,8 @@ class User implements UserInterface
         return $this;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setPasswordRequestedAt(?DateTime $date = null)
     {
@@ -644,7 +637,6 @@ class User implements UserInterface
 
         return $this;
     }
-
 
     /**
      * Gets the timestamp that the user requested a password reset.
@@ -656,9 +648,8 @@ class User implements UserInterface
         return $this->passwordRequestedAt;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isPasswordRequestNonExpired($ttl)
     {
@@ -668,9 +659,8 @@ class User implements UserInterface
             $passwordRequestedAt->getTimestamp() + $ttl > time();
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setLastLogin(?DateTime $time = null)
     {
@@ -679,15 +669,13 @@ class User implements UserInterface
         return $this;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getPassword(): string
     {
         return $this->hash;
     }
-
 
     /**
      * @return string
@@ -697,42 +685,37 @@ class User implements UserInterface
         return $this->hash;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getSalt(): ?string
     {
         return null;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getUsernameCanonical(): string
     {
         return $this->usernameCanonical;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function eraseCredentials(): void
     {
         $this->plainPassword = null;
     }
-
 
     /**
      * @return DateTime|null
@@ -742,10 +725,8 @@ class User implements UserInterface
         return $this->lastLogin;
     }
 
-
     public function __toString()
     {
         return $this->getUsername();
     }
-
 }

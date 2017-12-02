@@ -1,9 +1,9 @@
-FROM php:7.1-fpm-alpine
+FROM php:7.2-fpm-alpine
 
 ARG TIMEZONE="Europe/Warsaw"
 ENV TZ=${TIMEZONE}
 ENV DOT_ENV=.env.mysql
-ENV DOCKERIZE_VERSION=v0.5.0 \
+ENV DOCKERIZE_VERSION=v0.6.0 \
     DOCKERIZE_WAIT_FOR=tcp://mysql:3306
 
 # Install custom packages

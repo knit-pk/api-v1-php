@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -74,7 +75,6 @@ class SecurityRole extends Role
      */
     protected $users;
 
-
     /**
      * SecurityRole constructor.
      *
@@ -86,7 +86,6 @@ class SecurityRole extends Role
         $this->setRole($role);
     }
 
-
     /**
      * @return Uuid|null
      */
@@ -95,15 +94,13 @@ class SecurityRole extends Role
         return $this->id;
     }
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRole(): ?string
     {
         return $this->role;
     }
-
 
     /**
      * @param string|null $role
@@ -113,15 +110,13 @@ class SecurityRole extends Role
         $this->role = $role;
     }
 
-
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
-
 
     /**
      * @param string $name
@@ -131,7 +126,6 @@ class SecurityRole extends Role
         $this->name = $name;
     }
 
-
     /**
      * @return User[]|Collection
      */
@@ -139,7 +133,6 @@ class SecurityRole extends Role
     {
         return $this->users;
     }
-
 
     /**
      * @param User $user
@@ -150,12 +143,10 @@ class SecurityRole extends Role
         $this->users[] = $user;
     }
 
-
     public function removeUser(User $user)
     {
         $this->users->removeElement($user);
     }
-
 
     /**
      * @param Role|null $role
@@ -166,7 +157,6 @@ class SecurityRole extends Role
     {
         return $role instanceof self && $role->getRole() === $this->getRole();
     }
-
 
     /**
      * @return string

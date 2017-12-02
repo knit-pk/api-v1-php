@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DataFixtures\ORM;
@@ -19,9 +20,8 @@ class SecurityRoleFixtures extends Fixture
         User::ROLE_SUPER_ADMIN,
     ];
 
-
     /**
-     * Load data fixtures with the passed EntityManager
+     * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
      */
@@ -31,7 +31,6 @@ class SecurityRoleFixtures extends Fixture
                 'role' => $role,
                 'name' => $name,
             ]) {
-
             $securityRole = new SecurityRole($role);
             $securityRole->setName($name);
 
@@ -42,7 +41,6 @@ class SecurityRoleFixtures extends Fixture
 
         $manager->flush();
     }
-
 
     public function getSecurityRolesData(): array
     {

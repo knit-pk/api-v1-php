@@ -6,9 +6,10 @@ easy_admin:
             class: App\Entity\User
             list:
                 fields:
-                    - fullname
                     - username
+                    - fullname
                     - email
+                    - { property: avatar, type: 'image' }
                     - securityRoles
                     - enabled
                     - superAdmin
@@ -17,6 +18,7 @@ easy_admin:
                     - fullname
                     - username
                     - email
+                    - avatar
                     - enabled
                     - superAdmin
                     - lastLogin
@@ -26,7 +28,6 @@ easy_admin:
                         type_options: {
                             required: false
                         } }
-
         Project:
             class: App\Entity\Project
             list:
@@ -48,17 +49,20 @@ easy_admin:
                     - title
                     - category
                     - author
-                    - createdAt
-                    - tags
+                    - { property: image, type: 'image' }
+                    - comments
+                    - publishedAt
                     - published
             form:
                 fields:
                     - title
                     - category
+                    - image
                     - description
                     - content
                     - tags
                     - author
+                    - comments
             edit:
                 fields:
                     - published
@@ -92,3 +96,34 @@ easy_admin:
                     - name
                     - role
                     - { property: 'users', type_options: { by_reference: false } }
+        Image:
+            class: App\Entity\Image
+            list:
+                fields:
+                    - originalName
+                    - author
+                    - uploadedAt
+                    - createdAt
+                    - updatedAt
+            show:
+                fields:
+                    - id
+                    - author
+                    - { label: 'Size (in bytes)', property: size }
+                    - originalName
+                    - { property: 'url', type: 'url' }
+                    - uploadedAt
+                    - createdAt
+                    - updatedAt
+                    - { label: 'Image', property: 'fileName', type: 'image', base_path: '/media/upload' }
+            form:
+                fields:
+                    - author
+                    - { property: 'file', type: 'vich_image' }
+        Comment:
+                class: App\Entity\Comment
+                form:
+                    fields:
+                        - article
+                        - author
+                        - text

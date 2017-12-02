@@ -1,12 +1,23 @@
 namespaces:
-    entity: Entity
+    entity: App\Entity
 
 types:
+    ImageObject:
+        properties:
+            contentUrl: ~
+            contentSize: ~
+            author: { range: "Person" }
+            thumbnail: { range: "ImageObject" }
+            uploadDate: { range: "DateTime" }
+            dateModified: { range: "DateTime" }
+            dateCreated: { range: "DateTime" }
+
     Person:
         properties:
             name: ~
             alternateName: ~
             email: ~
+            image: { range: "ImageObject" }
 #            gender: ~
 #            birthDate: ~
 #            telephone: ~
@@ -20,3 +31,11 @@ types:
             dateModified: { range: "DateTime" }
             dateCreated: { range: "DateTime" }
             name: ~
+            image: { range: "ImageObject" }
+            comment: { range: "Comment" }
+
+    Comment:
+        properties:
+            author: { range: "Person" }
+            mentions: { range: "Person" }
+            text: ~
