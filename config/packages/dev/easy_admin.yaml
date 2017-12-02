@@ -28,7 +28,6 @@ easy_admin:
                         type_options: {
                             required: false
                         } }
-
         Project:
             class: App\Entity\Project
             list:
@@ -50,13 +49,15 @@ easy_admin:
                     - title
                     - category
                     - author
-                    - createdAt
+                    - { property: image, type: 'image' }
                     - tags
+                    - publishedAt
                     - published
             form:
                 fields:
                     - title
                     - category
+                    - image
                     - description
                     - content
                     - tags
@@ -94,24 +95,26 @@ easy_admin:
                     - name
                     - role
                     - { property: 'users', type_options: { by_reference: false } }
-
         Image:
             class: App\Entity\Image
             list:
                 fields:
                     - originalName
                     - author
+                    - uploadedAt
                     - createdAt
                     - updatedAt
             show:
                 fields:
                     - id
                     - author
+                    - { label: 'Size (in bytes)', property: size }
                     - originalName
                     - { property: 'url', type: 'url' }
+                    - uploadedAt
                     - createdAt
                     - updatedAt
-                    - { property: 'name', type: 'image', base_path: '/media/upload' }
+                    - { label: 'Image', property: 'fileName', type: 'image', base_path: '/media/upload' }
             form:
                 fields:
                     - author

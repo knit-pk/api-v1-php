@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -130,7 +131,6 @@ class Project
      */
     protected $updatedAt;
 
-
     /**
      * @return Uuid|null
      */
@@ -139,48 +139,40 @@ class Project
         return $this->id;
     }
 
-
     public function getCode(): ?string
     {
         return $this->code;
     }
-
 
     public function getName(): ?string
     {
         return $this->name;
     }
 
-
     public function setName(string $name): void
     {
         $this->name = $name;
     }
-
 
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-
     public function setDescription(string $description): void
     {
         $this->description = $description;
     }
-
 
     public function getUrl(): ?string
     {
         return $this->url;
     }
 
-
     public function getAuthor(): ?User
     {
         return $this->author;
     }
-
 
     public function setAuthor(User $author): void
     {
@@ -198,18 +190,15 @@ class Project
         return $author->isUser($user);
     }
 
-
     public function setUrl(string $url): void
     {
         $this->url = $url;
     }
 
-
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
-
 
     public function getUpdatedAt(): DateTime
     {

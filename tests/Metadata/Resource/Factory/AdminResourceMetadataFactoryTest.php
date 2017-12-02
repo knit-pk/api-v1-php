@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Metadata\Resource\Factory;
@@ -33,7 +34,6 @@ class AdminResourceMetadataFactoryTest extends TestCase
      */
     private $adminResourceMetadataFactory;
 
-
     protected function setUp()
     {
         $this->resourceMetadataFactoryProphecy = $this->prophesize(ResourceMetadataFactoryInterface::class);
@@ -43,7 +43,6 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $this->adminResourceMetadataFactory = new AdminResourceMetadataFactory($this->resourceMetadataFactoryProphecy->reveal(), $this->authorizationCheckerProphecy->reveal(), $this->adminSerializerGroupFactoryProphecy->reveal());
     }
 
-
     public function noContextProphecyProvider(): array
     {
         return [
@@ -52,7 +51,6 @@ class AdminResourceMetadataFactoryTest extends TestCase
             ['willThrow', new AuthenticationCredentialsNotFoundException()],
         ];
     }
-
 
     /**
      * @dataProvider noContextProphecyProvider
@@ -80,14 +78,13 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $this->assertSame($resourceMetadata->getAttributes(), $newResourceMetadata->getAttributes());
     }
 
-
     public function testAttributesNormalizationWithDenormalization()
     {
         $resourceClass = 'Test';
         $itemOperations = [];
         $collectionOperations = [];
         $attributes = [
-            'normalization_context'   => [
+            'normalization_context' => [
                 'groups' => [
                     'TestRead',
                 ],
@@ -125,7 +122,6 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $this->assertSame($resourceMetadata->getCollectionOperations(), $newResourceMetadata->getCollectionOperations());
         $this->assertSame($resourceMetadata->getAttributes(), $newResourceMetadata->getAttributes());
     }
-
 
     public function testAttributesNormalizationWithOperationsDenormalization()
     {
@@ -188,5 +184,4 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $this->assertSame($resourceMetadata->getCollectionOperations(), $newResourceMetadata->getCollectionOperations());
         $this->assertSame($resourceMetadata->getAttributes(), $newResourceMetadata->getAttributes());
     }
-
 }

@@ -1,10 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Action\Image;
 
 use App\Entity\Image;
-use App\Entity\User;
 use DomainException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -18,7 +18,6 @@ class ImageUploadAction
         'image/jpeg',
         'image/png',
     ];
-
 
     /**
      * @Route(name="api_images_upload",
@@ -38,7 +37,6 @@ class ImageUploadAction
      */
     public function __invoke(Request $request, UserInterface $user)
     {
-
         $imageFile = $request->files->get('image');
 
         if (!$imageFile instanceof UploadedFile) {
