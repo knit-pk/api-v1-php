@@ -50,7 +50,7 @@ easy_admin:
                     - category
                     - author
                     - { property: image, type: 'image' }
-                    - tags
+                    - comments
                     - publishedAt
                     - published
             form:
@@ -62,6 +62,7 @@ easy_admin:
                     - content
                     - tags
                     - author
+                    - comments
             edit:
                 fields:
                     - published
@@ -119,3 +120,10 @@ easy_admin:
                 fields:
                     - author
                     - { property: 'file', type: 'vich_image' }
+        Comment:
+                class: App\Entity\Comment
+                form:
+                    fields:
+                        - article
+                        - author
+                        - text

@@ -34,12 +34,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *     },
  *     "post"={
  *          "method"="POST",
- *          "access_control"="is_granted('ROLE_USER_WRITER')",
+ *          "access_control"="is_granted('ROLE_READER')",
  *     },
  *     "upload"={
  *          "route_name"="api_images_upload",
- *          "access_control"="is_granted('ROLE_USER_WRITER')",
- *      },
+ *          "access_control"="is_granted('ROLE_READER')",
+ *     },
  * },
  * itemOperations={
  *     "get"={
@@ -94,14 +94,14 @@ class Image
      *
      * @Groups({"ImageRead","ImageWrite"})
      */
-    private $size;
+    protected $size;
 
     /**
      * @var string
      *
      * @ORM\Column(type="string",unique=true,nullable=true)
      */
-    private $fileName;
+    protected $fileName;
 
     /**
      * @var string
@@ -110,14 +110,14 @@ class Image
      *
      * @Groups({"ImageRead","ImageWrite"})
      */
-    private $originalName;
+    protected $originalName;
 
     /**
      * @var File|null
      *
      * @Vich\UploadableField(mapping="images",fileNameProperty="fileName",originalName="originalName",size="size")
      */
-    private $file;
+    protected $file;
 
     /**
      * @var User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.

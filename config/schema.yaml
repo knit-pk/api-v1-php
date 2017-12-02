@@ -32,3 +32,10 @@ types:
             dateCreated: { range: "DateTime" }
             name: ~
             image: { range: "ImageObject" }
+            comment: { range: "Comment" }
+
+    Comment:
+        properties:
+            author: { range: "Person" }
+            mentions: { range: "Person" }
+            text: ~

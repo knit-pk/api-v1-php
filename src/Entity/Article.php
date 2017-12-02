@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,8 +24,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(iri="http://schema.org/Article",
  * attributes={
- *     "normalization_context"={"groups"={"ArticleRead"}},
  *     "filters"={"app.article.search_filter","app.article.boolean_filter","app.article.group_filter"},
+ *     "normalization_context"={"groups"={"ArticleRead"}},
+ *     "denormalization_context"={"groups"={"ArticleWrite"}},
  * },
  * collectionOperations={
  *     "get"={
@@ -33,7 +35,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     "post"={
  *          "method"="POST",
  *          "access_control"="is_granted('ROLE_READER')",
- *          "denormalization_context"={"groups"={"ArticleWrite"}},
  *     },
  * },
  * itemOperations={
@@ -43,11 +44,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     "put"={
  *          "method"="PUT",
  *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
- *          "denormalization_context"={"groups"={"ArticleWrite"}},
  *     },
  *     "delete"={
  *          "method"="DELETE",
  *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     },
+ *     "add_comment"={
+ *          "route_name"="api_articles_comments_post_subresource",
+ *          "normalization_context"={"groups"={"CommentRead"}},
+ *          "access_control"="is_granted('ROLE_READER')",
  *     },
  * })
  *
@@ -71,9 +76,9 @@ class Article
     /**
      * @var string
      *
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="string",unique=true)
      *
-     * @Gedmo\Slug(fields={"createdAt", "title"},separator="-",updatable=true,unique=true,dateFormat="Y/m")
+     * @Gedmo\Slug(fields={"createdAt","title"},separator="-",updatable=true,unique=true,dateFormat="Y/m")
      *
      * @Groups({"ArticleRead"})
      */
@@ -82,14 +87,14 @@ class Article
     /**
      * @var string|null the title of the article
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string",nullable=false)
      *
      * @ApiProperty(iri="http://schema.org/name")
      *
      * @Assert\NotBlank()
      * @Assert\Length(min="3",max="100")
      *
-     * @Groups({"ArticleRead", "ArticleWrite"})
+     * @Groups({"ArticleRead","ArticleWrite"})
      */
     protected $title;
 
@@ -102,7 +107,7 @@ class Article
      *
      * @Assert\NotBlank()
      *
-     * @Groups({"ArticleRead", "ArticleWrite"})
+     * @Groups({"ArticleRead","ArticleWrite"})
      */
     protected $content;
 
@@ -132,9 +137,20 @@ class Article
      *      },
      * )
      *
-     * @Groups({"ArticleRead", "ArticleWrite"})
+     * @Groups({"ArticleRead","ArticleWrite"})
      */
     protected $tags;
+
+    /**
+     * @var ArrayCollection|Comment[] Comments, typically from users.
+     *
+     * @ORM\OneToMany(targetEntity="Comment",mappedBy="article")
+     *
+     * @ApiSubresource()
+     *
+     * @Groups({"ArticleRead","ArticleWrite"})
+     */
+    protected $comments;
 
     /**
      * @var string|null the subject matter of the content
@@ -146,12 +162,12 @@ class Article
      * @Assert\NotBlank()
      * @Assert\Length(max="300")
      *
-     * @Groups({"ArticleRead", "ArticleWrite"})
+     * @Groups({"ArticleRead","ArticleWrite"})
      */
     protected $description;
 
     /**
-     * @var \App\Entity\User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
+     * @var User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE")
@@ -160,7 +176,7 @@ class Article
      *
      * @Assert\NotBlank()
      *
-     * @Groups({"ArticleRead", "ArticleWrite"})
+     * @Groups({"ArticleRead","ArticleWrite"})
      */
     protected $author;
 
@@ -172,7 +188,7 @@ class Article
      *
      * @ApiProperty(iri="http://schema.org/image")
      *
-     * @Groups({"ArticleRead", "ArticleWrite"})
+     * @Groups({"ArticleRead","ArticleWrite"})
      */
     protected $image;
 
@@ -194,7 +210,7 @@ class Article
      *
      * @ORM\Column(type="boolean")
      *
-     * @Groups({"ArticleRead", "ArticleAdminUpdate"})
+     * @Groups({"ArticleRead","ArticleAdminUpdate"})
      */
     protected $published;
 
@@ -227,6 +243,7 @@ class Article
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->comments = new ArrayCollection();
         $this->published = false;
     }
 
@@ -250,17 +267,11 @@ class Article
         return $this->content;
     }
 
-    /**
-     * @return Image|null
-     */
     public function getImage(): ?Image
     {
         return $this->image;
     }
 
-    /**
-     * @param Image|null $image
-     */
     public function setImage(?Image $image): void
     {
         $this->image = $image;
@@ -289,6 +300,21 @@ class Article
     public function getTags(): Collection
     {
         return $this->tags;
+    }
+
+    public function addComment(Comment $comment): void
+    {
+        $this->comments[] = $comment;
+    }
+
+    public function removeComment(Comment $comment): void
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    public function getComments(): Collection
+    {
+        return $this->comments;
     }
 
     public function setDescription(?string $description): void
@@ -355,5 +381,10 @@ class Article
         }
 
         return $author->isUser($user);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getCode();
     }
 }
