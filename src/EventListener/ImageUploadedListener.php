@@ -13,14 +13,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 
 class ImageUploadedListener
 {
-    /**
-     * @var \Vich\UploaderBundle\Storage\StorageInterface
-     */
     private $storage;
-
-    /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
-     */
     private $requestStack;
 
     public function __construct(StorageInterface $storage, RequestStack $requestStack)

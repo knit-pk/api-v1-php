@@ -266,7 +266,7 @@ class Article
         $this->image = $image;
     }
 
-    public function getCategory(): Category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }

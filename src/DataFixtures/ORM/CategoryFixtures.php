@@ -16,7 +16,6 @@ class CategoryFixtures extends Fixture
         'announcement',
     ];
 
-
     /**
      * Load data fixtures with the passed EntityManager.
      *

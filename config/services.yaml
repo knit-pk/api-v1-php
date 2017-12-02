@@ -71,3 +71,6 @@ services:
         decorates: 'api_platform.swagger.normalizer.documentation'
         arguments: [ '@App\Swagger\SwaggerDocumentation.inner' ]
         autoconfigure: false
+
+    'Vich\UploaderBundle\Storage\StorageInterface':
+        alias: vich_uploader.storage.file_system

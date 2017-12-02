@@ -115,7 +115,7 @@ class Image
     /**
      * @var File|null
      *
-     * @Vich\UploadableField(mapping="images",fileNameProperty="name",originalName="originalName",size="size")
+     * @Vich\UploadableField(mapping="images",fileNameProperty="fileName",originalName="originalName",size="size")
      */
     private $file;
 
