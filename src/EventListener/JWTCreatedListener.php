@@ -9,16 +9,9 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 
 class JWTCreatedListener
 {
-    /**
-     * Add custom payload to JWT Access Token.
-     *
-     * @param JWTCreatedEvent $event
-     */
     public function onJWTCreated(JWTCreatedEvent $event): void
     {
-        /**
-         * @var User
-         */
+        /** @var User $user */
         $user = $event->getUser();
 
         $payload = $event->getData();

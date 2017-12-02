@@ -113,7 +113,7 @@ class SecurityRole extends Role
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
