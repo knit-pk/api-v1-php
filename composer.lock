@@ -4,11 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< 605c6db6fd2300099f6278196c39e84a7decbd5f
-    "content-hash": "885b5b649db8c4577e7e36af08ba4834",
-=======
-    "content-hash": "5a5a4d9317c417adceb5530c3659f3bd",
->>>>>>> Add Vich Uploader; Update dependencies (Symfony 3.4)
+    "content-hash": "a088ff4dd6474c11e8e3af3e7b62650e",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -969,16 +965,16 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "v1.6.1",
+            "version": "v1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "5d5ff249e67a4eebe031b8ec419e8f215dd6562e"
+                "reference": "e3faf7c96b8a6084045dedcaf51f74c7834644d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/5d5ff249e67a4eebe031b8ec419e8f215dd6562e",
-                "reference": "5d5ff249e67a4eebe031b8ec419e8f215dd6562e",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/e3faf7c96b8a6084045dedcaf51f74c7834644d4",
+                "reference": "e3faf7c96b8a6084045dedcaf51f74c7834644d4",
                 "shasum": ""
             },
             "require": {
@@ -1037,7 +1033,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2017-11-18T12:48:27+00:00"
+            "time": "2017-11-24T14:13:17+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -1905,16 +1901,16 @@
         },
         {
             "name": "ocramius/package-versions",
-            "version": "1.1.3",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ocramius/PackageVersions.git",
-                "reference": "72b226d2957e9e6a9ed09aeaa29cabd840d1a3b7"
+                "reference": "ad8a245decad4897cc6b432743913dad0d69753c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/72b226d2957e9e6a9ed09aeaa29cabd840d1a3b7",
-                "reference": "72b226d2957e9e6a9ed09aeaa29cabd840d1a3b7",
+                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/ad8a245decad4897cc6b432743913dad0d69753c",
+                "reference": "ad8a245decad4897cc6b432743913dad0d69753c",
                 "shasum": ""
             },
             "require": {
@@ -1925,7 +1921,7 @@
                 "composer/composer": "^1.3",
                 "ext-zip": "*",
                 "humbug/humbug": "dev-master",
-                "phpunit/phpunit": "^5.7.5"
+                "phpunit/phpunit": "^6.4"
             },
             "type": "composer-plugin",
             "extra": {
@@ -1950,7 +1946,7 @@
                 }
             ],
             "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
-            "time": "2017-09-06T15:24:43+00:00"
+            "time": "2017-11-24T11:07:03+00:00"
         },
         {
             "name": "ocramius/proxy-manager",
@@ -6718,7 +6714,7 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
+                    "email": "sb@sebastian-bergmann.de",
                     "role": "lead"
                 }
             ],
@@ -7048,7 +7044,7 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sb@sebastian-bergmann.de",
+                    "email": "sebastian@phpunit.de",
                     "role": "lead"
                 }
             ],

@@ -88,7 +88,7 @@ class Image
     /**
      * @var int|null file size in bytes
      *
-     * @ORM\Column(type="bigint",nullable=true)
+     * @ORM\Column(name="file_size",type="bigint",nullable=true)
      *
      * @ApiProperty(iri="http://schema.org/contentSize")
      *
