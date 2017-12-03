@@ -1,0 +1,16 @@
+<!--Creator: K911 © 2017-->
+<svg xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" viewBox="0 0 193 193" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" clip-rule="evenodd">
+  <defs>
+    <style>
+<![CDATA[
+    .str0 {stroke:white;stroke-width:4.57367}
+    .fil1 {fill:none}
+    .fil0 {fill:#212121}
+   ]]>
+    </style>
+  </defs>
+  <g id="Warstwa_x0020_1">
+    <path d="M49 183v10h-4v-10h4zm17 0v10h-5v-10h5zm83 0v10h-5v-10h5zm-17 0v10h-4v-10h4zm-50 0v10h-4v-10h4zm33 0v10h-4v-10h4zm-16 0v10h-5v-10h5zm-45-14v14H39v-14h15zm16 0v14H56v-14h14zm83 0v14h-13v-14h13zm-16 0v14h-14v-14h14zm-50 0v14H73v-14h14zm34 0v14h-15v-14h15zm-17 0v14H90v-14h14zM11 49H0v-4h11v4zm0 17H0v-5h11v5zm0 83H0v-5h11v5zm0-17H0v-4h11v4zm0-50H0v-4h11v4zm0 33H0v-4h11v4zm0-16H0v-5h11v5zm14-45H11V39h14v15zm0 16H11V56h14v14zm0 83H11v-13h14v13zm0-16H11v-14h14v14zm0-50H11V73h14v14zm0 34H11v-15h14v15zm0-17H11V90h14v14zm119-93V0h5v11h-5zm-16 0V0h4v11h-4zm-83 0V0h4v11h-4zm16 0V0h5v11h-5zm50 0V0h4v11h-4zm-33 0V0h4v11h-4zm16 0V0h5v11h-5zm46 14V11h13v14h-13zm-17 0V11h14v14h-14zm-83 0V11h14v14H40zm16 0V11h14v14H56zm50 0V11h15v14h-15zm-33 0V11h14v14H73zm17 0V11h14v14H90zm93 119h10v5h-10v-5zm-14-4h14v13h-14v-13zm0-17h14v14h-14v-14zm14 5h10v4h-10v-4zm0-83h10v4h-10v-4zm0 16h10v5h-10v-5zm0 50h10v4h-10v-4zm0-33h10v4h-10v-4zm0 16h10v5h-10v-5zm-14-55h14v15h-14V39zm0 17h14v14h-14V56zm0 50h14v14h-14v-14zm0-33h14v14h-14V73zm0 17h14v14h-14V90zM29 164h135V29H29v135z" class="fil0"/>
+    <path d="M68 97c0-8-5-14-13-14-7 0-13 6-13 14 0 7 6 13 13 13 8 0 13-6 13-13zM47 31v55m0 22v54m16-76l17-17V31m0 131v-38l-17-17m42 19v36m33-49v49m-20-49h44m-57-51v38m13-53c0-8-6-14-13-14s-13 6-13 14c0 7 6 13 13 13s13-6 13-13zm-5 10l17 21m22 10c0-7-6-13-14-13-7 0-13 6-13 13 0 8 6 14 13 14 8 0 14-6 14-14zm-14-13V31m-20 82c0-7-6-13-13-13s-13 6-13 13c0 8 6 14 13 14s13-6 13-14z" class="fil1 str0"/>
+  </g>
+</svg>

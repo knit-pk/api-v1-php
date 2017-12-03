@@ -1,0 +1,74 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<form class="form-horizontal" role="form" method="POST" action="{{ path("fos_user_security_check") }}" style="margin-top: 5vh">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <h2>{{ 'layout.login'|trans }}</h2>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="form-group has-danger">
+                <label class="sr-only" for="username">{{ 'security.login.username'|trans }}</label>
+                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                    <div class="input-group-addon" style="width: 2.6rem"><i class="mdi mdi-at"></i></div>
+                    <input type="text" name="_username" class="form-control" id="username" placeholder="{{ 'security.login.username'|trans }}" value="{{ last_username }}" required autofocus>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="sr-only" for="password">{{ 'security.login.password'|trans }}</label>
+                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                    <div class="input-group-addon" style="width: 2.6rem"><i class="mdi mdi-key"></i></div>
+                    <input type="password" id="password" name="_password" class="form-control" placeholder="{{ 'security.login.password'|trans }}" required>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if error %}
+        <div class="row" role="alert">
+            <div class="col-md-3"></div>
+            <div class="col-md-6" style="padding-top: .35rem">
+                <div class="alert alert-danger">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <input type="hidden" id="remember_me" name="_remember_me" value="off"/>
+    <input type="hidden" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}"/>
+    {% if csrf_token %}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+    {% endif %}
+    <div class="row" style="padding-top: 1rem">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-success"><i class="mdi mdi-login-variant"></i> Login</button>
+            {#<a class="btn btn-link" href="/password/reset">Forgot Your Password?</a>#}
+        </div>
+    </div>
+</form>
+
+{#<form action="{{ path("fos_user_security_check") }}" method="post">#}
+    {#{% if csrf_token %}#}
+        {#<input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>#}
+    {#{% endif %}#}
+
+    {#<label for="username">{{ 'security.login.username'|trans }}</label>#}
+    {#<input type="text" id="username" name="_username" value="{{ last_username }}" required="required"/>#}
+
+    {#<label for="password">{{ 'security.login.password'|trans }}</label>#}
+    {#<input type="password" id="password" name="_password" required="required"/>#}
+
+    {#<input type="checkbox" id="remember_me" name="_remember_me" value="on"/>#}
+    {#<label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>#}
+
+    {#<input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}"/>#}
+{#</form>#}
