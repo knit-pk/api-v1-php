@@ -9,7 +9,7 @@ easy_admin:
                     - username
                     - fullname
                     - email
-                    - { property: avatar, type: 'image' }
+                    - { property: 'avatar', type: 'image' }
                     - securityRoles
                     - enabled
                     - superAdmin
@@ -49,7 +49,7 @@ easy_admin:
                     - title
                     - category
                     - author
-                    - { property: image, type: 'image' }
+                    - { property: 'image', type: 'image' }
                     - comments
                     - publishedAt
                     - published
@@ -62,7 +62,6 @@ easy_admin:
                     - content
                     - tags
                     - author
-                    - comments
             edit:
                 fields:
                     - published
@@ -101,6 +100,7 @@ easy_admin:
             list:
                 fields:
                     - originalName
+                    - { label: 'Image', property: url, type: 'image' }
                     - author
                     - uploadedAt
                     - createdAt
@@ -120,6 +120,9 @@ easy_admin:
                 fields:
                     - author
                     - { property: 'file', type: 'vich_image' }
+            edit:
+                fields:
+                    - originalName
         Comment:
                 class: App\Entity\Comment
                 form:
