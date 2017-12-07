@@ -35,6 +35,7 @@ easy_admin:
                     - name
                     - author
                     - url
+                    - teams
                     - createdAt
             form:
                 fields:
@@ -42,6 +43,7 @@ easy_admin:
                     - description
                     - url
                     - author
+                    - teams
         Article:
             class: App\Entity\Article
             list:
@@ -124,9 +126,17 @@ easy_admin:
                 fields:
                     - originalName
         Comment:
-                class: App\Entity\Comment
-                form:
-                    fields:
-                        - article
-                        - author
-                        - text
+            class: App\Entity\Comment
+            form:
+                fields:
+                    - article
+                    - author
+                    - text
+                    - parent
+        Team:
+            class: App\Entity\Team
+            form:
+                fields:
+                    - name
+                    - parent
+                    - users

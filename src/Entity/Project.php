@@ -6,6 +6,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -110,6 +112,18 @@ class Project
     protected $url;
 
     /**
+     * @var Collection|Team[]
+     *
+     * @ORM\ManyToMany(targetEntity="Team")
+     * @ORM\JoinTable(name="projects_teams",joinColumns={
+     *      @ORM\JoinColumn(name="project_id",referencedColumnName="id",onDelete="CASCADE")
+     * },inverseJoinColumns={
+     *      @ORM\JoinColumn(name="team_id",referencedColumnName="id",onDelete="CASCADE"),
+     * })
+     */
+    protected $teams;
+
+    /**
      * @var DateTime
      *
      * @ORM\Column(type="datetime")
@@ -130,6 +144,11 @@ class Project
      * @Assert\DateTime()
      */
     protected $updatedAt;
+
+    public function __construct()
+    {
+        $this->teams = new ArrayCollection();
+    }
 
     /**
      * @return Uuid|null
@@ -203,5 +222,20 @@ class Project
     public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
+    }
+
+    public function getTeams(): Collection
+    {
+        return $this->teams;
+    }
+
+    public function addTeam(Team $team): void
+    {
+        $this->teams[] = $team;
+    }
+
+    public function removeTeam(Team $team): void
+    {
+        $this->teams->removeElement($team);
     }
 }

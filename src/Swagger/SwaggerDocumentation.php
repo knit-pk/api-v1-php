@@ -18,6 +18,8 @@ final class SwaggerDocumentation implements NormalizerInterface
         '/token/refresh'               => ['post'],
         '/articles'                    => ['get'],
         '/articles/{id}'               => ['get'],
+        '/comments'                    => ['get'],
+        '/comments/{id}'               => ['get'],
         '/articles/{id}/comments'      => ['get'],
         '/articles/{id}/comments/{id}' => ['get'],
         '/projects'                    => ['get'],
@@ -283,8 +285,8 @@ final class SwaggerDocumentation implements NormalizerInterface
                                 'type'       => 'object',
                                 'properties' => [
                                     'text' => [
-                                        'type' => 'string',
-                                        'description' => 'Actual content of comment'
+                                        'type'        => 'string',
+                                        'description' => 'Actual content of comment',
                                     ],
                                 ],
                             ],
