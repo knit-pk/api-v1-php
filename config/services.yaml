@@ -2,6 +2,10 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
+    public_upload.prefix: 'media/upload'
+    router.request_context.host: localhost
+    router.request_context.scheme: http
+    router.request_context.base_url: /
 
 services:
     # default configuration for services in *this* file
@@ -20,7 +24,7 @@ services:
         resource: '../src/*'
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
-        exclude: '../src/{Entity,Migrations,Repository,Tests}'
+        exclude: '../src/{Entity,Migrations,Repository,DataFixtures}'
 
     # controllers are imported separately to make sure they
     # have the tag that allows actions to type-hint services

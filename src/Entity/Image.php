@@ -123,9 +123,7 @@ class Image
      * @var User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE")
-     *
-     * @Assert\NotBlank()
+     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE",nullable=true)
      *
      * @Groups({"ImageRead","ImageWrite"})
      */
@@ -134,7 +132,7 @@ class Image
     /**
      * @var DateTime|null date when this media object was uploaded to this site
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime",nullable=true)
      *
      * @Groups({"ImageRead"})
      */

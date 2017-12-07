@@ -36,7 +36,6 @@ class CommentAddAction
      */
     public function __invoke(Request $request, UserInterface $user, $data)
     {
-//        return $data;
         if(!$data instanceof Article) {
             throw new \DomainException('Expected instance of Article');
         }

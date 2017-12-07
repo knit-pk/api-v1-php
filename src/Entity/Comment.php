@@ -7,6 +7,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -21,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(iri="http://schema.org/Comment",
  * attributes={
+ *     "filters"={"app.comment.search_filter"},
  *     "normalization_context"={"groups"={"CommentRead"}},
  *     "denormalization_context"={"groups"={"CommentWrite"}},
  * },
@@ -91,6 +94,27 @@ class Comment
     protected $author;
 
     /**
+     * @var Collection|Comment[]
+     *
+     * One Team has Many Comments.
+     * @ORM\OneToMany(targetEntity="Comment",mappedBy="parent")
+     *
+     * @Groups({"CommentRead"})
+     */
+    protected $replies;
+
+    /**
+     * @var Comment
+     *
+     * Many Comments have One parent Comment.
+     * @ORM\ManyToOne(targetEntity="Comment",inversedBy="replies")
+     * @ORM\JoinColumn(name="parent_comment_id",referencedColumnName="id")
+     *
+     * @Groups({"CommentWrite"})
+     */
+    protected $parent;
+
+    /**
      * @var string|null the textual content of this CreativeWork
      *
      * @ORM\Column(type="text")
@@ -128,6 +152,11 @@ class Comment
      * @Groups({"CommentRead"})
      */
     protected $createdAt;
+
+    public function __construct()
+    {
+        $this->replies = new ArrayCollection();
+    }
 
     public function getId(): ?Uuid
     {
@@ -182,6 +211,31 @@ class Comment
     public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
+    }
+
+    public function addReply(self $comment): void
+    {
+        $this->replies[] = $comment;
+    }
+
+    public function removeReply(self $comment): void
+    {
+        $this->replies->removeElement($comment);
+    }
+
+    public function getReplies(): Collection
+    {
+        return $this->replies;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(self $comment): void
+    {
+        $this->parent = $comment;
     }
 
     public function isAuthor(?UserInterface $user): bool
