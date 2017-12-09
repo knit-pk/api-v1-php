@@ -126,7 +126,7 @@ class User implements UserInterface
      *
      * @ORM\Column(type="string",nullable=true)
      *
-     * @Groups({"UserRead","UserWrite"})
+     * @Groups({"UserRead","UserWrite","UserReadLess"})
      */
     protected $fullname;
 

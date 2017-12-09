@@ -132,7 +132,14 @@ easy_admin:
                     - article
                     - author
                     - text
-                    - parent
+
+        CommentReply:
+            class: App\Entity\CommentReply
+            form:
+                fields:
+                    - comment
+                    - author
+                    - text
         Team:
             class: App\Entity\Team
             form:

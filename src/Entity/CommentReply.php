@@ -6,10 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -24,9 +21,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(iri="http://schema.org/Comment",
  * attributes={
- *     "filters"={"app.comment.search_filter","app.comment.group_filter"},
- *     "normalization_context"={"groups"={"CommentRead"}},
- *     "denormalization_context"={"groups"={"CommentWrite"}},
+ *     "filters"={"app.comment_reply.search_filter"},
+ *     "normalization_context"={"groups"={"ReplyRead"}},
+ *     "denormalization_context"={"groups"={"ReplyWrite"}},
  * },
  * collectionOperations={
  *     "get"={
@@ -52,9 +49,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * })
  *
  * @ORM\Entity()
- * @ORM\Table(name="comments")
+ * @ORM\Table(name="comment_replies")
  */
-class Comment
+class CommentReply
 {
     /**
      * @var Uuid
@@ -64,21 +61,9 @@ class Comment
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
-     * @Groups({"CommentRead"})
+     * @Groups({"ReplyRead"})
      */
     protected $id;
-
-    /**
-     * @var Article
-     *
-     * @ORM\ManyToOne(targetEntity="Article",inversedBy="comments")
-     * @ORM\JoinColumn(name="article_id",referencedColumnName="id",onDelete="CASCADE")
-     *
-     * @Assert\NotBlank()
-     *
-     * @Groups({"CommentRead","CommentWrite"})
-     */
-    protected $article;
 
     /**
      * @var User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
@@ -90,19 +75,20 @@ class Comment
      *
      * @Assert\NotBlank()
      *
-     * @Groups({"CommentRead","CommentWrite"})
+     * @Groups({"ReplyRead","ReplyWrite","ReplyReadLess"})
      */
     protected $author;
 
     /**
-     * @var Collection|CommentReply[]
+     * @var Comment
      *
-     * One Comment has Many Replies.
-     * @ORM\OneToMany(targetEntity="CommentReply",mappedBy="comment")
+     * Many Replies have One Comment.
+     * @ORM\ManyToOne(targetEntity="Comment",inversedBy="replies")
+     * @ORM\JoinColumn(name="comment_id",referencedColumnName="id")
      *
-     * @Groups({"CommentRead"})
+     * @Groups({"ReplyWrite"})
      */
-    protected $replies;
+    protected $comment;
 
     /**
      * @var string|null the textual content of this CreativeWork
@@ -113,7 +99,7 @@ class Comment
      *
      * @Assert\NotBlank()
      *
-     * @Groups({"CommentRead","CommentWrite","CommentWriteLess"})
+     * @Groups({"ReplyRead","ReplyWrite","ReplyReadLess"})
      */
     protected $text;
 
@@ -126,7 +112,7 @@ class Comment
      *
      * @Gedmo\Timestampable(on="update")
      *
-     * @Groups({"CommentRead"})
+     * @Groups({"ReplyRead","ReplyReadLess"})
      */
     protected $updatedAt;
 
@@ -139,28 +125,13 @@ class Comment
      *
      * @Gedmo\Timestampable(on="create")
      *
-     * @Groups({"CommentRead"})
+     * @Groups({"ReplyRead","ReplyReadLess"})
      */
     protected $createdAt;
-
-    public function __construct()
-    {
-        $this->replies = new ArrayCollection();
-    }
 
     public function getId(): ?Uuid
     {
         return $this->id;
-    }
-
-    public function setArticle(?Article $article): void
-    {
-        $this->article = $article;
-    }
-
-    public function getArticle(): ?Article
-    {
-        return $this->article;
     }
 
     public function setAuthor(?User $author): void
@@ -203,19 +174,14 @@ class Comment
         return $this->createdAt;
     }
 
-    public function addReply(CommentReply $reply): void
+    public function getComment(): ?Comment
     {
-        $this->replies[] = $reply;
+        return $this->comment;
     }
 
-    public function removeReply(CommentReply $reply): void
+    public function setComment(Comment $comment): void
     {
-        $this->replies->removeElement($reply);
-    }
-
-    public function getReplies(): Collection
-    {
-        return $this->replies;
+        $this->comment = $comment;
     }
 
     public function isAuthor(?UserInterface $user): bool
