@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\EventListener;
 
 use App\Entity\Image;
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\RequestContextAwareInterface;
 use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -15,13 +15,13 @@ class ImageUploadedListener
 {
     private $storage;
     private $requestStack;
-    private $router;
+    private $requestContextAware;
 
-    public function __construct(StorageInterface $storage, RequestStack $requestStack, Router $router)
+    public function __construct(StorageInterface $storage, RequestStack $requestStack, RequestContextAwareInterface $requestContextAware)
     {
         $this->storage = $storage;
         $this->requestStack = $requestStack;
-        $this->router = $router;
+        $this->requestContextAware = $requestContextAware;
     }
 
     public function onVichUploaderPostUpload(Event $event): void
@@ -47,7 +47,7 @@ class ImageUploadedListener
 
     private function guessUriForPath(string $path): string
     {
-        $context = $this->router->getContext();
+        $context = $this->requestContextAware->getContext();
 
         $realPath = ltrim(sprintf('%s/%s', $context->getBaseUrl(), $path), '\/');
 

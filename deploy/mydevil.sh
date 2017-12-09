@@ -33,4 +33,6 @@ cp public/* ../public_html
 ln -s `pwd`/public/media ../public_html/media
 sed -i _backup "s~^const APP_PATH.*$~const APP_PATH = \"../${PWD##*/}/\";~g" ../public_html/index.php && rm ../public_html/index.php_backup
 
-gmake fixtures-reload
+php71 bin/console doctrine:schema:drop --force
+php71 bin/console doctrine:schema:create
+php71 bin/console doctrine:fixtures:load -n
