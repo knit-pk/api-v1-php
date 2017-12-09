@@ -11,22 +11,22 @@ use Doctrine\Common\Persistence\ObjectManager;
 class UserFixtures extends Fixture
 {
     public const DEFAULT_USERS = [
-        'Super Admin' => [
+        'Super Admin'     => [
             USER::ROLE_SUPER_ADMIN,
         ],
-        'Admin' => [
+        'Admin'           => [
             USER::ROLE_ADMIN,
         ],
-        'Reader' => [
+        'Reader'          => [
             USER::ROLE_READER,
         ],
-        'Writer' => [
+        'Writer'          => [
             USER::ROLE_WRITER,
         ],
-        'User' => [
+        'User'            => [
             USER::ROLE_USER,
         ],
-        'User Writer' => [
+        'User Writer'     => [
             USER::ROLE_USER_WRITER,
         ],
         'Articles Author' => [
@@ -53,9 +53,15 @@ class UserFixtures extends Fixture
     {
         $publicUsers = array_flip(self::PUBLIC_USERNAMES);
 
+        /** @var \App\Entity\SecurityRole $defaultRole */
+        $defaultRole = $this->getReference(sprintf('security-%s', strtolower(USER::ROLE_DEFAULT)));
+
+        /** @var \App\Entity\Image $avatar */
+        $avatar = $this->getReference('image-avatar.png');
+
         foreach (self::DEFAULT_USERS as $fullname => $roles) {
             $username = strtolower(str_replace(' ', '_', $fullname));
-            $email = sprintf('%s@%s.pl', $username, $username);
+            $email = sprintf('%s@%s.pl', $username, strtolower(str_replace(' ', '-', $fullname)));
 
             $user = new User();
             $user->setFullname($fullname);
@@ -63,14 +69,16 @@ class UserFixtures extends Fixture
             $user->setEmail($email);
             $user->setEnabled(true);
             $user->setPlainPassword($username);
+            $user->setAvatar($avatar);
 
             foreach ($roles as $role) {
+                /** @var \App\Entity\SecurityRole $securityRole */
                 $securityRole = $this->getReference(sprintf('security-%s', strtolower($role)));
                 $user->addSecurityRole($securityRole);
             }
 
             // Add default role
-            $user->addSecurityRole($this->getReference(sprintf('security-%s', strtolower(USER::ROLE_DEFAULT))));
+            $user->addSecurityRole($defaultRole);
 
             if (isset($publicUsers[$username])) {
                 $this->setReference(sprintf('user-%s', $username), $user);
@@ -86,6 +94,7 @@ class UserFixtures extends Fixture
     {
         return [
             SecurityRoleFixtures::class,
+            ImageFixtures::class,
         ];
     }
 }

@@ -18,6 +18,10 @@ final class SwaggerDocumentation implements NormalizerInterface
         '/token/refresh'               => ['post'],
         '/articles'                    => ['get'],
         '/articles/{id}'               => ['get'],
+        '/comments'                    => ['get'],
+        '/comments/{id}'               => ['get'],
+        '/comment_replies'             => ['get'],
+        '/comment_replies/{id}'        => ['get'],
         '/articles/{id}/comments'      => ['get'],
         '/articles/{id}/comments/{id}' => ['get'],
         '/projects'                    => ['get'],
@@ -113,7 +117,7 @@ final class SwaggerDocumentation implements NormalizerInterface
     private function appendAdditionalPaths(ArrayObject $paths)
     {
         $additionalPaths = [
-            '/token'                  => [
+            '/token'                         => [
                 'post' => new ArrayObject([
                     'tags'        => ['Token'],
                     'consumes'    => 'application/json',
@@ -174,7 +178,7 @@ final class SwaggerDocumentation implements NormalizerInterface
                     ],
                 ]),
             ],
-            '/token/refresh'          => [
+            '/token/refresh'                 => [
                 'post' => new ArrayObject([
                     'tags'        => ['Token'],
                     'consumes'    => 'application/json',
@@ -233,7 +237,7 @@ final class SwaggerDocumentation implements NormalizerInterface
                     ],
                 ]),
             ],
-            '/images/upload'          => [
+            '/images/upload'                 => [
                 'post' => new ArrayObject([
                     'tags'        => ['Image'],
                     'consumes'    => 'application/x-www-form-urlencoded',
@@ -261,48 +265,90 @@ final class SwaggerDocumentation implements NormalizerInterface
                     ],
                 ]),
             ],
-            '/articles/{id}/comments' => [
-                'post' => new ArrayObject([
-                    'tags'        => ['Article', 'Comment'],
-                    'consumes'    => 'application/json',
-                    'produces'    => 'application/json',
-                    'summary'     => 'Add an Comment to an Article.',
-                    'description' => 'Add an Comment to an Article resource.',
-                    'parameters'  => [
-                        [
-                            'name'     => 'id',
-                            'in'       => 'path',
-                            'type'     => 'string',
-                            'format'   => 'uuid',
-                            'required' => true,
-                        ],
-                        [
-                            'name'   => 'comment',
-                            'in'     => 'body',
-                            'schema' => [
-                                'type'       => 'object',
-                                'properties' => [
-                                    'text' => [
-                                        'type' => 'string',
-                                        'description' => 'Actual content of comment'
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'responses'   => [
-                        '200' => [
-                            'description' => 'Successfully created resource',
-                            'schema'      => [
-                                '$ref' => '#/definitions/Comment-CommentRead',
-                            ],
-                        ],
-                        '400' => [
-                            'description' => 'Invalid input',
-                        ],
-                    ],
-                ]),
-            ],
+//            '/articles/{id}/comments'        => [
+//                'post' => new ArrayObject([
+//                    'tags'        => ['Article', 'Comment'],
+//                    'consumes'    => 'application/json',
+//                    'produces'    => 'application/json',
+//                    'summary'     => 'Add an Comment to an Article.',
+//                    'description' => 'Add an Comment to an Article resource.',
+//                    'parameters'  => [
+//                        [
+//                            'name'     => 'id',
+//                            'in'       => 'path',
+//                            'type'     => 'string',
+//                            'format'   => 'uuid',
+//                            'required' => true,
+//                        ],
+//                        [
+//                            'name'   => 'comment',
+//                            'in'     => 'body',
+//                            'schema' => [
+//                                'type'       => 'object',
+//                                'properties' => [
+//                                    'text' => [
+//                                        'type'        => 'string',
+//                                        'description' => 'Actual content of comment',
+//                                    ],
+//                                ],
+//                            ],
+//                        ],
+//                    ],
+//                    'responses'   => [
+//                        '200' => [
+//                            'description' => 'Successfully created resource',
+//                            'schema'      => [
+//                                '$ref' => '#/definitions/Comment-CommentRead',
+//                            ],
+//                        ],
+//                        '400' => [
+//                            'description' => 'Invalid input',
+//                        ],
+//                    ],
+//                ]),
+//            ],
+//            '/comments/{id}/comment_replies' => [
+//                'post' => new ArrayObject([
+//                    'tags'        => ['Comment', 'CommentReply'],
+//                    'consumes'    => 'application/json',
+//                    'produces'    => 'application/json',
+//                    'summary'     => 'Add an Comment Reply to an Article.',
+//                    'description' => 'Add an Comment Reply to an Article resource.',
+//                    'parameters'  => [
+//                        [
+//                            'name'     => 'id',
+//                            'in'       => 'path',
+//                            'type'     => 'string',
+//                            'format'   => 'uuid',
+//                            'required' => true,
+//                        ],
+//                        [
+//                            'name'   => 'reply',
+//                            'in'     => 'body',
+//                            'schema' => [
+//                                'type'       => 'object',
+//                                'properties' => [
+//                                    'text' => [
+//                                        'type'        => 'string',
+//                                        'description' => 'Actual content of reply',
+//                                    ],
+//                                ],
+//                            ],
+//                        ],
+//                    ],
+//                    'responses'   => [
+//                        '200' => [
+//                            'description' => 'Successfully created resource',
+//                            'schema'      => [
+//                                '$ref' => '#/definitions/CommentReply-ReplyRead',
+//                            ],
+//                        ],
+//                        '400' => [
+//                            'description' => 'Invalid input',
+//                        ],
+//                    ],
+//                ]),
+//            ],
         ];
 
         foreach ($additionalPaths as $additionalPath => $methods) {

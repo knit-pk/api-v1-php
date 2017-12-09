@@ -1,25 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Action\Article;
+namespace App\Action\Comment;
 
 use App\Entity\Article;
 use App\Entity\Comment;
+use App\Entity\CommentReply;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class CommentAddAction
+class AddReplyAction
 {
 
     /**
-     * @Route(name="api_articles_comments_post_subresource",
-     *      path="/articles/{id}/comments",
+     * @Route(name="api_comments_comment_replies_post_subresource",
+     *      path="/comments/{id}/comment_replies",
      *      defaults={
-     *          "_api_resource_class"=Article::class,
-     *          "_api_item_operation_name"="add_comment",
+     *          "_api_resource_class"=Comment::class,
+     *          "_api_item_operation_name"="add_reply",
      *      },
      * )
      * @Method("POST")
@@ -36,26 +37,25 @@ class CommentAddAction
      */
     public function __invoke(Request $request, UserInterface $user, $data)
     {
-//        return $data;
-        if(!$data instanceof Article) {
-            throw new \DomainException('Expected instance of Article');
+        if (!$data instanceof Comment) {
+            throw new \DomainException('Expected instance of Comment');
         }
 
-        if('json' !== $request->getContentType()) {
+        if ('json' !== $request->getContentType()) {
             throw new HttpException(400, sprintf('Content type %s is not supported. Accepted: json', $request->getContentType()));
         }
 
         $content = json_decode($request->getContent(), true);
 
-        if(empty($content['text'])) {
-            throw new HttpException(400, 'Comment cannot be empty.');
+        if (empty($content['text'])) {
+            throw new HttpException(400, 'Reply cannot be empty.');
         }
 
-        $comment = new Comment();
-        $comment->setArticle($data);
-        $comment->setAuthor($user);
-        $comment->setText($content['text']);
+        $reply = new CommentReply();
+        $reply->setComment($data);
+        $reply->setAuthor($user);
+        $reply->setText($content['text']);
 
-        return $comment;
+        return $reply;
     }
 }
