@@ -49,11 +49,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "method"="DELETE",
  *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
  *     },
- *     "add_comment"={
- *          "route_name"="api_articles_comments_post_subresource",
- *          "normalization_context"={"groups"={"CommentRead"}},
- *          "access_control"="is_granted('ROLE_READER')",
- *     },
  * })
  *
  * @ORM\Entity()
@@ -145,8 +140,6 @@ class Article
      * @var ArrayCollection|Comment[] Comments, typically from users.
      *
      * @ORM\OneToMany(targetEntity="Comment",mappedBy="article")
-     *
-     * @ApiSubresource()
      *
      * @Groups({"ArticleRead","ArticleWrite"})
      */

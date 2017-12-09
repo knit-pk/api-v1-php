@@ -65,3 +65,13 @@ endif
 	openssl rsa -passin pass:${JWT_PASSPHRASE} -pubout -in ${JWT_PRIVATE_KEY_PATH} -out ${JWT_PUBLIC_KEY_PATH}
 	@echo "\033[32mRSA key pair successfully generated\033[39m"
 ###< lexik/jwt-authentication-bundle ###
+
+fixtures-reload:
+ifdef CONSOLE
+	@$(CONSOLE) doctrine:schema:drop --force
+	@$(CONSOLE) doctrine:schema:create
+	@$(CONSOLE) doctrine:fixtures:load -vvv -n
+else
+	@printf "Cannot reload fixtures (needs symfony/console)\n"
+endif
+.PHONY: cache-warmup

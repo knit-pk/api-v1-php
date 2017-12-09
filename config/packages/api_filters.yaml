@@ -3,7 +3,7 @@ services:
     ### API PLATFORM FILTERS
     app.article.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
-        arguments: [ { code: 'exact', author: 'exact', title: 'partial' } ]
+        arguments: [ { code: 'exact', author: 'exact', title: 'partial', category.code: 'exact', tag.code: 'exact' } ]
         tags: [ 'api_platform.filter' ]
 
     app.article.boolean_filter:
@@ -13,7 +13,7 @@ services:
 
     app.article.group_filter:
         parent: 'api_platform.serializer.group_filter'
-        arguments: [ 'group', false, ['UserReadLess', 'ImageReadLess', 'TagRead', 'CategoryRead'] ]
+        arguments: [ 'group', false, ['UserReadLess','ImageReadLess','TagRead','CategoryRead'] ]
         tags: [ 'api_platform.filter' ]
 
     app.user.group_filter:
@@ -39,4 +39,14 @@ services:
     app.comment.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
         arguments: [ { article.id: 'exact' } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.comment.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['ReplyReadLess','UserReadLess'] ]
+        tags: [ 'api_platform.filter' ]
+
+    app.comment_reply.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { comment.id: 'exact' } ]
         tags: [ 'api_platform.filter' ]

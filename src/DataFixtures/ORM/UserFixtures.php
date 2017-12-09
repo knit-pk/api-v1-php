@@ -11,22 +11,22 @@ use Doctrine\Common\Persistence\ObjectManager;
 class UserFixtures extends Fixture
 {
     public const DEFAULT_USERS = [
-        'Super Admin' => [
+        'Super Admin'     => [
             USER::ROLE_SUPER_ADMIN,
         ],
-        'Admin' => [
+        'Admin'           => [
             USER::ROLE_ADMIN,
         ],
-        'Reader' => [
+        'Reader'          => [
             USER::ROLE_READER,
         ],
-        'Writer' => [
+        'Writer'          => [
             USER::ROLE_WRITER,
         ],
-        'User' => [
+        'User'            => [
             USER::ROLE_USER,
         ],
-        'User Writer' => [
+        'User Writer'     => [
             USER::ROLE_USER_WRITER,
         ],
         'Articles Author' => [
@@ -61,7 +61,7 @@ class UserFixtures extends Fixture
 
         foreach (self::DEFAULT_USERS as $fullname => $roles) {
             $username = strtolower(str_replace(' ', '_', $fullname));
-            $email = sprintf('%s@%s.pl', $username, $username);
+            $email = sprintf('%s@%s.pl', $username, strtolower(str_replace(' ', '-', $fullname)));
 
             $user = new User();
             $user->setFullname($fullname);

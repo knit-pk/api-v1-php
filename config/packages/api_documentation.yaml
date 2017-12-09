@@ -49,3 +49,13 @@ services:
         class: App\Swagger\Filter\SwaggerSearchFilter
         decorates: 'app.comment.search_filter'
         arguments: [ '@app.swagger.comment.search_filter.inner' ]
+
+    app.swagger.comment.group_filter:
+        class: App\Swagger\Filter\SwaggerGroupFilter
+        decorates: 'app.comment.group_filter'
+        arguments: [ '@app.swagger.comment.group_filter.inner' ]
+
+    app.swagger.comment_reply.search_filter:
+        class: App\Swagger\Filter\SwaggerSearchFilter
+        decorates: 'app.comment_reply.search_filter'
+        arguments: [ '@app.swagger.comment_reply.search_filter.inner' ]
