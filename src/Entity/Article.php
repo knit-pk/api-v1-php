@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(iri="http://schema.org/Article",
  * attributes={
- *     "filters"={"app.article.search_filter","app.article.boolean_filter","app.article.group_filter"},
+ *     "filters"={"app.article.search_filter","app.article.boolean_filter","app.article.group_filter","app.article.order_filter"},
  *     "normalization_context"={"groups"={"ArticleRead"}},
  *     "denormalization_context"={"groups"={"ArticleWrite"}},
  * },
