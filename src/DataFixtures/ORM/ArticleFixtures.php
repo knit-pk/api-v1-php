@@ -203,6 +203,109 @@ Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle p
                 ],
                 'author'      => 'user-user_writer',
             ],
+            [
+                'title'       => 'Wykład o systemie kontroli wersji Git',
+                'content'     => 'Wykład obejmował:
+- instalacja i konfiguracja
+- commit history
+- podstawy rozgałęziania i scalania
+- zmiana bazy
+- techniki zaawansowane: fitrowanie gałęzi, cherry pick, refs',
+                'description' => 'Wczoraj odbył się wykład o Git poprowadzony przez zarząd KNIT',
+                'category'    => 'category-news',
+                'tags'        => [
+                    'tag-university',
+                    'tag-programming',
+                    'tag-poland',
+                ],
+                'image'       => 'image-card-photo-4.jpg',
+                'comments'    => [
+                    [
+                        'author' => 'user-reader',
+                        'text'   => 'A może zrobicie wykład o sposobie pracy z Git?',
+                    ],
+                    [
+                        'author' => 'user-user',
+                        'text'   => 'A ja mało zrozumiałem :< Macie jakieś materiały do samodzielnej nauki?',
+                    ],
+                    [
+                        'author' => 'user-writer',
+                        'text'   => 'Dobra robota chłopaki!',
+                    ],
+                    [
+                        'author'  => 'user-writer',
+                        'text'    => 'Super wykład! Chciałbym spytać czy seria wykładów o Git będzie kontynuowana?',
+                        'replies' => [
+                            [
+                                'author' => 'user-articles_author',
+                                'text'   => 'Prawdopodobnie zrealizujemy jeszcze dwa wykłady. Jeden o `git flow` czyli o sposobie pracy ze zdalnym repozytorium oraz o technikach zaawansowanych :)',
+                            ],
+                            [
+                                'author' => 'user-writer',
+                                'text'   => 'Dokładnie o to mi chodziło. Nie mogę się doczekać! :)',
+                            ],
+                        ],
+                    ],
+                    [
+                        'author' => 'user-reader',
+                        'text'   => 'Super! Świetny wykład, dzięki niemu zrozumiałem różnicę pomiedzy `merge` a `rebase`!',
+                    ],
+                    [
+                        'author' => 'user-user_writer',
+                        'text'   => 'No, i teraz wszystko jasne! Dzięki!',
+                    ],
+                    [
+                        'author'  => 'user-reader',
+                        'text'    => 'Mam mały problem. Zrobiłem commit zmian które nie są jeszcze w pełni ukończone. Czy mogę jakoś cofnąć ten commit i zrobić go ponownie jak skończę pracę?',
+                        'replies' => [
+                            [
+                                'author' => 'user-articles_author',
+                                'text'   => 'Jasne, jest kilka rozwiązań tego problemu:
+1. Możesz kontynuować pracę, a gdy już skończyć zrobić `git commit --amend`. To polecenie nadpisze ostatni commit zmianami które właśnie zatwierdzasz. *Uwaga!* `git commit --amend` tworzy zupełnie nowy commit, dlatego trzeba uważać z tym poleceniem jeśli wypchałeś już zmiany do zdalnego repozytorium.
+2. Jak skończysz pracę możesz zrobić drugi commit, a później scalić te dwa commity w jeden używając interaktywnego rebase `git rebase -i HEAD~2`, co weźmie dwa ostatnie commity i otworzy edytor z listą tych dwóch commitów. Aby zrobić sqash commita do poprzedniego będziesz musiał zmienić `pick` na `s` lub `squash` przy danym commicie. 
+Jest jeszcze kilka innych, ale bardziej skomplikowanych sposobów, powodzenia! :)',
+                            ],
+                            [
+                                'author' => 'user-reader',
+                                'text'   => 'A co jeśli chcę całkowicie usunąć ostatni commit? Przez przypadek wypchałem zmiany testowe. Da się tak zrobic? Zrobiłem tak w pracy i jak tego nie usunę to szef mnie zabije! :c',
+                            ],
+                            [
+                                'author' => 'user-articles_author',
+                                'text'   => 'Spokojnie! W Gitcie i na to jest sposób :) Wystarczy, że zrobisz `git rest --hard HEAD^`, co oznacza cofnięcie historii do przedostatniego commita. Jeżeli zmiany są już na zdalnym repozytorium, będziesz musiał zrobić force push `git push -f`. *Uwaga! Force push może być bardzo niebezpieczny jeśli zmiany są publiczne. Może doprowadzić do zaburzenia całej historii commitów. Dlatego upewnij się, że nikt nie rozpoczął pracy wychodząc od twojego brancha.*',
+                            ],
+                            [
+                                'author' => 'user-reader',
+                                'text'   => '@articles_author zrobiłem tym pierszym sposobem. Super sprawa, dzięki!',
+                            ],
+                            [
+                                'author' => 'user-reader',
+                                'text'   => '@articles_author uff! Udało się, cofnąłem ten commit. Dzięk! Btw super strona. Bardzo szybko działa. Jakich technologii używacie?',
+                            ],
+                            [
+                                'author' => 'user-articles_author',
+                                'text'   => '@reader cześć front-endowa zrobiona jest w Nuxt.js - framework bazujący na Vue.js do tworzenia aplikacji z wykorzystaniem SSR (Server Side Rendering). To właśnie niemu oraz API napisanym w PHP na frameworku API Platform, z odpowiednią wartwą cache (Varnish), zawdzięczamy szybkość działanai naszej platformy.',
+                            ],
+                            [
+                                'author' => 'user-reader',
+                                'text'   => 'Wow! Czy kod waszej strony jest open source?',
+                            ],
+                            [
+                                'author' => 'user-articles_author',
+                                'text'   => 'Tak, repozytorium dostępne jest [tutaj](https://github.com/knit-pk/homepage-nuxtjs/). Zapraszamy wszystkich zainteresowanych do współpracy. Jest jeszcze wiele do zrobienia i można się na prawdę dużo nauczyć :)',
+                            ],
+                            [
+                                'author' => 'user-articles_author',
+                                'text'   => '@articles_author mam doświadczenie w pracy z Reactem. Jest możliwość dołączenia do zespołu?',
+                            ],
+                            [
+                                'author' => 'user-articles_author',
+                                'text'   => '@reader pewnie! Napisz do @admin, on ci wszystko wytłumaczy :)',
+                            ],
+                        ],
+                    ],
+                ],
+                'author'      => 'user-user_writer',
+            ],
         ];
     }
 
