@@ -11,6 +11,11 @@ services:
         arguments: [ { published: ~ } ]
         tags: [ 'api_platform.filter' ]
 
+    app.article.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [ { createdAt: ~ } ]
+        tags: [ 'api_platform.filter' ]
+
     app.article.group_filter:
         parent: 'api_platform.serializer.group_filter'
         arguments: [ 'group', false, ['UserReadLess','ImageReadLess','TagRead','CategoryRead'] ]
@@ -46,7 +51,17 @@ services:
         arguments: [ 'group', false, ['ReplyReadLess','UserReadLess'] ]
         tags: [ 'api_platform.filter' ]
 
+    app.comment.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [ { createdAt: ~ } ]
+        tags: [ 'api_platform.filter' ]
+
     app.comment_reply.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
         arguments: [ { comment.id: 'exact' } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.comment_reply.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [ { createdAt: ~ } ]
         tags: [ 'api_platform.filter' ]
