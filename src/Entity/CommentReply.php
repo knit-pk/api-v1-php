@@ -82,7 +82,7 @@ class CommentReply
     /**
      * @var Comment
      *
-     * Many Replies have One Comment.
+     * Many Replies have One Comment
      * @ORM\ManyToOne(targetEntity="Comment",inversedBy="replies")
      * @ORM\JoinColumn(name="comment_id",referencedColumnName="id")
      *

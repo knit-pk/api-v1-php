@@ -651,12 +651,12 @@ class User implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function isPasswordRequestNonExpired($ttl)
+    public function isPasswordRequestNonExpired($ttl): int
     {
         $passwordRequestedAt = $this->getPasswordRequestedAt();
 
-        return $passwordRequestedAt instanceof DateTime &&
-            $passwordRequestedAt->getTimestamp() + $ttl > time();
+        return (int) ($passwordRequestedAt instanceof DateTime &&
+            $passwordRequestedAt->getTimestamp() + $ttl > time());
     }
 
     /**

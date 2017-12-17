@@ -11,22 +11,22 @@ use Doctrine\Common\Persistence\ObjectManager;
 class UserFixtures extends Fixture
 {
     public const DEFAULT_USERS = [
-        'Super Admin'     => [
+        'Super Admin' => [
             USER::ROLE_SUPER_ADMIN,
         ],
-        'Admin'           => [
+        'Admin' => [
             USER::ROLE_ADMIN,
         ],
-        'Reader'          => [
+        'Reader' => [
             USER::ROLE_READER,
         ],
-        'Writer'          => [
+        'Writer' => [
             USER::ROLE_WRITER,
         ],
-        'User'            => [
+        'User' => [
             USER::ROLE_USER,
         ],
-        'User Writer'     => [
+        'User Writer' => [
             USER::ROLE_USER_WRITER,
         ],
         'Articles Author' => [

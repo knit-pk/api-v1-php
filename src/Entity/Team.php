@@ -1,17 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use DomainException;
-use FOS\UserBundle\Model\UserInterface;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -76,7 +72,7 @@ class Team
     /**
      * @var Collection|Team[]
      *
-     * One Team has Many Teams.
+     * One Team has Many Teams
      * @ORM\OneToMany(targetEntity="Team",mappedBy="parent")
      *
      * @Groups({"TeamRead"})
@@ -86,7 +82,7 @@ class Team
     /**
      * @var Team
      *
-     * Many Teams have One parent Team.
+     * Many Teams have One parent Team
      * @ORM\ManyToOne(targetEntity="Team",inversedBy="children")
      * @ORM\JoinColumn(name="parent_team_id",referencedColumnName="id")
      *

@@ -82,6 +82,7 @@ class SecurityRole extends Role
      */
     public function __construct(?string $role = null)
     {
+        parent::__construct($role);
         $this->users = new ArrayCollection();
         $this->setRole($role);
     }

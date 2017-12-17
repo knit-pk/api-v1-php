@@ -6,7 +6,6 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -97,7 +96,7 @@ class Comment
     /**
      * @var Collection|CommentReply[]
      *
-     * One Comment has Many Replies.
+     * One Comment has Many Replies
      * @ORM\OneToMany(targetEntity="CommentReply",mappedBy="comment")
      *
      * @Groups({"CommentRead"})

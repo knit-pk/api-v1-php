@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DataFixtures\ORM;
@@ -11,10 +12,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageFixtures extends Fixture
 {
-    private const APP_ROOT = __DIR__ . '/../../../';
+    private const APP_ROOT = __DIR__.'/../../../';
 
     /**
-     * Load data fixtures with the passed EntityManager
+     * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
      *
@@ -28,11 +29,10 @@ class ImageFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        $tempFile = self::APP_ROOT . 'var/temp.file';
+        $tempFile = self::APP_ROOT.'var/temp.file';
         $fs = $this->container->get('filesystem');
 
         foreach ($this->getImagesData() as $data) {
-
             $defaultAvatarImage = new SplFileInfo($data['file']);
             if ($defaultAvatarImage->isFile()) {
                 $fs->copy($defaultAvatarImage->getRealPath(), $tempFile, true);
@@ -54,11 +54,11 @@ class ImageFixtures extends Fixture
     {
         return [
             [
-                'file' => self::APP_ROOT . 'src/DataFixtures/Resources/images/avatar.png',
+                'file' => self::APP_ROOT.'src/DataFixtures/Resources/images/avatar.png',
                 'name' => 'avatar.png',
             ],
             [
-                'file' => self::APP_ROOT . 'src/DataFixtures/Resources/images/card-photo-4.jpg',
+                'file' => self::APP_ROOT.'src/DataFixtures/Resources/images/card-photo-4.jpg',
                 'name' => 'card-photo-4.jpg',
             ],
         ];

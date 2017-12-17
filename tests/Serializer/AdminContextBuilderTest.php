@@ -6,24 +6,26 @@ namespace App\Tests\Serializer;
 
 use ApiPlatform\Core\Serializer\SerializerContextBuilderInterface;
 use App\Serializer\AdminContextBuilder;
+use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AdminContextBuilderTest extends TestCase
 {
     /**
-     * @var \ApiPlatform\Core\Serializer\SerializerContextBuilderInterface
+     * @var SerializerContextBuilderInterface|ObjectProphecy
      */
     private $serializerContextBuilderProphecy;
 
     /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     * @var AuthorizationCheckerInterface|ObjectProphecy
      */
     private $authorizationCheckerProphecy;
 
     /**
-     * @var \App\Serializer\Group\Factory\AdminSerializerGroupFactory
+     * @var AdminSerializerGroupFactory|ObjectProphecy
      */
     private $adminSerializerGroupFactoryProphecy;
 
@@ -36,7 +38,7 @@ class AdminContextBuilderTest extends TestCase
     {
         $this->serializerContextBuilderProphecy = $this->prophesize(SerializerContextBuilderInterface::class);
         $this->authorizationCheckerProphecy = $this->prophesize(AuthorizationCheckerInterface::class);
-        $this->adminSerializerGroupFactoryProphecy = $this->prophesize(\App\Serializer\Group\Factory\AdminSerializerGroupFactory::class);
+        $this->adminSerializerGroupFactoryProphecy = $this->prophesize(AdminSerializerGroupFactory::class);
 
         $this->adminContextBuilder = new AdminContextBuilder($this->serializerContextBuilderProphecy->reveal(), $this->authorizationCheckerProphecy->reveal(), $this->adminSerializerGroupFactoryProphecy->reveal());
     }
