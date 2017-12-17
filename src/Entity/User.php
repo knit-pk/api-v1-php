@@ -309,7 +309,7 @@ class User implements UserInterface
     /**
      * @param string $role
      *
-     * @return \App\Entity\SecurityRole|null
+     * @return SecurityRole|null
      */
     public function getRole(string $role): ?SecurityRole
     {
@@ -337,7 +337,9 @@ class User implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param SecurityRole $role
+     *
+     * @return self
      *
      * @throws \DomainException
      */
@@ -401,7 +403,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param \App\Entity\SecurityRole $role
+     * @param SecurityRole $role
      */
     public function addSecurityRole(SecurityRole $role): void
     {
@@ -411,7 +413,7 @@ class User implements UserInterface
     }
 
     /**
-     * @param \App\Entity\SecurityRole $role
+     * @param SecurityRole $role
      */
     public function removeSecurityRole(SecurityRole $role): void
     {
@@ -593,7 +595,7 @@ class User implements UserInterface
      */
     public function setEnabled($boolean)
     {
-        $this->enabled = (bool) $boolean;
+        $this->enabled = $boolean;
 
         return $this;
     }
@@ -603,7 +605,7 @@ class User implements UserInterface
      */
     public function setSuperAdmin($boolean)
     {
-        if (!$this->superAdmin = (bool) $boolean) {
+        if (!$this->superAdmin = $boolean) {
             $this->removeRole(static::ROLE_SUPER_ADMIN);
         }
 
