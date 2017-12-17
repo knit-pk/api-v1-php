@@ -1,0 +1,25 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+env:
+  global:
+    - APP_ENV=test
+
+matrix:
+  include:
+    - php: '7.1'
+    - php: '7.2'
+
+before_install:
+  - export PATH="$PATH:$HOME/.composer/vendor/bin"
+
+install:
+  - composer update --prefer-dist --no-progress --no-suggest --no-scripts --ansi;
+
+script:
+  - composer test

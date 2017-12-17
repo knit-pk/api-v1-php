@@ -26,7 +26,8 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/k911/DoctrineExtensions"
+      "url": "https://github.com/k911/DoctrineExtensions",
+      "no-api": true
     }
   ],
   "require-dev": {
