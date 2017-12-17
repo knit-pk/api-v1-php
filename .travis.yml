@@ -2,6 +2,18 @@ language: php
 
 sudo: false
 
+services:
+  - mysql
+
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+
+dist: trusty
+
 cache:
   directories:
     - $HOME/.composer/cache
@@ -9,6 +21,11 @@ cache:
 env:
   global:
     - APP_ENV=test
+    - APP_TITLE="KNIT API Test"
+    - APP_DESCRIPTION="KNIT API"
+    - APP_VERSION=0.2.9
+    - JWT_TOKEN_TTL=3600
+    - DATABASE_URL="mysql://travis@127.0.0.1:3306/database?charset=utf8mb4&serverVersion=5.7"
 
 matrix:
   include:
@@ -17,9 +34,12 @@ matrix:
 
 before_install:
   - export PATH="$PATH:$HOME/.composer/vendor/bin"
+  - mysql -e 'CREATE DATABASE `database` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
 
 install:
   - composer update --prefer-dist --no-progress --no-suggest --no-scripts --ansi;
 
 script:
   - composer test
+  - bin/console doctrine:schema:create
+  - bin/console doctrine:fixtures:load -n
