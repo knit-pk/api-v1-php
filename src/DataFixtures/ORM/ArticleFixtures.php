@@ -109,8 +109,8 @@ class ArticleFixtures extends Fixture
     {
         return [
             [
-                'title'       => 'Jak zacząć naukę języka Kotlin',
-                'content'     => 'Kotlin is a language I thought about using for some time, yet it wasn\'t until recently that I decided to give it a try. And I\'m so excited that I have!.
+                'title' => 'Jak zacząć naukę języka Kotlin',
+                'content' => 'Kotlin is a language I thought about using for some time, yet it wasn\'t until recently that I decided to give it a try. And I\'m so excited that I have!.
 
 ## This is a random subheading 
 If you\'ve not heard of Kotlin, it\'s a language that, while newer than most, has gained significant amounts of traction in recent years. And why not? It has a series of advantages, especially over Java, that makes it quite compeling.
@@ -174,137 +174,137 @@ I\'m typing this shortly before the release of 2.5 Vue 3 hasn\'t been talked abo
 
 Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia tekstem próbnej książki. Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym. Spopularyzował się w latach 60. XX w. wraz z publikacją arkuszy Letrasetu, zawierających fragmenty Lorem Ipsum, a ostatnio z zawierającym różne wersje Lorem Ipsum oprogramowaniem przeznaczonym do realizacji druków na komputerach osobistych, jak Aldus PageMaker.',
                 'description' => 'Naucz się języka już dziś! Pokażemy Ci jak osiągnąć sukces z językiem Kotlin.',
-                'category'    => 'category-article',
-                'tags'        => [
+                'category' => 'category-article',
+                'tags' => [
                     'tag-university',
                     'tag-programming',
                     'tag-poland',
                 ],
-                'image'       => 'image-card-photo-4.jpg',
-                'comments'    => [
+                'image' => 'image-card-photo-4.jpg',
+                'comments' => [
                     [
-                        'author'  => 'user-reader',
-                        'text'    => 'Super artykuł!',
+                        'author' => 'user-reader',
+                        'text' => 'Super artykuł!',
                         'replies' => [
                             [
                                 'author' => 'user-user_writer',
-                                'text'   => 'Dzięki',
+                                'text' => 'Dzięki',
                             ],
                             [
                                 'author' => 'user-reader',
-                                'text'   => '@user-user_writer Nie ma za co!',
+                                'text' => '@user-user_writer Nie ma za co!',
                             ],
                         ],
                     ],
                     [
                         'author' => 'user-user',
-                        'text'   => 'O kurde, nigdy tego nie ogarnę..',
+                        'text' => 'O kurde, nigdy tego nie ogarnę..',
                     ],
                 ],
-                'author'      => 'user-user_writer',
+                'author' => 'user-user_writer',
             ],
             [
-                'title'       => 'Wykład o systemie kontroli wersji Git',
-                'content'     => 'Wykład obejmował:
+                'title' => 'Wykład o systemie kontroli wersji Git',
+                'content' => 'Wykład obejmował:
 - instalacja i konfiguracja
 - commit history
 - podstawy rozgałęziania i scalania
 - zmiana bazy
 - techniki zaawansowane: fitrowanie gałęzi, cherry pick, refs',
                 'description' => 'Wczoraj odbył się wykład o Git poprowadzony przez zarząd KNIT',
-                'category'    => 'category-news',
-                'tags'        => [
+                'category' => 'category-news',
+                'tags' => [
                     'tag-university',
                     'tag-programming',
                     'tag-poland',
                 ],
-                'image'       => 'image-card-photo-4.jpg',
-                'comments'    => [
+                'image' => 'image-card-photo-4.jpg',
+                'comments' => [
                     [
                         'author' => 'user-reader',
-                        'text'   => 'A może zrobicie wykład o sposobie pracy z Git?',
+                        'text' => 'A może zrobicie wykład o sposobie pracy z Git?',
                     ],
                     [
                         'author' => 'user-user',
-                        'text'   => 'A ja mało zrozumiałem :< Macie jakieś materiały do samodzielnej nauki?',
+                        'text' => 'A ja mało zrozumiałem :< Macie jakieś materiały do samodzielnej nauki?',
                     ],
                     [
                         'author' => 'user-writer',
-                        'text'   => 'Dobra robota chłopaki!',
+                        'text' => 'Dobra robota chłopaki!',
                     ],
                     [
-                        'author'  => 'user-writer',
-                        'text'    => 'Super wykład! Chciałbym spytać czy seria wykładów o Git będzie kontynuowana?',
+                        'author' => 'user-writer',
+                        'text' => 'Super wykład! Chciałbym spytać czy seria wykładów o Git będzie kontynuowana?',
                         'replies' => [
                             [
                                 'author' => 'user-articles_author',
-                                'text'   => 'Prawdopodobnie zrealizujemy jeszcze dwa wykłady. Jeden o `git flow` czyli o sposobie pracy ze zdalnym repozytorium oraz o technikach zaawansowanych :)',
+                                'text' => 'Prawdopodobnie zrealizujemy jeszcze dwa wykłady. Jeden o `git flow` czyli o sposobie pracy ze zdalnym repozytorium oraz o technikach zaawansowanych :)',
                             ],
                             [
                                 'author' => 'user-writer',
-                                'text'   => 'Dokładnie o to mi chodziło. Nie mogę się doczekać! :)',
+                                'text' => 'Dokładnie o to mi chodziło. Nie mogę się doczekać! :)',
                             ],
                         ],
                     ],
                     [
                         'author' => 'user-reader',
-                        'text'   => 'Super! Świetny wykład, dzięki niemu zrozumiałem różnicę pomiedzy `merge` a `rebase`!',
+                        'text' => 'Super! Świetny wykład, dzięki niemu zrozumiałem różnicę pomiedzy `merge` a `rebase`!',
                     ],
                     [
                         'author' => 'user-user_writer',
-                        'text'   => 'No, i teraz wszystko jasne! Dzięki!',
+                        'text' => 'No, i teraz wszystko jasne! Dzięki!',
                     ],
                     [
-                        'author'  => 'user-reader',
-                        'text'    => 'Mam mały problem. Zrobiłem commit zmian które nie są jeszcze w pełni ukończone. Czy mogę jakoś cofnąć ten commit i zrobić go ponownie jak skończę pracę?',
+                        'author' => 'user-reader',
+                        'text' => 'Mam mały problem. Zrobiłem commit zmian które nie są jeszcze w pełni ukończone. Czy mogę jakoś cofnąć ten commit i zrobić go ponownie jak skończę pracę?',
                         'replies' => [
                             [
                                 'author' => 'user-articles_author',
-                                'text'   => 'Jasne, jest kilka rozwiązań tego problemu:
+                                'text' => 'Jasne, jest kilka rozwiązań tego problemu:
 1. Możesz kontynuować pracę, a gdy już skończyć zrobić `git commit --amend`. To polecenie nadpisze ostatni commit zmianami które właśnie zatwierdzasz. *Uwaga!* `git commit --amend` tworzy zupełnie nowy commit, dlatego trzeba uważać z tym poleceniem jeśli wypchałeś już zmiany do zdalnego repozytorium.
 2. Jak skończysz pracę możesz zrobić drugi commit, a później scalić te dwa commity w jeden używając interaktywnego rebase `git rebase -i HEAD~2`, co weźmie dwa ostatnie commity i otworzy edytor z listą tych dwóch commitów. Aby zrobić sqash commita do poprzedniego będziesz musiał zmienić `pick` na `s` lub `squash` przy danym commicie. 
 Jest jeszcze kilka innych, ale bardziej skomplikowanych sposobów, powodzenia! :)',
                             ],
                             [
                                 'author' => 'user-reader',
-                                'text'   => 'A co jeśli chcę całkowicie usunąć ostatni commit? Przez przypadek wypchałem zmiany testowe. Da się tak zrobic? Zrobiłem tak w pracy i jak tego nie usunę to szef mnie zabije! :c',
+                                'text' => 'A co jeśli chcę całkowicie usunąć ostatni commit? Przez przypadek wypchałem zmiany testowe. Da się tak zrobic? Zrobiłem tak w pracy i jak tego nie usunę to szef mnie zabije! :c',
                             ],
                             [
                                 'author' => 'user-articles_author',
-                                'text'   => 'Spokojnie! W Gitcie i na to jest sposób :) Wystarczy, że zrobisz `git rest --hard HEAD^`, co oznacza cofnięcie historii do przedostatniego commita. Jeżeli zmiany są już na zdalnym repozytorium, będziesz musiał zrobić force push `git push -f`. *Uwaga! Force push może być bardzo niebezpieczny jeśli zmiany są publiczne. Może doprowadzić do zaburzenia całej historii commitów. Dlatego upewnij się, że nikt nie rozpoczął pracy wychodząc od twojego brancha.*',
+                                'text' => 'Spokojnie! W Gitcie i na to jest sposób :) Wystarczy, że zrobisz `git rest --hard HEAD^`, co oznacza cofnięcie historii do przedostatniego commita. Jeżeli zmiany są już na zdalnym repozytorium, będziesz musiał zrobić force push `git push -f`. *Uwaga! Force push może być bardzo niebezpieczny jeśli zmiany są publiczne. Może doprowadzić do zaburzenia całej historii commitów. Dlatego upewnij się, że nikt nie rozpoczął pracy wychodząc od twojego brancha.*',
                             ],
                             [
                                 'author' => 'user-reader',
-                                'text'   => '@articles_author zrobiłem tym pierszym sposobem. Super sprawa, dzięki!',
+                                'text' => '@articles_author zrobiłem tym pierszym sposobem. Super sprawa, dzięki!',
                             ],
                             [
                                 'author' => 'user-reader',
-                                'text'   => '@articles_author uff! Udało się, cofnąłem ten commit. Dzięk! Btw super strona. Bardzo szybko działa. Jakich technologii używacie?',
+                                'text' => '@articles_author uff! Udało się, cofnąłem ten commit. Dzięk! Btw super strona. Bardzo szybko działa. Jakich technologii używacie?',
                             ],
                             [
                                 'author' => 'user-articles_author',
-                                'text'   => '@reader cześć front-endowa zrobiona jest w Nuxt.js - framework bazujący na Vue.js do tworzenia aplikacji z wykorzystaniem SSR (Server Side Rendering). To właśnie niemu oraz API napisanym w PHP na frameworku API Platform, z odpowiednią wartwą cache (Varnish), zawdzięczamy szybkość działanai naszej platformy.',
+                                'text' => '@reader cześć front-endowa zrobiona jest w Nuxt.js - framework bazujący na Vue.js do tworzenia aplikacji z wykorzystaniem SSR (Server Side Rendering). To właśnie niemu oraz API napisanym w PHP na frameworku API Platform, z odpowiednią wartwą cache (Varnish), zawdzięczamy szybkość działanai naszej platformy.',
                             ],
                             [
                                 'author' => 'user-reader',
-                                'text'   => 'Wow! Czy kod waszej strony jest open source?',
+                                'text' => 'Wow! Czy kod waszej strony jest open source?',
                             ],
                             [
                                 'author' => 'user-articles_author',
-                                'text'   => 'Tak, repozytorium dostępne jest [tutaj](https://github.com/knit-pk/homepage-nuxtjs/). Zapraszamy wszystkich zainteresowanych do współpracy. Jest jeszcze wiele do zrobienia i można się na prawdę dużo nauczyć :)',
+                                'text' => 'Tak, repozytorium dostępne jest [tutaj](https://github.com/knit-pk/homepage-nuxtjs/). Zapraszamy wszystkich zainteresowanych do współpracy. Jest jeszcze wiele do zrobienia i można się na prawdę dużo nauczyć :)',
                             ],
                             [
                                 'author' => 'user-articles_author',
-                                'text'   => '@articles_author mam doświadczenie w pracy z Reactem. Jest możliwość dołączenia do zespołu?',
+                                'text' => '@articles_author mam doświadczenie w pracy z Reactem. Jest możliwość dołączenia do zespołu?',
                             ],
                             [
                                 'author' => 'user-articles_author',
-                                'text'   => '@reader pewnie! Napisz do @admin, on ci wszystko wytłumaczy :)',
+                                'text' => '@reader pewnie! Napisz do @admin, on ci wszystko wytłumaczy :)',
                             ],
                         ],
                     ],
                 ],
-                'author'      => 'user-user_writer',
+                'author' => 'user-user_writer',
             ],
         ];
     }

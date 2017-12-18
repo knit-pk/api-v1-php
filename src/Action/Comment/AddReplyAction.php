@@ -1,9 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Action\Comment;
 
-use App\Entity\Article;
 use App\Entity\Comment;
 use App\Entity\CommentReply;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -14,7 +14,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class AddReplyAction
 {
-
     /**
      * @Route(name="api_comments_comment_replies_post_subresource",
      *      path="/comments/{id}/comment_replies",
@@ -27,7 +26,7 @@ class AddReplyAction
      *
      * @param \Symfony\Component\HttpFoundation\Request           $request
      * @param \Symfony\Component\Security\Core\User\UserInterface $user
-     * @param                                                     $data
+     * @param mixed                                               $data
      *
      * @return mixed
      *

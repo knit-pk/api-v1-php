@@ -6,7 +6,6 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -137,7 +136,7 @@ class Article
     protected $tags;
 
     /**
-     * @var ArrayCollection|Comment[] Comments, typically from users.
+     * @var ArrayCollection|Comment[] comments, typically from users
      *
      * @ORM\OneToMany(targetEntity="Comment",mappedBy="article")
      *

@@ -87,6 +87,7 @@ easy_admin:
                     - name
         SecurityRole:
             class: App\Entity\SecurityRole
+            disabled_actions: ['new']
             list:
                 fields:
                     - name
@@ -95,7 +96,6 @@ easy_admin:
             form:
                 fields:
                     - name
-                    - role
                     - { property: 'users', type_options: { by_reference: false } }
         Image:
             class: App\Entity\Image

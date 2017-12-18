@@ -56,6 +56,11 @@ services:
         arguments: [ { createdAt: ~ } ]
         tags: [ 'api_platform.filter' ]
 
+    app.comment.date_filter:
+        parent: 'api_platform.doctrine.orm.date_filter'
+        arguments: [ { createdAt: ~ } ]
+        tags: [ 'api_platform.filter' ]
+
     app.comment_reply.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
         arguments: [ { comment.id: 'exact' } ]
@@ -63,5 +68,10 @@ services:
 
     app.comment_reply.order_filter:
         parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [ { createdAt: ~ } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.comment_reply.date_filter:
+        parent: 'api_platform.doctrine.orm.date_filter'
         arguments: [ { createdAt: ~ } ]
         tags: [ 'api_platform.filter' ]

@@ -80,55 +80,33 @@ class SecurityRole extends Role
      *
      * @param string $role
      */
-    public function __construct(?string $role = null)
+    public function __construct(string $role)
     {
+        parent::__construct($role);
+        $this->role = $role;
         $this->users = new ArrayCollection();
-        $this->setRole($role);
     }
 
-    /**
-     * @return Uuid|null
-     */
     public function getId(): ?Uuid
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    /**
-     * @param string|null $role
-     */
-    public function setRole(?string $role)
-    {
-        $this->role = $role;
-    }
-
-    /**
-     * @return string
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
     public function setName(string $name)
     {
         $this->name = $name;
     }
 
-    /**
-     * @return User[]|Collection
-     */
     public function getUsers(): Collection
     {
         return $this->users;
@@ -148,21 +126,13 @@ class SecurityRole extends Role
         $this->users->removeElement($user);
     }
 
-    /**
-     * @param Role|null $role
-     *
-     * @return bool
-     */
     public function isSecurityRole(?Role $role): bool
     {
         return $role instanceof self && $role->getRole() === $this->getRole();
     }
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
-        return $this->getName();
+        return (string) $this->getName();
     }
 }

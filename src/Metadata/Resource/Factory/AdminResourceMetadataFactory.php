@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Metadata\Resource\Factory;
 
-use ApiPlatform\Core\Exception\ResourceClassNotFoundException;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use ApiPlatform\Core\Metadata\Resource\ResourceMetadata;
 use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
@@ -13,28 +12,10 @@ use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundE
 
 final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInterface
 {
-    /**
-     * @var \ApiPlatform\Core\Metadata\Property\Factory\PropertyNameCollectionFactoryInterface
-     */
     private $decorated;
-
-    /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
-     */
     private $authorizationChecker;
-
-    /**
-     * @var \App\Serializer\Group\Factory\AdminSerializerGroupFactory
-     */
     private $adminSerializerGroupFactory;
 
-    /**
-     * AdminResourceMetadataFactory constructor.
-     *
-     * @param \ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface $decorated
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
-     * @param \App\Serializer\Group\Factory\AdminSerializerGroupFactory                    $adminSerializerGroupFactory
-     */
     public function __construct(ResourceMetadataFactoryInterface $decorated, AuthorizationCheckerInterface $authorizationChecker, AdminSerializerGroupFactory $adminSerializerGroupFactory)
     {
         $this->decorated = $decorated;
@@ -43,13 +24,7 @@ final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInter
     }
 
     /**
-     * Creates a resource metadata.
-     *
-     * @param string $resourceClass
-     *
-     * @throws ResourceClassNotFoundException
-     *
-     * @return ResourceMetadata
+     * {@inheritdoc}
      */
     public function create(string $resourceClass): ResourceMetadata
     {
