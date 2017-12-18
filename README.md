@@ -1,4 +1,6 @@
 # KNIT Restful API
+![travis](https://api.travis-ci.org/knit-pk/api-v1-php.svg?branch=develop)
+
 Development configuration of KNIT API written in PHP, deployed using docker.
 
 - [Run project](#run-project)
