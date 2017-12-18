@@ -21,10 +21,6 @@ cache:
 env:
   global:
     - APP_ENV=test
-    - APP_TITLE="KNIT API Test"
-    - APP_DESCRIPTION="KNIT API"
-    - APP_VERSION=0.2.9
-    - JWT_TOKEN_TTL=3600
     - DATABASE_URL="mysql://travis@127.0.0.1:3306/database?charset=utf8mb4&serverVersion=5.7"
 
 matrix:

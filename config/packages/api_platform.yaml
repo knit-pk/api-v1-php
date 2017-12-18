@@ -1,12 +1,12 @@
 api_platform:
     # The title of the API.
-    title: '%env(APP_TITLE)%'
+    title: '%title%'
 
     # The description of the API.
-    description: '%env(APP_DESCRIPTION)%'
+    description: '%description%'
 
     # The version of the API.
-    version: '%env(APP_VERSION)%'
+    version: '%version%'
 
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']

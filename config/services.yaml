@@ -2,6 +2,9 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
+    version: '0.3.0'
+    title: 'KNIT RESTful API'
+    description: 'KNIT RESTful API build using ApiPlatform'
     public_upload.prefix: 'media/upload'
     router.request_context.host: localhost
     router.request_context.scheme: http

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9d8a3fa5ed9068a596c4608bfa75882",
+    "content-hash": "b0f072a92b55657cbc493580fcb9db98",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -904,16 +904,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.5.13",
+            "version": "v2.5.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "93103f44a3e36e7b48165b6e6b736833f33b18ef"
+                "reference": "810a7baf81462a5ddf10e8baa8cb94b6eec02754"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/93103f44a3e36e7b48165b6e6b736833f33b18ef",
-                "reference": "93103f44a3e36e7b48165b6e6b736833f33b18ef",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/810a7baf81462a5ddf10e8baa8cb94b6eec02754",
+                "reference": "810a7baf81462a5ddf10e8baa8cb94b6eec02754",
                 "shasum": ""
             },
             "require": {
@@ -976,7 +976,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-11-27T23:25:55+00:00"
+            "time": "2017-12-17T02:57:51+00:00"
         },
         {
             "name": "friendsofsymfony/user-bundle",
@@ -1060,12 +1060,12 @@
             "version": "v2.4.33",
             "source": {
                 "type": "git",
-                "url": "https://github.com/k911/doctrine-extensions.git",
+                "url": "https://github.com/k911/DoctrineExtensions",
                 "reference": "46293a663b43b98843886ee0d0ac6b36bcf10b4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/k911/doctrine-extensions/zipball/46293a663b43b98843886ee0d0ac6b36bcf10b4e",
+                "url": "https://api.github.com/repos/k911/DoctrineExtensions/zipball/46293a663b43b98843886ee0d0ac6b36bcf10b4e",
                 "reference": "46293a663b43b98843886ee0d0ac6b36bcf10b4e",
                 "shasum": ""
             },
@@ -7261,16 +7261,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.5.4",
+            "version": "6.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1b2f933d5775f9237369deaa2d2bfbf9d652be4c"
+                "reference": "83d27937a310f2984fd575686138597147bdc7df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1b2f933d5775f9237369deaa2d2bfbf9d652be4c",
-                "reference": "1b2f933d5775f9237369deaa2d2bfbf9d652be4c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/83d27937a310f2984fd575686138597147bdc7df",
+                "reference": "83d27937a310f2984fd575686138597147bdc7df",
                 "shasum": ""
             },
             "require": {
@@ -7341,7 +7341,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-12-10T08:06:19+00:00"
+            "time": "2017-12-17T06:31:19+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

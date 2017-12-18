@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(iri="http://schema.org/Comment",
  * attributes={
- *     "filters"={"app.comment.search_filter","app.comment.group_filter","app.comment.order_filter"},
+ *     "filters"={"app.comment.search_filter","app.comment.group_filter","app.comment.order_filter","app.comment.date_filter"},
  *     "normalization_context"={"groups"={"CommentRead"}},
  *     "denormalization_context"={"groups"={"CommentWrite"}},
  * },
