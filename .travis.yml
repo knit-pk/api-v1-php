@@ -1,17 +1,5 @@
 language: php
-
 sudo: false
-
-services:
-  - mysql
-
-addons:
-  apt:
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - mysql-server
-
 dist: trusty
 
 cache:
@@ -21,21 +9,38 @@ cache:
 env:
   global:
     - APP_ENV=test
-    - DATABASE_URL="mysql://travis@127.0.0.1:3306/database?charset=utf8mb4&serverVersion=5.7"
 
 matrix:
   include:
     - php: '7.1'
+      services:
+        - mysql
+      addons:
+        apt:
+          sources:
+            - mysql-5.7-trusty
+          packages:
+            - mysql-server
+      before_script:
+        - mysql -e 'CREATE DATABASE knit_api_test;'
+      env:
+        - DATABASE_URL="mysql://travis@127.0.0.1:3306/knit_api_test?charset=utf8mb4&serverVersion=5.7"
+    - php: '7.1'
+      services:
+        - postgresql
+      before_script:
+        - psql -c 'CREATE DATABASE knit_api_test;' -U postgres
+      env:
+        - DATABASE_URL="pgsql://postgres@127.0.0.1:5432/knit_api_test"
     - php: '7.2'
 
 before_install:
   - export PATH="$PATH:$HOME/.composer/vendor/bin"
-  - mysql -e 'CREATE DATABASE `database` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
 
 install:
   - composer update --prefer-dist --no-progress --no-suggest --no-scripts --ansi;
 
 script:
   - composer test
-  - bin/console doctrine:schema:create
-  - bin/console doctrine:fixtures:load -n
+  - if [[ -v DATABASE_URL ]]; then bin/console doctrine:schema:create; fi
+  - if [[ -v DATABASE_URL ]]; then bin/console doctrine:fixtures:load -n; fi
