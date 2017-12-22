@@ -23,6 +23,11 @@ acl ban {
 }
 
 sub vcl_backend_response {
+    if (bereq.url ~ "^[^?]*\.(?:jpe?g|png)(?:\?.*)?$") {
+        unset beresp.http.set-cookie;
+        set beresp.do_stream = true;
+     }
+
      // Ban lurker friendly header
      set beresp.http.url = bereq.url;
 
@@ -42,7 +47,7 @@ sub vcl_deliver {
 
     // Uncomment the following line to NOT send the "Cache-Tags" header to the client (prevent using CloudFlare cache tags)
     //unset resp.http.Cache-Tags;
-    
+
     // CORS
     set req.http.Access-Control-Allow-Origin = "*";
     
@@ -56,6 +61,17 @@ sub vcl_deliver {
 }
 
 sub vcl_recv {
+    // Do not cache media files
+    if (req.url ~ "^[^?]*\.(?:jpe?g|png)(?:\?.*)?$") {
+        unset req.http.Cookie;
+        return (hash);
+    }
+
+    // Only cache GET or HEAD requests. This makes sure the POST/PUT/DELETE requests are always passed.
+    if (req.method != "GET" && req.method != "HEAD") {
+        return (pass);
+    }
+
     if (req.http.X-Forwarded-Proto == "https" ) {
         set req.http.X-Forwarded-Port = "443";
     } else {

@@ -53,7 +53,7 @@ api_platform:
         shared_max_age: 60
 
         # Default values of the "Vary" HTTP header.
-        vary: ['Content-Type', 'Authorization']
+        vary: ['Authorization']
 
         # To make all responses public by default.
         public: true

@@ -1,6 +1,7 @@
 FROM php:7.2-fpm-alpine
 
 ARG TIMEZONE="Europe/Warsaw"
+ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV TZ=${TIMEZONE}
 ENV DOT_ENV=.env.mysql
 ENV DOCKERIZE_VERSION=v0.6.0 \
@@ -36,6 +37,9 @@ RUN apk del tzdata
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Copy phpini
+COPY php.ini /usr/local/etc/php/php.ini
 
 # Copy script that runs on container startup
 COPY startup.sh /usr/local/bin/docker-app-startup

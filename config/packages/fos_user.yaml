@@ -5,6 +5,8 @@ fos_user:
     from_email:
         address: 'no-reply@localhost'
         sender_name: 'no-reply'
-
+    registration:
+        confirmation:
+            enabled: true
     service:
         mailer: fos_user.mailer.noop
