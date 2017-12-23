@@ -11,9 +11,8 @@
     "nelmio/cors-bundle": "^1.5",
     "api-platform/api-pack": "^1.0",
     "symfony/monolog-bundle": "^3.1",
-    "vich/uploader-bundle": "^1.6",
+    "vich/uploader-bundle": "^1.7",
     "friendsofsymfony/user-bundle": "^2.0",
-    "javiereguiluz/easyadmin-bundle": "^1.17",
     "lexik/jwt-authentication-bundle": "^2.4",
     "gesdinet/jwt-refresh-token-bundle": "^0.3",
     "symfony/flex": "^1.0",
@@ -37,15 +36,16 @@
     }
   ],
   "require-dev": {
-    "api-platform/schema-generator": "^2.0",
-    "doctrine/doctrine-fixtures-bundle": "^2.4",
-    "friendsofphp/php-cs-fixer": "^2.9",
-    "phpstan/phpstan": "^0.9.1",
-    "phpunit/phpunit": "^6.4",
-    "symfony/console": "^4",
-    "symfony/dotenv": "^4",
     "symfony/profiler-pack": "^1.0",
-    "symfony/web-server-bundle": "^4"
+    "symfony/web-server-bundle": "^4",
+    "javiereguiluz/easyadmin-bundle": "^1.17",
+    "doctrine/doctrine-fixtures-bundle": "^2.4",
+    "symfony/dotenv": "^4",
+    "symfony/console": "^4",
+    "phpunit/phpunit": "^6.5",
+    "phpstan/phpstan": "^0.9.1",
+    "friendsofphp/php-cs-fixer": "^2.9",
+    "api-platform/schema-generator": "^2.0"
   },
   "config": {
     "preferred-install": {

@@ -6,14 +6,16 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Security\User\UserInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\UserInterface as FOSUserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -57,18 +59,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="users")
  */
-class User implements UserInterface
+class User implements UserInterface, FOSUserInterface
 {
-    public const ROLE_USER = 'ROLE_USER';
-
-    public const ROLE_READER = 'ROLE_READER';
-
-    public const ROLE_WRITER = 'ROLE_WRITER';
-
-    public const ROLE_USER_WRITER = 'ROLE_USER_WRITER';
-
-    public const ROLE_ADMIN = 'ROLE_ADMIN';
-
     /**
      * @var Uuid
      *
@@ -285,7 +277,7 @@ class User implements UserInterface
         ] = unserialize($serialized, ['allowed_classes' => true]);
     }
 
-    public function getId(): ?Uuid
+    public function getId(): ?UuidInterface
     {
         return $this->id;
     }
@@ -453,13 +445,11 @@ class User implements UserInterface
     }
 
     /**
-     * @param UserInterface|null $user
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isUser(?UserInterface $user): bool
     {
-        return $user instanceof self && $user->id === $this->id;
+        return $user instanceof UserInterface && $this->id->equals($user->getId());
     }
 
     /**
@@ -729,6 +719,6 @@ class User implements UserInterface
 
     public function __toString()
     {
-        return $this->getUsername();
+        return (string) $this->getUsername();
     }
 }
