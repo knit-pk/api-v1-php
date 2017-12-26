@@ -75,6 +75,8 @@ services:
            - api
         build:
            context: ./docker/varnish
+        volumes:
+            - ./docker/varnish/conf:/etc/varnish:ro
         ports:
            - "80:80"
 

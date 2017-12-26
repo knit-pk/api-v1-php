@@ -1,9 +1,11 @@
 api_platform:
     http_cache:
-        shared_max_age: 3600
         invalidation:
             # To enable the tags-based cache invalidation system.
             enabled: true
 
             # URLs of the Varnish servers to purge using cache tags when a resource is updated.
             varnish_urls: ['%env(VARNISH_URL)%']
+
+        # Default value for the response shared (proxy) max age.
+        shared_max_age: 3600

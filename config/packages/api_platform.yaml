@@ -31,6 +31,12 @@ api_platform:
     # Enable Swagger ui.
     enable_swagger_ui: true
 
+    # Enable Swagger UI authorization.
+    swagger:
+         api_keys:
+             - { name: 'authorization', type: 'header' }
+             - { name: 'token', type: 'query' }
+
     collection:
         # The default order of results.
         order: 'ASC'
@@ -53,7 +59,7 @@ api_platform:
         shared_max_age: 60
 
         # Default values of the "Vary" HTTP header.
-        vary: ['Content-Type', 'Authorization']
+        vary: ['Authorization']
 
         # To make all responses public by default.
         public: true

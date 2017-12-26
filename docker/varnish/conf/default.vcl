@@ -42,24 +42,48 @@ sub vcl_deliver {
 
     // Uncomment the following line to NOT send the "Cache-Tags" header to the client (prevent using CloudFlare cache tags)
     //unset resp.http.Cache-Tags;
-    
+
     // CORS
     set req.http.Access-Control-Allow-Origin = "*";
     
     // Insert Diagnostic header to show Hit or Miss
     if (obj.hits > 0) {
-        set resp.http.X-Cache = "Hit";
-        set resp.http.X-Cache-Hits = obj.hits;
+        set resp.http.X-Cache = "Hits: " + obj.hits;
     } else {
         set resp.http.X-Cache = "Miss";
     }
 }
 
 sub vcl_recv {
+    // Remove the "Forwarded" HTTP header if exists (security)
+    unset req.http.forwarded;
+
     if (req.http.X-Forwarded-Proto == "https" ) {
         set req.http.X-Forwarded-Port = "443";
     } else {
         set req.http.X-Forwarded-Port = "80";
+    }
+
+    // Add a Surrogate-Capability header to announce ESI support.
+    set req.http.Surrogate-Capability = "abc=ESI/1.0";
+
+    // To allow API Platform to ban by cache tags
+    if (req.method == "BAN") {
+        if (client.ip !~ ban) {
+            return(synth(405, "Not allowed: " + client.ip));
+        }
+
+        if (req.http.ApiPlatform-Ban-Regex) {
+            ban("obj.http.Cache-Tags ~ " + req.http.ApiPlatform-Ban-Regex);
+            return(synth(200, "Ban added"));
+        }
+
+        return(synth(400, "ApiPlatform-Ban-Regex HTTP header must be set."));
+    }
+
+    // Only cache GET or HEAD requests. This makes sure the POST/PUT/DELETE requests are always passed.
+    if (req.method != "GET" && req.method != "HEAD") {
+        return (pass);
     }
 
     // Remove all cookies except the session ID.
@@ -76,26 +100,7 @@ sub vcl_recv {
         }
     }
 
-    // Add a Surrogate-Capability header to announce ESI support.
-    set req.http.Surrogate-Capability = "abc=ESI/1.0";
-
-    // Remove the "Forwarded" HTTP header if exists (security)
-    unset req.http.forwarded;
-
-    // To allow API Platform to ban by cache tags
-    if (req.method == "BAN") {
-        if (client.ip !~ ban) {
-            return(synth(405, "Not allowed: " + client.ip));
-        }
-
-        if (req.http.ApiPlatform-Ban-Regex) {
-            ban("obj.http.Cache-Tags ~ " + req.http.ApiPlatform-Ban-Regex);
-
-            return(synth(200, "Ban added"));
-        }
-
-        return(synth(400, "ApiPlatform-Ban-Regex HTTP header must be set."));
-    }
+    return(hash);
 }
 
 # From https://github.com/varnish/Varnish-Book/blob/master/vcl/grace.vcl
