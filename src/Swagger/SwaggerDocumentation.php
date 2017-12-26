@@ -26,6 +26,8 @@ final class SwaggerDocumentation implements NormalizerInterface
         '/articles/{id}/comments/{id}' => ['get'],
         '/projects' => ['get'],
         '/projects/{id}' => ['get'],
+        '/teams' => ['get'],
+        '/teams/{id}' => ['get'],
         '/tags' => ['get'],
         '/tags/{id}' => ['get'],
         '/categories' => ['get'],
@@ -36,17 +38,9 @@ final class SwaggerDocumentation implements NormalizerInterface
         '/images/{id}' => ['get'],
     ];
 
-    /**
-     * Authorization parameter to secured routes
-     * (Shown in swagger documentation).
-     */
-    private const AUTHORIZATION_PARAMETER = [
-        'name' => 'Authorization',
-        'description' => 'JWT Access Token',
-        'in' => 'header',
-        'default' => 'Bearer <%JWTAccessToken%>',
-        'required' => true,
-        'type' => 'string',
+    private const SECURITY_METHODS = [
+        'header' => 'BearerAuthHeader',
+        'query' => 'QueryParamToken',
     ];
 
     /**
@@ -64,6 +58,17 @@ final class SwaggerDocumentation implements NormalizerInterface
         $this->decorated = $decorated;
     }
 
+    private function makeSecurity(): array
+    {
+        $security = [];
+
+        foreach (array_values(self::SECURITY_METHODS) as $arrayValue) {
+            $security[] = new ArrayObject([$arrayValue => []]);
+        }
+
+        return $security;
+    }
+
     /**
      * {@inheritdoc}
      *
@@ -73,6 +78,9 @@ final class SwaggerDocumentation implements NormalizerInterface
     {
         $docs = $this->decorated->normalize($object, $format, $context);
 
+        $docs['securityDefinitions'] = $this->filterSecurityDefinitions($docs['securityDefinitions']);
+        $docs['security'] = []; // not all routes need authorization
+
         $paths = $docs['paths'];
         if (!$paths instanceof ArrayObject) {
             throw new RuntimeException('[Swagger Documentation] Item `swagger.paths` expected to be represented by an ArrayObject.');
@@ -81,7 +89,8 @@ final class SwaggerDocumentation implements NormalizerInterface
         // Appends additional paths to documentation
         $this->appendAdditionalPaths($paths);
 
-        // Prepend authorization parameter to paths
+        // Add security parameter to paths
+        $security = $this->makeSecurity();
         foreach ($paths as $path => $methods) {
             /** @var array $methods */
             /** @var ArrayObject $swagger */
@@ -93,7 +102,8 @@ final class SwaggerDocumentation implements NormalizerInterface
                     if (!$swagger instanceof ArrayObject) {
                         throw new RuntimeException(sprintf('[Swagger Documentation] Item `swagger.paths[%s][%s]` expected to be represented by an ArrayObject.', $path, $method));
                     }
-                    $this->addAuthorizationParameter($swagger);
+
+                    $swagger->offsetSet('security', $security);
                 }
             }
         }
@@ -367,19 +377,24 @@ final class SwaggerDocumentation implements NormalizerInterface
     }
 
     /**
-     * Adds an authorization parameter to swagger schema.
+     * Filters security definitions.
      *
-     * @param ArrayObject $swagger Object representing swagger.path[$path].method[$method]
-     *                             in swagger schema
+     * @param ArrayObject[] $definitions
+     *
+     * @return ArrayObject[]
      */
-    private function addAuthorizationParameter(ArrayObject $swagger)
+    private function filterSecurityDefinitions(array $definitions): array
     {
-        // Prepend parameters
-        if ($swagger->offsetExists('parameters')) {
-            array_unshift($swagger['parameters'], self::AUTHORIZATION_PARAMETER);
-        } else {
-            // ..or create with first parameter
-            $swagger['parameters'][] = self::AUTHORIZATION_PARAMETER;
+        $filteredDefinitions = [];
+
+        foreach ($definitions as $definition) {
+            if ('header' === $definition['in']) {
+                $definition['description'] .= '. Below write: Bearer MY_JWT_TOKEN';
+            }
+
+            $filteredDefinitions[self::SECURITY_METHODS[$definition['in']]] = $definition;
         }
+
+        return $filteredDefinitions;
     }
 }

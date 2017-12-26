@@ -31,6 +31,12 @@ api_platform:
     # Enable Swagger ui.
     enable_swagger_ui: true
 
+    # Enable Swagger UI authorization.
+    swagger:
+         api_keys:
+             - { name: 'authorization', type: 'header' }
+             - { name: 'token', type: 'query' }
+
     collection:
         # The default order of results.
         order: 'ASC'
