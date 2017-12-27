@@ -7,6 +7,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Security\User\UserInterface;
+use App\Thought\ThoughtfulInterface;
+use App\Thought\ThoughtInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -53,7 +55,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="articles")
  */
-class Article
+class Article implements ThoughtfulInterface
 {
     /**
      * @var Uuid
@@ -374,5 +376,29 @@ class Article
     public function __toString(): string
     {
         return $this->getCode();
+    }
+
+    /**
+     * Determines whether given thought is supported by an thoughtful object.
+     *
+     * @param ThoughtInterface $thought
+     *
+     * @return bool
+     */
+    public function isThoughtSupported(ThoughtInterface $thought): bool
+    {
+        return $thought instanceof Comment;
+    }
+
+    /**
+     * Returns an array of supported thought objects' class names.
+     *
+     * @return array
+     */
+    public static function getSupportedThoughts(): array
+    {
+        return [
+            Comment::class,
+        ];
     }
 }

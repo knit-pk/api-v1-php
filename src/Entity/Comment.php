@@ -7,6 +7,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Security\User\UserInterface;
+use App\Thought\ThoughtfulInterface;
+use App\Thought\ThoughtInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -35,6 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "method"="POST",
  *          "access_control"="is_granted('ROLE_READER')",
  *     },
+ *     "comment_an_article"={"route_name"="comment_an_article"},
  * },
  * itemOperations={
  *     "get"={
@@ -53,7 +56,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="comments")
  */
-class Comment
+class Comment implements ThoughtInterface
 {
     /**
      * @var Uuid
@@ -162,7 +165,10 @@ class Comment
         return $this->article;
     }
 
-    public function setAuthor(?User $author): void
+    /**
+     * {@inheritdoc}
+     */
+    public function setAuthor(?UserInterface $author): void
     {
         $this->author = $author;
     }
@@ -182,7 +188,10 @@ class Comment
         $this->createdAt = $createdAt;
     }
 
-    public function getAuthor(): ?User
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthor(): ?UserInterface
     {
         return $this->author;
     }
@@ -224,7 +233,33 @@ class Comment
         return $author instanceof UserInterface && $author->isUser($user);
     }
 
-    public function __toString()
+    public function __toString(): string
+    {
+        return $this->toString();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubject(): ThoughtfulInterface
+    {
+        return $this->article;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubject(ThoughtfulInterface $subject): void
+    {
+        $this->article = $subject;
+    }
+
+    /**
+     * Expresses thought provided by its author in readable form.
+     *
+     * @return string
+     */
+    public function toString(): string
     {
         return (string) $this->getText();
     }

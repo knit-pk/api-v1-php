@@ -5,3 +5,14 @@ api_action:
 api_login_check:
     path: /token
     methods: ['POST']
+
+comment_an_article:
+    path: '/articles/{id}/comments'
+    methods: ['POST']
+    defaults:
+        _controller: App\Action\Thought\AddThoughtAction
+        _api_collection_operation_name: comment_an_article
+        _api_parent_context:
+            item_operation_name: api_articles_get_item
+            resource_class: App\Entity\Article
+        _api_resource_class: App\Entity\Comment

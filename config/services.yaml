@@ -31,10 +31,10 @@ services:
         # but if a service is unused, it's removed anyway
         exclude: '../src/{Entity,Migrations,Repository,DataFixtures}'
 
-    # controllers are imported separately to make sure they
-    # have the tag that allows actions to type-hint services
-    App\Controller\:
-        resource: '../src/Controller'
+    # actions are imported separately to make sure they
+    # have the tag that allows to type-hint services
+    App\Action\:
+        resource: '../src/Action'
         tags: ['controller.service_arguments']
 
     ### Gedmo doctrine extensions
@@ -63,6 +63,12 @@ services:
         class: App\EventListener\ImageUploadedListener
         tags:
             - { name: kernel.event_listener, event: vich_uploader.post_upload, method: onVichUploaderPostUpload }
+
+    ### Add parent item to api sub resource
+    app.event.parent_read_listener:
+        class: App\EventListener\ParentReadListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 4 }
 
     ### Dynamically inject serialization groups for admins
     'App\Serializer\AdminContextBuilder':
