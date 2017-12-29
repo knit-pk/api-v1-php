@@ -4,76 +4,42 @@ declare(strict_types=1);
 
 namespace App\Action\Thought;
 
-use App\Entity\User;
-use App\Security\User\UserInterface;
+use App\Security\UserProvider\UserEntityProvider;
 use App\Thought\Exception\NotSupportedThoughtException;
 use App\Thought\ThoughtfulInterface;
 use App\Thought\ThoughtInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use RuntimeException;
-use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AddThoughtAction
 {
-    /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    private $em;
 
-    public function __construct(EntityManagerInterface $em)
+    private $userEntityProvider;
+
+    public function __construct(UserEntityProvider $userEntityProvider)
     {
-        $this->em = $em;
+        $this->userEntityProvider = $userEntityProvider;
     }
 
     /**
      * @param ThoughtInterface $data
      * @param ThoughtfulInterface $parent
-     * @param SymfonyUserInterface $user
+     * @param UserInterface $user
      *
      * @return ThoughtInterface
      *
-     * @throws \RuntimeException
+     * @throws \App\Security\Exception\SecurityException
      * @throws \App\Thought\Exception\NotSupportedThoughtException
-     * @throws \Doctrine\ORM\ORMException
      */
-    public function __invoke(ThoughtInterface $data, ThoughtfulInterface $parent, SymfonyUserInterface $user)
+    public function __invoke(ThoughtInterface $data, ThoughtfulInterface $parent, UserInterface $user)
     {
         if (!$parent->isThoughtSupported($data)) {
             throw new NotSupportedThoughtException($parent, $data);
         }
 
-        $data->setAuthor($this->getUserEntity($user));
+        $data->setAuthor($this->userEntityProvider->getUser($user));
         $data->setSubject($parent);
 
         return $data;
-    }
-
-    /**
-     * @param SymfonyUserInterface $user
-     *
-     * @return User
-     *
-     * @throws \RuntimeException
-     * @throws \Doctrine\ORM\ORMException
-     */
-    private function getUserEntity(SymfonyUserInterface $user): User
-    {
-        if ($user instanceof User) {
-            return $user;
-        }
-
-        if (!$user instanceof UserInterface) {
-            throw new RuntimeException('User object must implement local UserInterface.');
-        }
-
-        $entity = $this->em->getReference(User::class, $user->getId());
-
-        // Can never happen
-        if (!$entity instanceof User) {
-            throw new RuntimeException('Authenticated user does not exists in database.', 500);
-        }
-
-        return $entity;
     }
 
 }

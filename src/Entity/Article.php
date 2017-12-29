@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Security\User\UserInterface;
 use App\Thought\ThoughtfulInterface;
 use App\Thought\ThoughtInterface;
@@ -143,6 +144,8 @@ class Article implements ThoughtfulInterface
      * @ORM\OneToMany(targetEntity="Comment",mappedBy="article")
      *
      * @Groups({"ArticleRead","ArticleWrite"})
+     *
+     * @ApiSubresource()
      */
     protected $comments;
 

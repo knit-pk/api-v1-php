@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Security\User\UserInterface;
 use App\Thought\ThoughtfulInterface;
 use App\Thought\ThoughtInterface;
@@ -37,7 +38,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "method"="POST",
  *          "access_control"="is_granted('ROLE_READER')",
  *     },
- *     "comment_an_article"={"route_name"="comment_an_article"},
+ *     "article_add_comment"={
+ *          "route_name"="article_add_comment",
+ *          "access_control"="is_granted('ROLE_READER')",
+ *          "denormalization_context"={"groups"={"CommentWriteLess"}},
+ *     },
  * },
  * itemOperations={
  *     "get"={
@@ -56,7 +61,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="comments")
  */
-class Comment implements ThoughtInterface
+class Comment implements ThoughtInterface, ThoughtfulInterface
 {
     /**
      * @var Uuid
@@ -262,5 +267,21 @@ class Comment implements ThoughtInterface
     public function toString(): string
     {
         return (string) $this->getText();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isThoughtSupported(ThoughtInterface $thought): bool
+    {
+        return $thought instanceof CommentReply;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSupportedThoughts(): array
+    {
+        return [CommentReply::class];
     }
 }

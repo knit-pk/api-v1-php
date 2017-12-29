@@ -7,6 +7,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Security\User\UserInterface;
+use App\Thought\ThoughtfulInterface;
+use App\Thought\ThoughtInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -33,6 +35,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "method"="POST",
  *          "access_control"="is_granted('ROLE_READER')",
  *     },
+ *     "comment_add_comment_reply"={
+ *          "route_name"="comment_add_comment_reply",
+ *          "access_control"="is_granted('ROLE_READER')",
+ *          "denormalization_context"={"groups"={"ReplyWriteLess"}},
+ *     },
  * },
  * itemOperations={
  *     "get"={
@@ -51,7 +58,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="comment_replies")
  */
-class CommentReply
+class CommentReply implements ThoughtInterface
 {
     /**
      * @var Uuid
@@ -99,7 +106,7 @@ class CommentReply
      *
      * @Assert\NotBlank()
      *
-     * @Groups({"ReplyRead","ReplyWrite","ReplyReadLess"})
+     * @Groups({"ReplyRead","ReplyWrite","ReplyReadLess","ReplyWriteLess"})
      */
     protected $text;
 
@@ -134,7 +141,10 @@ class CommentReply
         return $this->id;
     }
 
-    public function setAuthor(?User $author): void
+    /**
+     * {@inheritdoc}
+     */
+    public function setAuthor(?UserInterface $author): void
     {
         $this->author = $author;
     }
@@ -154,7 +164,10 @@ class CommentReply
         $this->createdAt = $createdAt;
     }
 
-    public function getAuthor(): ?User
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthor(): ?UserInterface
     {
         return $this->author;
     }
@@ -192,6 +205,30 @@ class CommentReply
     }
 
     public function __toString()
+    {
+        return $this->toString();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubject(): ThoughtfulInterface
+    {
+        return $this->comment;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubject(ThoughtfulInterface $subject): void
+    {
+        $this->comment = $subject;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toString(): string
     {
         return (string) $this->getText();
     }
