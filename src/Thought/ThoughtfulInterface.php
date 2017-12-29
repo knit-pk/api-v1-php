@@ -6,7 +6,6 @@ namespace App\Thought;
 
 interface ThoughtfulInterface
 {
-
     /**
      * Determines whether given thought is supported by an thoughtful object.
      *
@@ -22,5 +21,4 @@ interface ThoughtfulInterface
      * @return array
      */
     public static function getSupportedThoughts(): array;
-
 }

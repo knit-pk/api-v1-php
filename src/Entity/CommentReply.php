@@ -13,6 +13,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use RuntimeException;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -93,6 +94,8 @@ class CommentReply implements ThoughtInterface
      * @ORM\ManyToOne(targetEntity="Comment",inversedBy="replies")
      * @ORM\JoinColumn(name="comment_id",referencedColumnName="id")
      *
+     * @Assert\NotBlank()
+     *
      * @Groups({"ReplyWrite"})
      */
     protected $comment;
@@ -143,9 +146,15 @@ class CommentReply implements ThoughtInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException
      */
-    public function setAuthor(?UserInterface $author): void
+    public function setAuthor(UserInterface $author): void
     {
+        if (!$author instanceof User) {
+            throw new RuntimeException('Author must be an User entity');
+        }
+
         $this->author = $author;
     }
 
@@ -164,9 +173,6 @@ class CommentReply implements ThoughtInterface
         $this->createdAt = $createdAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getAuthor(): ?UserInterface
     {
         return $this->author;
@@ -211,17 +217,15 @@ class CommentReply implements ThoughtInterface
 
     /**
      * {@inheritdoc}
-     */
-    public function getSubject(): ThoughtfulInterface
-    {
-        return $this->comment;
-    }
-
-    /**
-     * {@inheritdoc}
+     *
+     * @throws \RuntimeException
      */
     public function setSubject(ThoughtfulInterface $subject): void
     {
+        if (!$subject instanceof Comment) {
+            throw new RuntimeException('Subject must be an Comment instance');
+        }
+
         $this->comment = $subject;
     }
 

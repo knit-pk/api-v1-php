@@ -12,7 +12,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AddThoughtAction
 {
-
     private $userEntityProvider;
 
     public function __construct(UserEntityProvider $userEntityProvider)
@@ -21,9 +20,9 @@ final class AddThoughtAction
     }
 
     /**
-     * @param ThoughtInterface $data
+     * @param ThoughtInterface    $data
      * @param ThoughtfulInterface $parent
-     * @param UserInterface $user
+     * @param UserInterface       $user
      *
      * @return ThoughtInterface
      *
@@ -41,5 +40,4 @@ final class AddThoughtAction
 
         return $data;
     }
-
 }

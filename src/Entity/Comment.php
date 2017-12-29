@@ -6,7 +6,6 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Security\User\UserInterface;
 use App\Thought\ThoughtfulInterface;
 use App\Thought\ThoughtInterface;
@@ -16,6 +15,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use RuntimeException;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -172,9 +172,15 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException
      */
-    public function setAuthor(?UserInterface $author): void
+    public function setAuthor(UserInterface $author): void
     {
+        if (!$author instanceof User) {
+            throw new RuntimeException('Author must be an User entity');
+        }
+
         $this->author = $author;
     }
 
@@ -193,9 +199,6 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
         $this->createdAt = $createdAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getAuthor(): ?UserInterface
     {
         return $this->author;
@@ -245,17 +248,15 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
 
     /**
      * {@inheritdoc}
-     */
-    public function getSubject(): ThoughtfulInterface
-    {
-        return $this->article;
-    }
-
-    /**
-     * {@inheritdoc}
+     *
+     * @throws \RuntimeException
      */
     public function setSubject(ThoughtfulInterface $subject): void
     {
+        if (!$subject instanceof Article) {
+            throw new RuntimeException('Subject must be an instance of Article');
+        }
+
         $this->article = $subject;
     }
 

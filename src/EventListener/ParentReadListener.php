@@ -42,7 +42,7 @@ final class ParentReadListener
      * Gets data for an item operation.
      *
      * @param Request $request
-     * @param array $attributes
+     * @param array   $attributes
      *
      * @throws NotFoundHttpException
      *
@@ -79,7 +79,7 @@ final class ParentReadListener
     {
         $result = $request->attributes->get('_api_parent_context');
 
-        $attribute = OperationType::ITEM . '_operation_name';
+        $attribute = OperationType::ITEM.'_operation_name';
         if (null === $result || !isset($result['resource_class'], $result[$attribute])) {
             return [];
         }
