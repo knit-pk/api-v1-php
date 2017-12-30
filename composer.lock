@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0323578df691f4633975cb13f808ce6f",
+    "content-hash": "7af8d6b50695d5dfaa8be1f3904eb88d",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -990,12 +990,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "17c299bc5b244b3e0c0a601e175009a3a5599313"
+                "reference": "45314d5a4b3bd418c68a2988164f7b075bacfd47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/17c299bc5b244b3e0c0a601e175009a3a5599313",
-                "reference": "17c299bc5b244b3e0c0a601e175009a3a5599313",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/45314d5a4b3bd418c68a2988164f7b075bacfd47",
+                "reference": "45314d5a4b3bd418c68a2988164f7b075bacfd47",
                 "shasum": ""
             },
             "require": {
@@ -1058,7 +1058,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2017-12-27T10:56:32+00:00"
+            "time": "2018-01-02T10:26:07+00:00"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -5849,16 +5849,16 @@
         },
         {
             "name": "league/html-to-markdown",
-            "version": "4.6.0",
+            "version": "4.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/html-to-markdown.git",
-                "reference": "9022e648bc40e44cb3b18438d97ed8715ecbc49b"
+                "reference": "cfa6120579b1ad178192baa0b664a7c342424eef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/9022e648bc40e44cb3b18438d97ed8715ecbc49b",
-                "reference": "9022e648bc40e44cb3b18438d97ed8715ecbc49b",
+                "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/cfa6120579b1ad178192baa0b664a7c342424eef",
+                "reference": "cfa6120579b1ad178192baa0b664a7c342424eef",
                 "shasum": ""
             },
             "require": {
@@ -5909,7 +5909,7 @@
                 "html",
                 "markdown"
             ],
-            "time": "2017-10-24T02:45:05+00:00"
+            "time": "2018-01-01T18:16:04+00:00"
         },
         {
             "name": "myclabs/deep-copy",

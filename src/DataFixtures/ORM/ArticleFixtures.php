@@ -16,9 +16,15 @@ class ArticleFixtures extends Fixture
      * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
+     *
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function load(ObjectManager $manager): void
     {
+        $this->createTriggers();
+
         $categoryCollection = CategoryFixtures::PUBLIC_CATEGORY_CODES;
         $usersCollection = UserFixtures::PUBLIC_USERNAMES;
         $tagCollection = TagFixtures::PUBLIC_TAG_CODES;
@@ -307,6 +313,27 @@ Jest jeszcze kilka innych, ale bardziej skomplikowanych sposobów, powodzenia! :
                 'author' => 'user-user_writer',
             ],
         ];
+    }
+
+    /**
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    private function createTriggers()
+    {
+        $connection = $this->container->get('doctrine.orm.entity_manager')->getConnection();
+        $driverName = $connection->getDriver()->getName();
+        $sqlName = 'create_comment_triggers';
+        $sqlFile = sprintf('%s/../Resources/sql/%s/%s.sql', __DIR__, $driverName, $sqlName);
+
+        if (!is_file($sqlFile)) {
+            dump(sprintf('Notice: SQL File %s could not be found for driver %s', $sqlName, $driverName));
+
+            return;
+        }
+
+        $connection->exec(file_get_contents($sqlFile));
     }
 
     public function getDependencies(): array

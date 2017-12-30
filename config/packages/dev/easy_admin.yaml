@@ -52,7 +52,7 @@ easy_admin:
                     - category
                     - author
                     - { property: 'image', type: 'image' }
-                    - comments
+                    - commentsCount
                     - publishedAt
                     - published
             form:

@@ -105,7 +105,7 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
      * @var Collection|CommentReply[]
      *
      * One Comment has Many Replies
-     * @ORM\OneToMany(targetEntity="CommentReply",mappedBy="comment")
+     * @ORM\OneToMany(targetEntity="CommentReply",mappedBy="comment",cascade={"remove"})
      *
      * @Groups({"CommentRead"})
      */

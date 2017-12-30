@@ -141,13 +141,24 @@ class Article implements ThoughtfulInterface
     /**
      * @var ArrayCollection|Comment[] comments, typically from users
      *
-     * @ORM\OneToMany(targetEntity="Comment",mappedBy="article")
+     * @ORM\OneToMany(targetEntity="Comment",mappedBy="article",cascade={"remove"})
      *
      * @Groups({"ArticleRead","ArticleWrite"})
      *
      * @ApiSubresource()
      */
     protected $comments;
+
+    /**
+     * @var int Aggregate field that contains total number of comments and its replies
+     *
+     * @ORM\Column(type="integer",options={"unsigned"=true})
+     *
+     * @ApiProperty(iri="http://schema.org/commentCount")
+     *
+     * @Groups({"ArticleRead"})
+     */
+    protected $commentsCount;
 
     /**
      * @var string|null the subject matter of the content
@@ -241,6 +252,7 @@ class Article implements ThoughtfulInterface
     {
         $this->tags = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->commentsCount = 0;
         $this->published = false;
     }
 
@@ -312,6 +324,11 @@ class Article implements ThoughtfulInterface
     public function getComments(): Collection
     {
         return $this->comments;
+    }
+
+    public function getCommentsCount(): int
+    {
+        return $this->commentsCount;
     }
 
     public function setDescription(?string $description): void
