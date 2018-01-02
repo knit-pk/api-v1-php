@@ -7,10 +7,13 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Security\User\UserInterface;
+use App\Thought\ThoughtfulInterface;
+use App\Thought\ThoughtInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use RuntimeException;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -33,6 +36,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "method"="POST",
  *          "access_control"="is_granted('ROLE_READER')",
  *     },
+ *     "comment_add_comment_reply"={
+ *          "route_name"="comment_add_comment_reply",
+ *          "access_control"="is_granted('ROLE_READER')",
+ *          "denormalization_context"={"groups"={"ReplyWriteLess"}},
+ *     },
  * },
  * itemOperations={
  *     "get"={
@@ -51,7 +59,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="comment_replies")
  */
-class CommentReply
+class CommentReply implements ThoughtInterface
 {
     /**
      * @var Uuid
@@ -86,6 +94,8 @@ class CommentReply
      * @ORM\ManyToOne(targetEntity="Comment",inversedBy="replies")
      * @ORM\JoinColumn(name="comment_id",referencedColumnName="id")
      *
+     * @Assert\NotBlank()
+     *
      * @Groups({"ReplyWrite"})
      */
     protected $comment;
@@ -99,7 +109,7 @@ class CommentReply
      *
      * @Assert\NotBlank()
      *
-     * @Groups({"ReplyRead","ReplyWrite","ReplyReadLess"})
+     * @Groups({"ReplyRead","ReplyWrite","ReplyReadLess","ReplyWriteLess"})
      */
     protected $text;
 
@@ -134,8 +144,17 @@ class CommentReply
         return $this->id;
     }
 
-    public function setAuthor(?User $author): void
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \RuntimeException
+     */
+    public function setAuthor(UserInterface $author): void
     {
+        if (!$author instanceof User) {
+            throw new RuntimeException('Author must be an User entity');
+        }
+
         $this->author = $author;
     }
 
@@ -154,7 +173,7 @@ class CommentReply
         $this->createdAt = $createdAt;
     }
 
-    public function getAuthor(): ?User
+    public function getAuthor(): ?UserInterface
     {
         return $this->author;
     }
@@ -192,6 +211,28 @@ class CommentReply
     }
 
     public function __toString()
+    {
+        return $this->toString();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \RuntimeException
+     */
+    public function setSubject(ThoughtfulInterface $subject): void
+    {
+        if (!$subject instanceof Comment) {
+            throw new RuntimeException('Subject must be an Comment instance');
+        }
+
+        $this->comment = $subject;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toString(): string
     {
         return (string) $this->getText();
     }

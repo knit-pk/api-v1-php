@@ -7,12 +7,15 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Security\User\UserInterface;
+use App\Thought\ThoughtfulInterface;
+use App\Thought\ThoughtInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use RuntimeException;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -35,6 +38,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "method"="POST",
  *          "access_control"="is_granted('ROLE_READER')",
  *     },
+ *     "article_add_comment"={
+ *          "route_name"="article_add_comment",
+ *          "access_control"="is_granted('ROLE_READER')",
+ *          "denormalization_context"={"groups"={"CommentWriteLess"}},
+ *     },
  * },
  * itemOperations={
  *     "get"={
@@ -53,7 +61,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="comments")
  */
-class Comment
+class Comment implements ThoughtInterface, ThoughtfulInterface
 {
     /**
      * @var Uuid
@@ -97,7 +105,7 @@ class Comment
      * @var Collection|CommentReply[]
      *
      * One Comment has Many Replies
-     * @ORM\OneToMany(targetEntity="CommentReply",mappedBy="comment")
+     * @ORM\OneToMany(targetEntity="CommentReply",mappedBy="comment",cascade={"remove"})
      *
      * @Groups({"CommentRead"})
      */
@@ -162,8 +170,17 @@ class Comment
         return $this->article;
     }
 
-    public function setAuthor(?User $author): void
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \RuntimeException
+     */
+    public function setAuthor(UserInterface $author): void
     {
+        if (!$author instanceof User) {
+            throw new RuntimeException('Author must be an User entity');
+        }
+
         $this->author = $author;
     }
 
@@ -182,7 +199,7 @@ class Comment
         $this->createdAt = $createdAt;
     }
 
-    public function getAuthor(): ?User
+    public function getAuthor(): ?UserInterface
     {
         return $this->author;
     }
@@ -224,8 +241,48 @@ class Comment
         return $author instanceof UserInterface && $author->isUser($user);
     }
 
-    public function __toString()
+    public function __toString(): string
+    {
+        return $this->toString();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \RuntimeException
+     */
+    public function setSubject(ThoughtfulInterface $subject): void
+    {
+        if (!$subject instanceof Article) {
+            throw new RuntimeException('Subject must be an instance of Article');
+        }
+
+        $this->article = $subject;
+    }
+
+    /**
+     * Expresses thought provided by its author in readable form.
+     *
+     * @return string
+     */
+    public function toString(): string
     {
         return (string) $this->getText();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isThoughtSupported(ThoughtInterface $thought): bool
+    {
+        return $thought instanceof CommentReply;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSupportedThoughts(): array
+    {
+        return [CommentReply::class];
     }
 }

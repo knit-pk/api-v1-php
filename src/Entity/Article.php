@@ -6,7 +6,10 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Security\User\UserInterface;
+use App\Thought\ThoughtfulInterface;
+use App\Thought\ThoughtInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -53,7 +56,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="articles")
  */
-class Article
+class Article implements ThoughtfulInterface
 {
     /**
      * @var Uuid
@@ -138,11 +141,24 @@ class Article
     /**
      * @var ArrayCollection|Comment[] comments, typically from users
      *
-     * @ORM\OneToMany(targetEntity="Comment",mappedBy="article")
+     * @ORM\OneToMany(targetEntity="Comment",mappedBy="article",cascade={"remove"})
      *
      * @Groups({"ArticleRead","ArticleWrite"})
+     *
+     * @ApiSubresource()
      */
     protected $comments;
+
+    /**
+     * @var int Aggregate field that contains total number of comments and its replies
+     *
+     * @ORM\Column(type="integer",options={"unsigned"=true})
+     *
+     * @ApiProperty(iri="http://schema.org/commentCount")
+     *
+     * @Groups({"ArticleRead"})
+     */
+    protected $commentsCount;
 
     /**
      * @var string|null the subject matter of the content
@@ -236,6 +252,7 @@ class Article
     {
         $this->tags = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->commentsCount = 0;
         $this->published = false;
     }
 
@@ -309,6 +326,11 @@ class Article
         return $this->comments;
     }
 
+    public function getCommentsCount(): int
+    {
+        return $this->commentsCount;
+    }
+
     public function setDescription(?string $description): void
     {
         $this->description = $description;
@@ -374,5 +396,29 @@ class Article
     public function __toString(): string
     {
         return $this->getCode();
+    }
+
+    /**
+     * Determines whether given thought is supported by an thoughtful object.
+     *
+     * @param ThoughtInterface $thought
+     *
+     * @return bool
+     */
+    public function isThoughtSupported(ThoughtInterface $thought): bool
+    {
+        return $thought instanceof Comment;
+    }
+
+    /**
+     * Returns an array of supported thought objects' class names.
+     *
+     * @return array
+     */
+    public static function getSupportedThoughts(): array
+    {
+        return [
+            Comment::class,
+        ];
     }
 }
