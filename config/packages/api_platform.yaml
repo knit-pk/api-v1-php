@@ -1,12 +1,12 @@
 api_platform:
     # The title of the API.
-    title: '%env(APP_TITLE)%'
+    title: '%title%'
 
     # The description of the API.
-    description: '%env(APP_DESCRIPTION)%'
+    description: '%description%'
 
     # The version of the API.
-    version: '%env(APP_VERSION)%'
+    version: '%version%'
 
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
@@ -31,6 +31,12 @@ api_platform:
     # Enable Swagger ui.
     enable_swagger_ui: true
 
+    # Enable Swagger UI authorization.
+    swagger:
+         api_keys:
+             - { name: 'authorization', type: 'header' }
+             - { name: 'token', type: 'query' }
+
     collection:
         # The default order of results.
         order: 'ASC'
@@ -53,7 +59,7 @@ api_platform:
         shared_max_age: 60
 
         # Default values of the "Vary" HTTP header.
-        vary: ['Content-Type', 'Authorization']
+        vary: ['Authorization']
 
         # To make all responses public by default.
         public: true

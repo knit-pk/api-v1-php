@@ -6,9 +6,9 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Security\User\UserInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\File;
@@ -248,11 +248,7 @@ class Image
     {
         $author = $this->getAuthor();
 
-        if (!$author instanceof User) {
-            return false;
-        }
-
-        return $author->isUser($user);
+        return $author instanceof UserInterface && $author->isUser($user);
     }
 
     public function __toString(): string

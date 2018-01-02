@@ -11,26 +11,26 @@ use Doctrine\Common\Persistence\ObjectManager;
 class UserFixtures extends Fixture
 {
     public const DEFAULT_USERS = [
-        'Super Admin'     => [
-            USER::ROLE_SUPER_ADMIN,
+        'Super Admin' => [
+            User::ROLE_SUPER_ADMIN,
         ],
-        'Admin'           => [
-            USER::ROLE_ADMIN,
+        'Admin' => [
+            User::ROLE_ADMIN,
         ],
-        'Reader'          => [
-            USER::ROLE_READER,
+        'Reader' => [
+            User::ROLE_READER,
         ],
-        'Writer'          => [
-            USER::ROLE_WRITER,
+        'Writer' => [
+            User::ROLE_WRITER,
         ],
-        'User'            => [
-            USER::ROLE_USER,
+        'User' => [
+            User::ROLE_USER,
         ],
-        'User Writer'     => [
-            USER::ROLE_USER_WRITER,
+        'User Writer' => [
+            User::ROLE_USER_WRITER,
         ],
         'Articles Author' => [
-            USER::ROLE_USER,
+            User::ROLE_USER,
         ],
     ];
 
@@ -59,6 +59,10 @@ class UserFixtures extends Fixture
         /** @var \App\Entity\Image $avatar */
         $avatar = $this->getReference('image-avatar.png');
 
+        /**
+         * @var string
+         * @var array  $roles
+         */
         foreach (self::DEFAULT_USERS as $fullname => $roles) {
             $username = strtolower(str_replace(' ', '_', $fullname));
             $email = sprintf('%s@%s.pl', $username, strtolower(str_replace(' ', '-', $fullname)));

@@ -9,23 +9,25 @@ use ApiPlatform\Core\Metadata\Resource\ResourceMetadata;
 use App\Metadata\Resource\Factory\AdminResourceMetadataFactory;
 use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 class AdminResourceMetadataFactoryTest extends TestCase
 {
     /**
-     * @var \ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface
+     * @var ResourceMetadataFactoryInterface|ObjectProphecy
      */
     private $resourceMetadataFactoryProphecy;
 
     /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     * @var AuthorizationCheckerInterface|ObjectProphecy
      */
     private $authorizationCheckerProphecy;
 
     /**
-     * @var \App\Serializer\Group\Factory\AdminSerializerGroupFactory
+     * @var AdminSerializerGroupFactory|ObjectProphecy
      */
     private $adminSerializerGroupFactoryProphecy;
 
@@ -56,7 +58,9 @@ class AdminResourceMetadataFactoryTest extends TestCase
      * @dataProvider noContextProphecyProvider
      *
      * @param string $method
-     * @param        $result
+     * @param mixed  $result
+     *
+     * @throws \ApiPlatform\Core\Exception\ResourceClassNotFoundException
      */
     public function testNoContext(string $method, $result)
     {
@@ -69,7 +73,7 @@ class AdminResourceMetadataFactoryTest extends TestCase
 
         $this->resourceMetadataFactoryProphecy->create($resourceClass)->willReturn($resourceMetadata)->shouldBeCalled();
         $this->authorizationCheckerProphecy->isGranted('ROLE_ADMIN')->$method($result)->shouldBeCalled();
-        $this->adminSerializerGroupFactoryProphecy->createAdminGroup()->shouldNotBeCalled();
+        $this->adminSerializerGroupFactoryProphecy->createAdminGroup(Argument::any())->shouldNotBeCalled();
 
         $newResourceMetadata = $this->adminResourceMetadataFactory->create($resourceClass);
 
@@ -123,6 +127,9 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $this->assertSame($resourceMetadata->getAttributes(), $newResourceMetadata->getAttributes());
     }
 
+    /**
+     * @throws \ApiPlatform\Core\Exception\ResourceClassNotFoundException
+     */
     public function testAttributesNormalizationWithOperationsDenormalization()
     {
         $resourceClass = 'Test';
