@@ -1,12 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Security\User\UserInterface;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -46,7 +49,7 @@ class Project
     /**
      * @var Uuid
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -67,7 +70,7 @@ class Project
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE")
      *
      * @Assert\NotBlank()
      */
@@ -109,6 +112,18 @@ class Project
     protected $url;
 
     /**
+     * @var Collection|Team[]
+     *
+     * @ORM\ManyToMany(targetEntity="Team")
+     * @ORM\JoinTable(name="projects_teams",joinColumns={
+     *      @ORM\JoinColumn(name="project_id",referencedColumnName="id",onDelete="CASCADE")
+     * },inverseJoinColumns={
+     *      @ORM\JoinColumn(name="team_id",referencedColumnName="id",onDelete="CASCADE"),
+     * })
+     */
+    protected $teams;
+
+    /**
      * @var DateTime
      *
      * @ORM\Column(type="datetime")
@@ -130,6 +145,10 @@ class Project
      */
     protected $updatedAt;
 
+    public function __construct()
+    {
+        $this->teams = new ArrayCollection();
+    }
 
     /**
      * @return Uuid|null
@@ -139,119 +158,80 @@ class Project
         return $this->id;
     }
 
-
-    /**
-     * @return string|null
-     */
     public function getCode(): ?string
     {
         return $this->code;
     }
 
-
-    /**
-     * @return string|null
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-
-    /**
-     * @return string|null
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-
-    /**
-     * @param string $description
-     */
     public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-
-    /**
-     * @return string|null
-     */
     public function getUrl(): ?string
     {
         return $this->url;
     }
 
-
-    /**
-     * @return User|null
-     */
     public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-
-    /**
-     * @param User $author
-     */
     public function setAuthor(User $author): void
     {
         $this->author = $author;
     }
 
+    public function isAuthor(?UserInterface $user): bool
+    {
+        $author = $this->getAuthor();
 
-    /**
-     * @param string $url
-     */
+        return $author instanceof UserInterface && $author->isUser($user);
+    }
+
     public function setUrl(string $url): void
     {
         $this->url = $url;
     }
 
-
-    /**
-     * @return DateTime
-     */
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-
-    /**
-     * @return DateTime
-     */
     public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-
-    /**
-     * @param UserInterface|null $user
-     *
-     * @return bool
-     */
-    public function isAuthor(?UserInterface $user): bool
+    public function getTeams(): Collection
     {
-        $author = $this->getAuthor();
+        return $this->teams;
+    }
 
-        if (!$author instanceof User) {
-            return false;
-        }
+    public function addTeam(Team $team): void
+    {
+        $this->teams[] = $team;
+    }
 
-        return $author->isUser($user);
+    public function removeTeam(Team $team): void
+    {
+        $this->teams->removeElement($team);
     }
 }

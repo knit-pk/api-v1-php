@@ -12,6 +12,9 @@ security:
 
     providers:
         in_memory: { memory: ~ }
+        jwt:
+            lexik_jwt:
+                class: App\Security\User\JWTUser
         fos_userbundle:
             id: fos_user.user_provider.username_email
 
@@ -31,18 +34,14 @@ security:
                 check_path: fos_user_security_check
                 always_use_default_target_path: true
                 default_target_path: /admin
-
-            remember_me:
-                secret: '%kernel.secret%'
-                lifetime: 604800 # 7 days
-                path: /admin
-
+            logout_on_user_change: true
             logout:
                 path: fos_user_security_logout
                 target: fos_user_security_login
 
+
         token:
-            pattern:  ^/token
+            pattern: ^/token
             stateless: true
             anonymous: true
             provider: fos_userbundle
@@ -57,19 +56,10 @@ security:
             pattern: ^/
             stateless: true
             anonymous: true
-            provider: fos_userbundle
+            provider: jwt
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
-#            lexik_jwt:
-#                authorization_header:
-#                    enabled: true
-#                    prefix: Bearer
-#                query_parameter:
-#                    enabled: true
-#                    name: token
-#                throw_exceptions: false
-#                create_entry_point: true
 
     access_control:
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }

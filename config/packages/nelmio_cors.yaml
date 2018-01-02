@@ -1,7 +1,7 @@
 nelmio_cors:
     defaults:
         allow_credentials: false
-        allow_origin: ['http://localhost:[0-9]+']
+        allow_origin: ['http://localhost:[0-9]+', 'https://knit-test-homepage.tk']
         allow_headers: ['Content-type', 'Authorization']
         allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
         expose_headers: ['link']

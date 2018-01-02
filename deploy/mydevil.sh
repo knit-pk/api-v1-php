@@ -10,24 +10,20 @@ if [[ ! -f composer.lock || ! -d src ]]; then
 fi;
 
 mv .env.mydevil .env
-rm -rf .idea .git .env.* .directory .gitignore vendor logs public/bundles config/jwt var supervisord.pid
+rm -rf .idea .git .env.* .directory .gitignore vendor logs public/bundles config/jwt var supervisord.pid public/media/upload/*
+ 
+php71 /usr/local/bin/composer install -n -a --no-progress --no-ansi --no-suggest --no-scripts
 
-if [ ! -f composer.phar ]; then
-    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-    php composer-setup.php
-    php -r "unlink('composer-setup.php');"
-else
-    echo "Found composer.phar.."
-fi
-
-php71 composer.phar install -o --no-scripts
 php71 bin/console cache:clear
 php71 bin/console cache:warmup
 gmake generate-jwt-keys
+
 rm -rf ../public_html/bundles
+rm -rf ../public_html/media
 php71 bin/console assets:install --symlink --relative ../public_html
 cp public/* ../public_html
+ln -s `pwd`/public/media ../public_html/media
+
 sed -i _backup "s~^const APP_PATH.*$~const APP_PATH = \"../${PWD##*/}/\";~g" ../public_html/index.php && rm ../public_html/index.php_backup
 
 php71 bin/console doctrine:schema:drop --force

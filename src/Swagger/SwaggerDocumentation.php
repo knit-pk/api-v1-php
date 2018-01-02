@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Swagger;
@@ -10,39 +11,42 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 final class SwaggerDocumentation implements NormalizerInterface
 {
     /**
-     * Unsecured api docs paths
+     * Unsecured api docs paths.
      */
     private const NOT_SECURED_PATHS = [
-        '/token'         => ['post'],
+        '/token' => ['post'],
         '/token/refresh' => ['post'],
-        '/articles'      => ['get'],
+        '/articles' => ['get'],
         '/articles/{id}' => ['get'],
-        '/projects'      => ['get'],
+        '/comments' => ['get'],
+        '/comments/{id}' => ['get'],
+        '/comment_replies' => ['get'],
+        '/comment_replies/{id}' => ['get'],
+        '/articles/{id}/comments' => ['get'],
+        '/articles/{id}/comments/{id}' => ['get'],
+        '/projects' => ['get'],
         '/projects/{id}' => ['get'],
-        '/tags'          => ['get'],
-        '/tags/{id}'     => ['get'],
-        '/categories'    => ['get'],
+        '/teams' => ['get'],
+        '/teams/{id}' => ['get'],
+        '/tags' => ['get'],
+        '/tags/{id}' => ['get'],
+        '/categories' => ['get'],
         '/category/{id}' => ['get'],
+        '/security_roles' => ['get'],
+        '/security_roles/{id}' => ['get'],
+        '/images' => ['get'],
+        '/images/{id}' => ['get'],
     ];
 
-    /**
-     * Authorization parameter to secured routes
-     * (Shown in swagger documentation)
-     */
-    private const AUTHORIZATION_PARAMETER = [
-        'name'        => 'Authorization',
-        'description' => 'JWT Access Token',
-        'in'          => 'header',
-        'default'     => 'Bearer <%JWTAccessToken%>',
-        'required'    => true,
-        'type'        => 'string',
+    private const SECURITY_METHODS = [
+        'header' => 'BearerAuthHeader',
+        'query' => 'QueryParamToken',
     ];
 
     /**
      * @var \Symfony\Component\Serializer\Normalizer\NormalizerInterface
      */
     private $decorated;
-
 
     /**
      * SwaggerDecorator constructor.
@@ -54,6 +58,16 @@ final class SwaggerDocumentation implements NormalizerInterface
         $this->decorated = $decorated;
     }
 
+    private function makeSecurity(): array
+    {
+        $security = [];
+
+        foreach (array_values(self::SECURITY_METHODS) as $arrayValue) {
+            $security[] = new ArrayObject([$arrayValue => []]);
+        }
+
+        return $security;
+    }
 
     /**
      * {@inheritdoc}
@@ -64,6 +78,9 @@ final class SwaggerDocumentation implements NormalizerInterface
     {
         $docs = $this->decorated->normalize($object, $format, $context);
 
+        $docs['securityDefinitions'] = $this->filterSecurityDefinitions($docs['securityDefinitions']);
+        $docs['security'] = []; // not all routes need authorization
+
         $paths = $docs['paths'];
         if (!$paths instanceof ArrayObject) {
             throw new RuntimeException('[Swagger Documentation] Item `swagger.paths` expected to be represented by an ArrayObject.');
@@ -72,19 +89,21 @@ final class SwaggerDocumentation implements NormalizerInterface
         // Appends additional paths to documentation
         $this->appendAdditionalPaths($paths);
 
-        // Prepend authorization parameter to paths
+        // Add security parameter to paths
+        $security = $this->makeSecurity();
         foreach ($paths as $path => $methods) {
             /** @var array $methods */
             /** @var ArrayObject $swagger */
             foreach ($methods as $method => $swagger) {
                 if (
                     !array_key_exists($path, self::NOT_SECURED_PATHS) ||
-                    !in_array($method, self::NOT_SECURED_PATHS[$path], true)
+                    !\in_array($method, self::NOT_SECURED_PATHS[$path], true)
                 ) {
                     if (!$swagger instanceof ArrayObject) {
                         throw new RuntimeException(sprintf('[Swagger Documentation] Item `swagger.paths[%s][%s]` expected to be represented by an ArrayObject.', $path, $method));
                     }
-                    $this->addAuthorizationParameter($swagger);
+
+                    $swagger->offsetSet('security', $security);
                 }
             }
         }
@@ -92,38 +111,36 @@ final class SwaggerDocumentation implements NormalizerInterface
         return $docs;
     }
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function supportsNormalization($data, $format = null): bool
     {
         return $this->decorated->supportsNormalization($data, $format);
     }
 
-
     /**
-     * Add additional paths to swagger documentation
+     * Add additional paths to swagger documentation.
      *
      * @param \ArrayObject $paths
      */
     private function appendAdditionalPaths(ArrayObject $paths)
     {
         $additionalPaths = [
-            '/token'         => [
+            '/token' => [
                 'post' => new ArrayObject([
-                    'tags'        => ['Token'],
-                    'consumes'    => 'application/json',
-                    'produces'    => 'application/json',
-                    'summary'     => 'Authenticate using credentials',
+                    'tags' => ['Token'],
+                    'consumes' => 'application/json',
+                    'produces' => 'application/json',
+                    'summary' => 'Authenticate using credentials',
                     'description' => 'Authenticate using credentials',
-                    'parameters'  => [
+                    'parameters' => [
                         [
-                            'name'        => 'credentials',
-                            'in'          => 'body',
+                            'name' => 'credentials',
+                            'in' => 'body',
                             'description' => 'Valid User credentials',
-                            'schema'      => [
-                                'type'       => 'object',
+                            'schema' => [
+                                'type' => 'object',
                                 'properties' => [
                                     'username' => [
                                         'type' => 'string',
@@ -135,18 +152,18 @@ final class SwaggerDocumentation implements NormalizerInterface
                             ],
                         ],
                     ],
-                    'responses'   => [
+                    'responses' => [
                         '200' => [
                             'description' => 'Successfully generated token',
-                            'schema'      => [
-                                'type'       => 'object',
+                            'schema' => [
+                                'type' => 'object',
                                 'properties' => [
-                                    'token'         => [
-                                        'type'        => 'string',
+                                    'token' => [
+                                        'type' => 'string',
                                         'description' => 'JWT Access Token',
                                     ],
                                     'refresh_token' => [
-                                        'type'        => 'string',
+                                        'type' => 'string',
                                         'description' => 'Refresh Token',
                                     ],
                                 ],
@@ -154,15 +171,15 @@ final class SwaggerDocumentation implements NormalizerInterface
                         ],
                         '401' => [
                             'description' => 'Invalid Refresh Token',
-                            'schema'      => [
-                                'type'       => 'object',
+                            'schema' => [
+                                'type' => 'object',
                                 'properties' => [
-                                    'code'    => [
-                                        'type'        => 'string',
+                                    'code' => [
+                                        'type' => 'string',
                                         'description' => 'Error code',
                                     ],
                                     'message' => [
-                                        'type'        => 'string',
+                                        'type' => 'string',
                                         'description' => 'Error message',
                                     ],
                                 ],
@@ -173,39 +190,39 @@ final class SwaggerDocumentation implements NormalizerInterface
             ],
             '/token/refresh' => [
                 'post' => new ArrayObject([
-                    'tags'        => ['Token'],
-                    'consumes'    => 'application/json',
-                    'produces'    => 'application/json',
-                    'summary'     => 'Authenticate using refresh token',
+                    'tags' => ['Token'],
+                    'consumes' => 'application/json',
+                    'produces' => 'application/json',
+                    'summary' => 'Authenticate using refresh token',
                     'description' => 'Authenticate using refresh token',
-                    'parameters'  => [
+                    'parameters' => [
                         [
-                            'name'        => 'refresh_token',
-                            'in'          => 'body',
+                            'name' => 'refresh_token',
+                            'in' => 'body',
                             'description' => 'Valid refresh token',
-                            'schema'      => [
-                                'type'       => 'object',
+                            'schema' => [
+                                'type' => 'object',
                                 'properties' => [
                                     'refresh_token' => [
-                                        'type'        => 'string',
+                                        'type' => 'string',
                                         'description' => 'Refresh Token',
                                     ],
                                 ],
                             ],
                         ],
                     ],
-                    'responses'   => [
+                    'responses' => [
                         '200' => [
                             'description' => 'Successfully generated token',
-                            'schema'      => [
-                                'type'       => 'object',
+                            'schema' => [
+                                'type' => 'object',
                                 'properties' => [
-                                    'token'         => [
-                                        'type'        => 'string',
+                                    'token' => [
+                                        'type' => 'string',
                                         'description' => 'JWT Access Token',
                                     ],
                                     'refresh_token' => [
-                                        'type'        => 'string',
+                                        'type' => 'string',
                                         'description' => 'Refresh Token',
                                     ],
                                 ],
@@ -213,15 +230,15 @@ final class SwaggerDocumentation implements NormalizerInterface
                         ],
                         '401' => [
                             'description' => 'Invalid Refresh Token',
-                            'schema'      => [
-                                'type'       => 'object',
+                            'schema' => [
+                                'type' => 'object',
                                 'properties' => [
-                                    'code'    => [
-                                        'type'        => 'string',
+                                    'code' => [
+                                        'type' => 'string',
                                         'description' => 'Error code',
                                     ],
                                     'message' => [
-                                        'type'        => 'string',
+                                        'type' => 'string',
                                         'description' => 'Error message',
                                     ],
                                 ],
@@ -230,28 +247,142 @@ final class SwaggerDocumentation implements NormalizerInterface
                     ],
                 ]),
             ],
+            '/images/upload' => [
+                'post' => new ArrayObject([
+                    'tags' => ['Image'],
+                    'consumes' => 'application/x-www-form-urlencoded',
+                    'produces' => 'application/json',
+                    'summary' => 'Create an Image resource from file.',
+                    'description' => 'Create an Image resource from uploaded file.',
+                    'parameters' => [
+                        [
+                            'name' => 'image',
+                            'in' => 'formData',
+                            'type' => 'file',
+                            'description' => 'Image file to create resource from.',
+                        ],
+                    ],
+                    'responses' => [
+                        '200' => [
+                            'description' => 'Successfully generated token',
+                            'schema' => [
+                                '$ref' => '#/definitions/Image-ImageRead',
+                            ],
+                        ],
+                        '400' => [
+                            'description' => 'Invalid input',
+                        ],
+                    ],
+                ]),
+            ],
+            '/articles/{id}/comments' => [
+                'post' => new ArrayObject([
+                    'tags' => ['Article', 'Comment'],
+                    'consumes' => 'application/json',
+                    'produces' => 'application/json',
+                    'summary' => 'Adds a Comment to an Article.',
+                    'description' => 'Adds a Comment to an Article resource as current user.',
+                    'parameters' => [
+                        [
+                            'name' => 'id',
+                            'in' => 'path',
+                            'type' => 'string',
+                            'format' => 'uuid',
+                            'required' => true,
+                        ],
+                        [
+                            'name' => 'comment',
+                            'in' => 'body',
+                            'schema' => [
+                                '$ref' => '#/definitions/Comment-CommentWriteLess',
+                            ],
+                        ],
+                    ],
+                    'responses' => [
+                        '200' => [
+                            'description' => 'Successfully created resource',
+                            'schema' => [
+                                '$ref' => '#/definitions/Comment-CommentRead',
+                            ],
+                        ],
+                        '400' => [
+                            'description' => 'Invalid input',
+                        ],
+                    ],
+                ]),
+            ],
+            '/comments/{id}/comment_replies' => [
+                'post' => new ArrayObject([
+                    'tags' => ['Comment', 'CommentReply'],
+                    'consumes' => 'application/json',
+                    'produces' => 'application/json',
+                    'summary' => 'Adds a Comment Reply to an Article.',
+                    'description' => 'Adds a Comment Reply to an Article resource as current user.',
+                    'parameters' => [
+                        [
+                            'name' => 'id',
+                            'in' => 'path',
+                            'type' => 'string',
+                            'format' => 'uuid',
+                            'required' => true,
+                        ],
+                        [
+                            'name' => 'reply',
+                            'in' => 'body',
+                            'schema' => [
+                                '$ref' => '#/definitions/CommentReply-ReplyWriteLess',
+                            ],
+                        ],
+                    ],
+                    'responses' => [
+                        '200' => [
+                            'description' => 'Successfully created resource',
+                            'schema' => [
+                                '$ref' => '#/definitions/CommentReply-ReplyRead',
+                            ],
+                        ],
+                        '400' => [
+                            'description' => 'Invalid input',
+                        ],
+                    ],
+                ]),
+            ],
         ];
 
         foreach ($additionalPaths as $additionalPath => $methods) {
+            if ($paths->offsetExists($additionalPath)) {
+                /** @var array $existingMethods */
+                $existingMethods = $paths->offsetGet($additionalPath);
+                foreach ($existingMethods as $existingMethod => $methodData) {
+                    if (!isset($methods[$existingMethod])) {
+                        $methods[$existingMethod] = $methodData;
+                    }
+                }
+            }
+
             $paths->offsetSet($additionalPath, $methods);
         }
     }
 
-
     /**
-     * Adds an authorization parameter to swagger schema
+     * Filters security definitions.
      *
-     * @param ArrayObject $swagger  Object representing swagger.path[$path].method[$method]
-     *                              in swagger schema
+     * @param ArrayObject[] $definitions
+     *
+     * @return ArrayObject[]
      */
-    private function addAuthorizationParameter(ArrayObject $swagger)
+    private function filterSecurityDefinitions(array $definitions): array
     {
-        // Prepend parameters
-        if ($swagger->offsetExists('parameters')) {
-            array_unshift($swagger['parameters'], self::AUTHORIZATION_PARAMETER);
-        } else {
-            // ..or create with first parameter
-            $swagger['parameters'][] = self::AUTHORIZATION_PARAMETER;
+        $filteredDefinitions = [];
+
+        foreach ($definitions as $definition) {
+            if ('header' === $definition['in']) {
+                $definition['description'] .= '. Below write: Bearer MY_JWT_TOKEN';
+            }
+
+            $filteredDefinitions[self::SECURITY_METHODS[$definition['in']]] = $definition;
         }
+
+        return $filteredDefinitions;
     }
 }

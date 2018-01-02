@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -48,7 +49,7 @@ class Category
     /**
      * @var Uuid
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -82,7 +83,6 @@ class Category
      */
     protected $name;
 
-
     /**
      * @return null|Uuid
      */
@@ -90,7 +90,6 @@ class Category
     {
         return $this->id;
     }
-
 
     /**
      * @return string
@@ -100,7 +99,6 @@ class Category
         return $this->code;
     }
 
-
     /**
      * @return null|string
      */
@@ -108,7 +106,6 @@ class Category
     {
         return $this->name;
     }
-
 
     /**
      * @param string $name
@@ -118,10 +115,8 @@ class Category
         $this->name = $name;
     }
 
-
     public function __toString(): string
     {
         return (string) $this->name;
     }
-
 }

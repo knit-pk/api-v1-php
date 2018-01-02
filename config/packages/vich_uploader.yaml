@@ -1,0 +1,8 @@
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        images:
+            uri_prefix: '/%public_upload.prefix%'
+            namer: vich_uploader.namer_uniqid
+            upload_destination: '%kernel.project_dir%/public/%public_upload.prefix%'

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Swagger\Filter;
@@ -10,22 +11,18 @@ use DomainException;
 
 final class SwaggerSearchFilter implements FilterInterface
 {
-
     private $decorated;
-
 
     public function __construct(FilterInterface $decorated)
     {
         $this->decorated = $decorated;
     }
 
-
     public function getDescription(string $resourceClass): array
     {
         $description = $this->decorated->getDescription($resourceClass);
 
         foreach ($description as $property => $data) {
-
             $descriptionText = $this->getDescriptionText($data['strategy']);
 
             if ('[]' === substr($property, -2)) {
@@ -35,7 +32,7 @@ final class SwaggerSearchFilter implements FilterInterface
             }
 
             $description[$property]['swagger'] = [
-                'type'        => 'string',
+                'type' => 'string',
                 'description' => $descriptionText,
             ];
         }
@@ -43,12 +40,10 @@ final class SwaggerSearchFilter implements FilterInterface
         return $description;
     }
 
-
     public function apply(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
     {
         $this->decorated->apply($queryBuilder, $queryNameGenerator, $resourceClass, $operationName);
     }
-
 
     private function getDescriptionText(string $strategy): string
     {

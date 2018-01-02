@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Serializer;
@@ -27,7 +28,6 @@ final class AdminContextBuilder implements SerializerContextBuilderInterface
      */
     private $adminSerializerGroupFactory;
 
-
     /**
      * AdminContextBuilder constructor.
      *
@@ -41,22 +41,21 @@ final class AdminContextBuilder implements SerializerContextBuilderInterface
         $this->adminSerializerGroupFactory = $adminSerializerGroupFactory;
     }
 
-
     /**
      * Creates a serialization context from a Request.
      *
      * @param Request    $request
-     * @param bool       $normalization true | false = denormalization
+     * @param bool       $normalization       true | false = denormalization
      * @param array|null $extractedAttributes
      *
      * @throws RuntimeException
      *
      * @return array
+     *
      * @throws \DomainException
      */
     public function createFromRequest(Request $request, bool $normalization, array $extractedAttributes = null): array
     {
-
         $context = $this->decorated->createFromRequest($request, $normalization, $extractedAttributes);
 
         if (!isset($context['groups']) || !$this->authorizationChecker->isGranted('ROLE_ADMIN')) {

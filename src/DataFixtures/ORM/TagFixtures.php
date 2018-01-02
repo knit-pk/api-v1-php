@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DataFixtures\ORM;
@@ -9,24 +10,37 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class TagFixtures extends Fixture
 {
+    public const PUBLIC_TAG_CODES = [
+        'it',
+        'university',
+        'fun',
+        'programming',
+        'poland',
+    ];
 
     /**
-     * Load data fixtures with the passed EntityManager
+     * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager): void
     {
+        $publicTags = array_flip(self::PUBLIC_TAG_CODES);
+
         foreach ($this->getTagsData() as ['name' => $name]) {
             $tag = new Tag();
             $tag->setName($name);
+
+            $code = str_replace(' ', '-', strtolower($name));
+            if (isset($publicTags[$code])) {
+                $this->addReference(sprintf('tag-%s', $code), $tag);
+            }
 
             $manager->persist($tag);
         }
 
         $manager->flush();
     }
-
 
     private function getTagsData(): array
     {
@@ -45,6 +59,8 @@ class TagFixtures extends Fixture
             ['name' => 'Free'],
             ['name' => 'Mobile'],
             ['name' => 'Web'],
+            ['name' => 'University'],
+            ['name' => 'Fun'],
         ];
     }
 }

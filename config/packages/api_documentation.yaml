@@ -25,6 +25,11 @@ services:
         decorates: 'app.article.group_filter'
         arguments: [ '@app.swagger.article.group_filter.inner' ]
 
+    app.swagger.user.group_filter:
+        class: App\Swagger\Filter\SwaggerGroupFilter
+        decorates: 'app.user.group_filter'
+        arguments: [ '@app.swagger.user.group_filter.inner' ]
+
     app.swagger.tag.search_filter:
         class: App\Swagger\Filter\SwaggerSearchFilter
         decorates: 'app.tag.search_filter'
@@ -39,3 +44,18 @@ services:
         class: App\Swagger\Filter\SwaggerGroupFilter
         decorates: 'app.project.group_filter'
         arguments: [ '@app.swagger.project.group_filter.inner' ]
+
+    app.swagger.comment.search_filter:
+        class: App\Swagger\Filter\SwaggerSearchFilter
+        decorates: 'app.comment.search_filter'
+        arguments: [ '@app.swagger.comment.search_filter.inner' ]
+
+    app.swagger.comment.group_filter:
+        class: App\Swagger\Filter\SwaggerGroupFilter
+        decorates: 'app.comment.group_filter'
+        arguments: [ '@app.swagger.comment.group_filter.inner' ]
+
+    app.swagger.comment_reply.search_filter:
+        class: App\Swagger\Filter\SwaggerSearchFilter
+        decorates: 'app.comment_reply.search_filter'
+        arguments: [ '@app.swagger.comment_reply.search_filter.inner' ]

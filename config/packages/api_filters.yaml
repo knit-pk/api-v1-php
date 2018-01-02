@@ -3,7 +3,7 @@ services:
     ### API PLATFORM FILTERS
     app.article.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
-        arguments: [ { code: 'exact', author: 'exact', title: 'partial' } ]
+        arguments: [ { code: 'exact', author: 'exact', title: 'partial', category.code: 'exact', tag.code: 'exact' } ]
         tags: [ 'api_platform.filter' ]
 
     app.article.boolean_filter:
@@ -11,14 +11,19 @@ services:
         arguments: [ { published: ~ } ]
         tags: [ 'api_platform.filter' ]
 
-    app.article.group_filter:
-        parent: 'api_platform.serializer.group_filter'
-        arguments: [ 'group', false, ['UserReadLess', 'TagRead', 'CategoryRead'] ]
+    app.article.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [ { createdAt: ~ } ]
         tags: [ 'api_platform.filter' ]
 
-    app.project.group_filter:
+    app.article.group_filter:
         parent: 'api_platform.serializer.group_filter'
-        arguments: [ 'group', false, ['UserReadLess'] ]
+        arguments: [ 'group', false, ['UserReadLess','ImageReadLess','TagRead','CategoryRead'] ]
+        tags: [ 'api_platform.filter' ]
+
+    app.user.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['ImageReadLess'] ]
         tags: [ 'api_platform.filter' ]
 
     app.tag.search_filter:
@@ -29,4 +34,44 @@ services:
     app.category.search_filter:
         parent: 'api_platform.doctrine.orm.search_filter'
         arguments: [ { name: 'partial' } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.project.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['UserReadLess'] ]
+        tags: [ 'api_platform.filter' ]
+
+    app.comment.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { article.id: 'exact' } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.comment.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['ReplyReadLess','UserReadLess'] ]
+        tags: [ 'api_platform.filter' ]
+
+    app.comment.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [ { createdAt: ~ } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.comment.date_filter:
+        parent: 'api_platform.doctrine.orm.date_filter'
+        arguments: [ { createdAt: ~ } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.comment_reply.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments: [ { comment.id: 'exact' } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.comment_reply.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [ { createdAt: ~ } ]
+        tags: [ 'api_platform.filter' ]
+
+    app.comment_reply.date_filter:
+        parent: 'api_platform.doctrine.orm.date_filter'
+        arguments: [ { createdAt: ~ } ]
         tags: [ 'api_platform.filter' ]

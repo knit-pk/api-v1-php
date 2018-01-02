@@ -18,7 +18,7 @@ services:
            - mysql_data:/var/lib/mysql
 
 #    oracle:
-#        image: k911/oracle-12c:0.1.1-prebuilt
+#        image: k911/oracle-12c:0.2.0-ee-prebuilt
 #        ports:
 #            - "1521:1521"
 #        shm_size: 1G
@@ -75,6 +75,8 @@ services:
            - api
         build:
            context: ./docker/varnish
+        volumes:
+            - ./docker/varnish/conf:/etc/varnish:ro
         ports:
            - "80:80"
 
@@ -105,14 +107,14 @@ services:
 #        ports:
 #            - "5601:5601"
 
-#    pma:
-#        build:
-#            context: ./docker/pma
-#        depends_on:
-#            - mysql
-#        environment:
-#            - PMA_HOST=mysql
-#            - PMA_USER=user
-#            - PMA_PASSWORD=password
-#        ports:
-#            - "8000:80"
+    pma:
+        build:
+            context: ./docker/pma
+        depends_on:
+            - mysql
+        environment:
+            - PMA_HOST=mysql
+            - PMA_USER=user
+            - PMA_PASSWORD=password
+        ports:
+            - "8000:80"

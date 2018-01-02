@@ -6,35 +6,28 @@ easy_admin:
             class: App\Entity\User
             list:
                 fields:
-                    - fullname
                     - username
+                    - fullname
                     - email
+                    - { property: 'avatar', type: 'image' }
+                    - securityRoles
                     - enabled
+                    - superAdmin
             form:
                 fields:
                     - fullname
                     - username
                     - email
+                    - avatar
                     - enabled
+                    - superAdmin
                     - lastLogin
+                    - securityRoles
                     - { property: plainPassword,
                         type: 'text',
                         type_options: {
                             required: false
                         } }
-
-                    - { property: roles,
-                        type: 'choice',
-                        type_options: {
-                            multiple: true,
-                            choices: {
-                                USER: 'ROLE_USER',
-                                READER: 'ROLE_READER',
-                                WRITER: 'ROLE_WRITER',
-                                ADMIN: 'ROLE_ADMIN',
-                                SUPER_ADMIN: 'ROLE_SUPER_ADMIN',
-                            } } }
-
         Project:
             class: App\Entity\Project
             list:
@@ -42,6 +35,7 @@ easy_admin:
                     - name
                     - author
                     - url
+                    - teams
                     - createdAt
             form:
                 fields:
@@ -49,6 +43,7 @@ easy_admin:
                     - description
                     - url
                     - author
+                    - teams
         Article:
             class: App\Entity\Article
             list:
@@ -56,13 +51,15 @@ easy_admin:
                     - title
                     - category
                     - author
-                    - createdAt
-                    - tags
+                    - { property: 'image', type: 'image' }
+                    - commentsCount
+                    - publishedAt
                     - published
             form:
                 fields:
                     - title
                     - category
+                    - image
                     - description
                     - content
                     - tags
@@ -88,3 +85,65 @@ easy_admin:
             form:
                 fields:
                     - name
+        SecurityRole:
+            class: App\Entity\SecurityRole
+            disabled_actions: ['new']
+            list:
+                fields:
+                    - name
+                    - role
+                    - users
+            form:
+                fields:
+                    - name
+                    - { property: 'users', type_options: { by_reference: false } }
+        Image:
+            class: App\Entity\Image
+            list:
+                fields:
+                    - originalName
+                    - { label: 'Image', property: url, type: 'image' }
+                    - author
+                    - uploadedAt
+                    - createdAt
+                    - updatedAt
+            show:
+                fields:
+                    - id
+                    - author
+                    - { label: 'Size (in bytes)', property: size }
+                    - originalName
+                    - { property: 'url', type: 'url' }
+                    - uploadedAt
+                    - createdAt
+                    - updatedAt
+                    - { label: 'Image', property: 'fileName', type: 'image', base_path: '/media/upload' }
+            form:
+                fields:
+                    - author
+                    - { property: 'file', type: 'vich_image' }
+            edit:
+                fields:
+                    - originalName
+        Comment:
+            class: App\Entity\Comment
+            form:
+                fields:
+                    - article
+                    - author
+                    - text
+
+        CommentReply:
+            class: App\Entity\CommentReply
+            form:
+                fields:
+                    - comment
+                    - author
+                    - text
+        Team:
+            class: App\Entity\Team
+            form:
+                fields:
+                    - name
+                    - parent
+                    - users

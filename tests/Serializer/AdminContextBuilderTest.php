@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Serializer;
@@ -7,23 +8,24 @@ use ApiPlatform\Core\Serializer\SerializerContextBuilderInterface;
 use App\Serializer\AdminContextBuilder;
 use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AdminContextBuilderTest extends TestCase
 {
     /**
-     * @var \ApiPlatform\Core\Serializer\SerializerContextBuilderInterface
+     * @var SerializerContextBuilderInterface|ObjectProphecy
      */
     private $serializerContextBuilderProphecy;
 
     /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     * @var AuthorizationCheckerInterface|ObjectProphecy
      */
     private $authorizationCheckerProphecy;
 
     /**
-     * @var \App\Serializer\Group\Factory\AdminSerializerGroupFactory
+     * @var AdminSerializerGroupFactory|ObjectProphecy
      */
     private $adminSerializerGroupFactoryProphecy;
 
@@ -32,16 +34,14 @@ class AdminContextBuilderTest extends TestCase
      */
     private $adminContextBuilder;
 
-
     protected function setUp()
     {
         $this->serializerContextBuilderProphecy = $this->prophesize(SerializerContextBuilderInterface::class);
         $this->authorizationCheckerProphecy = $this->prophesize(AuthorizationCheckerInterface::class);
-        $this->adminSerializerGroupFactoryProphecy = $this->prophesize(\App\Serializer\Group\Factory\AdminSerializerGroupFactory::class);
+        $this->adminSerializerGroupFactoryProphecy = $this->prophesize(AdminSerializerGroupFactory::class);
 
         $this->adminContextBuilder = new AdminContextBuilder($this->serializerContextBuilderProphecy->reveal(), $this->authorizationCheckerProphecy->reveal(), $this->adminSerializerGroupFactoryProphecy->reveal());
     }
-
 
     public function testNonSerializerGroupsSet()
     {
@@ -60,7 +60,6 @@ class AdminContextBuilderTest extends TestCase
         $this->assertSame($context, $this->adminContextBuilder->createFromRequest($request, $normalization, $extractedAttributes));
     }
 
-
     public function testNonAdminGranted()
     {
         $request = new Request();
@@ -69,7 +68,7 @@ class AdminContextBuilderTest extends TestCase
         $extractedAttributes = null;
 
         $context = [
-            'groups'         => ['TestRead'],
+            'groups' => ['TestRead'],
             'resource_class' => 'Test',
         ];
 
@@ -80,7 +79,6 @@ class AdminContextBuilderTest extends TestCase
         $this->assertSame($context, $this->adminContextBuilder->createFromRequest($request, $normalization, $extractedAttributes));
     }
 
-
     public function testNormalization()
     {
         $request = new Request();
@@ -89,7 +87,7 @@ class AdminContextBuilderTest extends TestCase
         $extractedAttributes = null;
 
         $context = [
-            'groups'         => ['TestRead'],
+            'groups' => ['TestRead'],
             'resource_class' => 'Test',
         ];
 
@@ -105,7 +103,6 @@ class AdminContextBuilderTest extends TestCase
         $this->assertSame($context, $this->adminContextBuilder->createFromRequest($request, $normalization, $extractedAttributes));
     }
 
-
     public function testDenormalizationOnPut()
     {
         $request = new Request();
@@ -115,7 +112,7 @@ class AdminContextBuilderTest extends TestCase
         $extractedAttributes = null;
 
         $context = [
-            'groups'         => ['TestWrite'],
+            'groups' => ['TestWrite'],
             'resource_class' => 'Test',
         ];
 
@@ -136,7 +133,6 @@ class AdminContextBuilderTest extends TestCase
         $this->assertSame($context, $this->adminContextBuilder->createFromRequest($request, $normalization, $extractedAttributes));
     }
 
-
     public function testDenormalizationOnPost()
     {
         $request = new Request();
@@ -146,7 +142,7 @@ class AdminContextBuilderTest extends TestCase
         $extractedAttributes = null;
 
         $context = [
-            'groups'         => ['TestWrite'],
+            'groups' => ['TestWrite'],
             'resource_class' => 'Test',
         ];
 
@@ -167,7 +163,6 @@ class AdminContextBuilderTest extends TestCase
         $this->assertSame($context, $this->adminContextBuilder->createFromRequest($request, $normalization, $extractedAttributes));
     }
 
-
     public function notValidHttpMethodsForDenormalizationProvider(): array
     {
         return [
@@ -177,7 +172,6 @@ class AdminContextBuilderTest extends TestCase
             ['OPTIONS'],
         ];
     }
-
 
     /**
      * @dataProvider             notValidHttpMethodsForDenormalizationProvider
@@ -196,7 +190,7 @@ class AdminContextBuilderTest extends TestCase
         $extractedAttributes = null;
 
         $context = [
-            'groups'         => ['TestWrite'],
+            'groups' => ['TestWrite'],
             'resource_class' => 'Test',
         ];
 

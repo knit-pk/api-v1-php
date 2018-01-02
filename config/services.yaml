@@ -2,6 +2,15 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
+    version: '0.3.0'
+    title: 'KNIT RESTful API'
+    description: 'KNIT RESTful API build using ApiPlatform'
+    public_upload.prefix: 'media/upload'
+    router.request_context.host: localhost
+    router.request_context.scheme: http
+    router.request_context.base_url: /
+    session.storage.options:
+        cache_limiter: 0
 
 services:
     # default configuration for services in *this* file
@@ -20,12 +29,12 @@ services:
         resource: '../src/*'
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
-        exclude: '../src/{Entity,Migrations,Repository,Tests}'
+        exclude: '../src/{Entity,Migrations,Repository,DataFixtures}'
 
-    # controllers are imported separately to make sure they
-    # have the tag that allows actions to type-hint services
-    App\Controller\:
-        resource: '../src/Controller'
+    # actions are imported separately to make sure they
+    # have the tag that allows to type-hint services
+    App\Action\:
+        resource: '../src/Action'
         tags: ['controller.service_arguments']
 
     ### Gedmo doctrine extensions
@@ -44,10 +53,22 @@ services:
             - [ setAnnotationReader, ['@annotation_reader']]
 
     ### Add custom payload to JWT Access Token
-    acme_api.event.jwt_created_listener:
+    app.event.jwt_created_listener:
         class: App\EventListener\JWTCreatedListener
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+    ### Add custom payload to JWT Access Token
+    app.event.image_uploaded_listener:
+        class: App\EventListener\ImageUploadedListener
+        tags:
+            - { name: kernel.event_listener, event: vich_uploader.post_upload, method: onVichUploaderPostUpload }
+
+    ### Add parent item to api sub resource
+    app.event.parent_read_listener:
+        class: App\EventListener\ParentReadListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 4 }
 
     ### Dynamically inject serialization groups for admins
     'App\Serializer\AdminContextBuilder':
@@ -65,3 +86,6 @@ services:
         decorates: 'api_platform.swagger.normalizer.documentation'
         arguments: [ '@App\Swagger\SwaggerDocumentation.inner' ]
         autoconfigure: false
+
+    'Vich\UploaderBundle\Storage\StorageInterface':
+        alias: vich_uploader.storage.file_system

@@ -6,10 +6,14 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use App\Security\User\UserInterface;
+use App\Thought\ThoughtfulInterface;
+use App\Thought\ThoughtInterface;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,8 +26,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(iri="http://schema.org/Article",
  * attributes={
+ *     "filters"={"app.article.search_filter","app.article.boolean_filter","app.article.group_filter","app.article.order_filter"},
  *     "normalization_context"={"groups"={"ArticleRead"}},
- *     "filters"={"app.article.search_filter","app.article.boolean_filter","app.article.group_filter"},
+ *     "denormalization_context"={"groups"={"ArticleWrite"}},
  * },
  * collectionOperations={
  *     "get"={
@@ -32,7 +37,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     "post"={
  *          "method"="POST",
  *          "access_control"="is_granted('ROLE_READER')",
- *          "denormalization_context"={"groups"={"ArticleWrite"}},
  *     },
  * },
  * itemOperations={
@@ -42,7 +46,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     "put"={
  *          "method"="PUT",
  *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
- *          "denormalization_context"={"groups"={"ArticleWrite"}},
  *     },
  *     "delete"={
  *          "method"="DELETE",
@@ -53,12 +56,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="articles")
  */
-class Article
+class Article implements ThoughtfulInterface
 {
     /**
      * @var Uuid
      *
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -70,9 +73,9 @@ class Article
     /**
      * @var string
      *
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="string",unique=true)
      *
-     * @Gedmo\Slug(fields={"createdAt", "title"},separator="-",updatable=true,unique=true,dateFormat="Y/m")
+     * @Gedmo\Slug(fields={"createdAt","title"},separator="-",updatable=true,unique=true,dateFormat="Y/m")
      *
      * @Groups({"ArticleRead"})
      */
@@ -81,14 +84,14 @@ class Article
     /**
      * @var string|null the title of the article
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string",nullable=false)
      *
      * @ApiProperty(iri="http://schema.org/name")
      *
      * @Assert\NotBlank()
      * @Assert\Length(min="3",max="100")
      *
-     * @Groups({"ArticleRead", "ArticleWrite"})
+     * @Groups({"ArticleRead","ArticleWrite"})
      */
     protected $title;
 
@@ -101,7 +104,7 @@ class Article
      *
      * @Assert\NotBlank()
      *
-     * @Groups({"ArticleRead", "ArticleWrite"})
+     * @Groups({"ArticleRead","ArticleWrite"})
      */
     protected $content;
 
@@ -109,7 +112,7 @@ class Article
      * @var Category articles may belong to one category
      *
      * @ORM\ManyToOne(targetEntity="Category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="category_id",referencedColumnName="id",onDelete="CASCADE")
      *
      * @ApiProperty(iri="http://schema.org/articleSection")
      *
@@ -124,13 +127,38 @@ class Article
      *
      * @ORM\ManyToMany(targetEntity="Tag")
      * @ORM\JoinTable(name="articles_tags",
-     *      joinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")},
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="article_id",referencedColumnName="id",onDelete="CASCADE")
+     *      },inverseJoinColumns={
+     *          @ORM\JoinColumn(name="tag_id",referencedColumnName="id",onDelete="CASCADE")
+     *      },
      * )
      *
-     * @Groups({"ArticleRead", "ArticleWrite"})
+     * @Groups({"ArticleRead","ArticleWrite"})
      */
     protected $tags;
+
+    /**
+     * @var ArrayCollection|Comment[] comments, typically from users
+     *
+     * @ORM\OneToMany(targetEntity="Comment",mappedBy="article",cascade={"remove"})
+     *
+     * @Groups({"ArticleRead","ArticleWrite"})
+     *
+     * @ApiSubresource()
+     */
+    protected $comments;
+
+    /**
+     * @var int Aggregate field that contains total number of comments and its replies
+     *
+     * @ORM\Column(type="integer",options={"unsigned"=true})
+     *
+     * @ApiProperty(iri="http://schema.org/commentCount")
+     *
+     * @Groups({"ArticleRead"})
+     */
+    protected $commentsCount;
 
     /**
      * @var string|null the subject matter of the content
@@ -142,32 +170,42 @@ class Article
      * @Assert\NotBlank()
      * @Assert\Length(max="300")
      *
-     * @Groups({"ArticleRead", "ArticleWrite"})
+     * @Groups({"ArticleRead","ArticleWrite"})
      */
     protected $description;
 
     /**
-     * @var \App\Entity\User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
+     * @var User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE")
      *
      * @ApiProperty(iri="http://schema.org/author")
      *
      * @Assert\NotBlank()
      *
-     * @Groups({"ArticleRead", "ArticleWrite"})
+     * @Groups({"ArticleRead","ArticleWrite"})
      */
     protected $author;
 
     /**
-     * @var \DateTimeInterface|null date of first broadcast/publication
+     * @var Image|null an image of the item
+     *
+     * @ORM\ManyToOne(targetEntity="Image")
+     * @ORM\JoinColumn(name="image_id",referencedColumnName="id",onDelete="RESTRICT")
+     *
+     * @ApiProperty(iri="http://schema.org/image")
+     *
+     * @Groups({"ArticleRead","ArticleWrite"})
+     */
+    protected $image;
+
+    /**
+     * @var DateTime|null date of first broadcast/publication
      *
      * @ORM\Column(type="datetime",nullable=true)
      *
      * @ApiProperty(iri="http://schema.org/datePublished")
-     *
-     * @Assert\DateTime()
      *
      * @Gedmo\Timestampable(on="change",field="published",value=true)
      *
@@ -180,12 +218,12 @@ class Article
      *
      * @ORM\Column(type="boolean")
      *
-     * @Groups({"ArticleRead", "ArticleAdminUpdate"})
+     * @Groups({"ArticleRead","ArticleAdminUpdate"})
      */
     protected $published;
 
     /**
-     * @var \DateTimeInterface|null the date on which the CreativeWork was most recently modified or when the item's entry was modified within a DataFeed
+     * @var DateTime|null the date on which the CreativeWork was most recently modified or when the item's entry was modified within a DataFeed
      *
      * @ORM\Column(type="datetime")
      *
@@ -193,14 +231,12 @@ class Article
      *
      * @Gedmo\Timestampable(on="update")
      *
-     * @Assert\DateTime()
-     *
      * @Groups({"ArticleRead"})
      */
     protected $updatedAt;
 
     /**
-     * @var \DateTimeInterface|null the date on which the CreativeWork was created or the item was added to a DataFeed
+     * @var DateTime|null the date on which the CreativeWork was created or the item was added to a DataFeed
      *
      * @ORM\Column(type="datetime")
      *
@@ -208,175 +244,181 @@ class Article
      *
      * @Gedmo\Timestampable(on="create")
      *
-     * @Assert\DateTime()
-     *
      * @Groups({"ArticleRead"})
      */
     protected $createdAt;
 
-
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->commentsCount = 0;
         $this->published = false;
     }
 
-
-    /**
-     * @return null|\Ramsey\Uuid\Uuid
-     */
     public function getId(): ?Uuid
     {
         return $this->id;
     }
 
-
-    /**
-     * @return string
-     */
     public function getCode(): string
     {
         return $this->code;
     }
-
 
     public function setContent(?string $content): void
     {
         $this->content = $content;
     }
 
-
     public function getContent(): ?string
     {
         return $this->content;
     }
 
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
 
-    /**
-     * @return Category
-     */
-    public function getCategory(): Category
+    public function setImage(?Image $image): void
+    {
+        $this->image = $image;
+    }
+
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-
-    /**
-     * @param Category $category
-     */
     public function setCategory(Category $category): void
     {
         $this->category = $category;
     }
-
 
     public function addTag(Tag $tag): void
     {
         $this->tags[] = $tag;
     }
 
-
     public function removeTag(Tag $tag): void
     {
         $this->tags->removeElement($tag);
     }
-
 
     public function getTags(): Collection
     {
         return $this->tags;
     }
 
+    public function addComment(Comment $comment): void
+    {
+        $this->comments[] = $comment;
+    }
+
+    public function removeComment(Comment $comment): void
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function getCommentsCount(): int
+    {
+        return $this->commentsCount;
+    }
 
     public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
 
-
     public function getDescription(): ?string
     {
         return $this->description;
     }
-
 
     public function setAuthor(?User $author): void
     {
         $this->author = $author;
     }
 
-
     public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-
-    public function getPublishedAt(): ?\DateTimeInterface
+    public function getPublishedAt(): ?DateTime
     {
         return $this->publishedAt;
     }
 
-
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
-
 
     public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
 
-
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-
-    /**
-     * @return bool
-     */
     public function isPublished(): bool
     {
         return $this->published;
     }
 
-
-    /**
-     * @param bool $published
-     *
-     * @return Article
-     */
-    public function setPublished($published): Article
+    public function setPublished($published): void
     {
         $this->published = (bool) $published;
-
-        return $this;
     }
 
-
-    /**
-     * @param UserInterface|null $user
-     *
-     * @return bool
-     */
     public function isAuthor(?UserInterface $user): bool
     {
         $author = $this->getAuthor();
 
-        if (!$author instanceof User) {
-            return false;
-        }
+        return $author instanceof UserInterface && $author->isUser($user);
+    }
 
-        return $author->isUser($user);
+    public function __toString(): string
+    {
+        return $this->getCode();
+    }
+
+    /**
+     * Determines whether given thought is supported by an thoughtful object.
+     *
+     * @param ThoughtInterface $thought
+     *
+     * @return bool
+     */
+    public function isThoughtSupported(ThoughtInterface $thought): bool
+    {
+        return $thought instanceof Comment;
+    }
+
+    /**
+     * Returns an array of supported thought objects' class names.
+     *
+     * @return array
+     */
+    public static function getSupportedThoughts(): array
+    {
+        return [
+            Comment::class,
+        ];
     }
 }

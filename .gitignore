@@ -1,12 +1,15 @@
-logs
-config/jwt
 supervisord.pid
-docker/oracle/instantclient-12c
-docker/oracle/database-12c
-docker/php/instantclient
-
 .env.mydevil
 .env.debug
+
+/logs
+/config/jwt
+/docker/oracle/instantclient-12c
+/docker/oracle/database-12c
+/docker/php/instantclient
+/public/media/upload/*
+
+!/public/media/upload/.gitkeep
 
 ###> symfony/framework-bundle ###
 .env
