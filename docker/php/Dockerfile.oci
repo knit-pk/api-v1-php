@@ -20,6 +20,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Configure oci8 php extensions for Oracle Database
+ENV LD_LIBRARY_PATH "${INSTANT_CLIENT_DEST}/"
 COPY $INSTANT_CLIENT_SRC $INSTANT_CLIENT_DEST
 RUN ln -s $INSTANT_CLIENT_DEST/libclntsh.so.12.1 $INSTANT_CLIENT_DEST/libclntsh.so
 RUN docker-php-ext-configure oci8 --with-oci8=instantclient,$INSTANT_CLIENT_DEST
