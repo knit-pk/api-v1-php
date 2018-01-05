@@ -52,6 +52,7 @@ easy_admin:
                     - category
                     - author
                     - { property: 'image', type: 'image' }
+                    - ratings
                     - commentsCount
                     - publishedAt
                     - published
@@ -132,7 +133,6 @@ easy_admin:
                     - article
                     - author
                     - text
-
         CommentReply:
             class: App\Entity\CommentReply
             form:
@@ -147,3 +147,9 @@ easy_admin:
                     - name
                     - parent
                     - users
+        Rating:
+            class: App\Entity\Rating
+            form:
+                fields:
+                    - author
+                    - article
