@@ -60,9 +60,9 @@
   },
   "scripts": {
     "test": [
-      "phpunit",
-      "php-cs-fixer fix --dry-run --diff --allow-risky=true",
-      "phpstan analyze src tests --level=4"
+      "phpstan analyze src tests --level=4",
+      "php-cs-fixer fix --dry-run --diff",
+      "phpunit"
     ],
     "fix": "php-cs-fixer fix",
     "auto-scripts": {
