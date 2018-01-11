@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Action\Image;
 
 use App\Entity\Image;
+use App\Security\UserProvider\UserEntityProvider;
 use DomainException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -19,19 +20,29 @@ class ImageUploadAction
         'image/png',
     ];
 
+    private $userEntityProvider;
+
+    public function __construct(UserEntityProvider $userEntityProvider)
+    {
+        $this->userEntityProvider = $userEntityProvider;
+    }
+
     /**
      * @Route(name="api_images_upload",
-     *      path="/images/upload",
-     *      defaults={
-     *          "_api_receive"=false,
-     *          "_api_resource_class"=Image::class,
-     *          "_api_collection_operation_name"="upload"
-     *      },
+     *     path="/images/upload",
+     *     defaults={
+     *         "_api_receive": false,
+     *         "_api_resource_class": Image::class,
+     *         "_api_collection_operation_name": "upload"
+     *     },
      * )
      * @Method("POST")
      *
      * @param \Symfony\Component\HttpFoundation\Request           $request
      * @param \Symfony\Component\Security\Core\User\UserInterface $user
+     *
+     * @throws \App\Security\Exception\SecurityException
+     * @throws \DomainException
      *
      * @return \App\Entity\Image
      */
@@ -44,12 +55,12 @@ class ImageUploadAction
         }
 
         if (!\in_array($imageFile->getMimeType(), self::SUPPORTED_MIME_TYPES, true)) {
-            throw new DomainException(sprintf('Uploaded file must be an image. Supported mime types: %s', implode(', ', self::SUPPORTED_MIME_TYPES)));
+            throw new DomainException(\sprintf('Uploaded file must be an image. Supported mime types: %s', \implode(', ', self::SUPPORTED_MIME_TYPES)));
         }
 
         $image = new Image();
         $image->setFile($imageFile);
-        $image->setAuthor($user);
+        $image->setAuthor($this->userEntityProvider->getUser($user));
 
         return $image;
     }

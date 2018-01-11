@@ -16,32 +16,32 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(attributes={
- *     "filters"={"app.project.group_filter"},
+ *     "filters": {"app.project.group_filter"},
  * },
  * collectionOperations={
- *     "get"={
- *          "method"="GET",
+ *     "get": {
+ *         "method": "GET",
  *     },
- *     "post"={
- *          "method"="POST",
- *          "access_control"="is_granted('ROLE_USER_WRITER')",
+ *     "post": {
+ *         "method": "POST",
+ *         "access_control": "is_granted('ROLE_USER_WRITER')",
  *     },
  * },
  * itemOperations={
- *     "get"={
- *          "method"="GET",
+ *     "get": {
+ *         "method": "GET",
  *     },
- *     "put"={
- *          "method"="PUT",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     "put": {
+ *         "method": "PUT",
+ *         "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
  *     },
- *     "delete"={
- *          "method"="DELETE",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     "delete": {
+ *         "method": "DELETE",
+ *         "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
  *     },
  * })
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="projects")
  */
 class Project
@@ -49,7 +49,7 @@ class Project
     /**
      * @var Uuid
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -61,8 +61,8 @@ class Project
      *
      * @ORM\Column(type="string")
      *
-     * @Assert\NotBlank()
-     * @Assert\Length(min="3",max="100")
+     * @Assert\NotBlank
+     * @Assert\Length(min="3", max="100")
      */
     protected $name;
 
@@ -70,9 +70,9 @@ class Project
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      */
     protected $author;
 
@@ -82,12 +82,12 @@ class Project
      * @ORM\Column(type="string", unique=true)
      *
      * @Gedmo\Slug(handlers={
-     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler",options={
-     *          @Gedmo\SlugHandlerOption(name="relationField",value="author"),
-     *          @Gedmo\SlugHandlerOption(name="relationSlugField",value="username"),
-     *          @Gedmo\SlugHandlerOption(name="separator",value="/"),
-     *      }),
-     * },fields={"name"},separator="-",updatable=true,unique=true)
+     *     @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
+     *         @Gedmo\SlugHandlerOption(name="relationField", value="author"),
+     *         @Gedmo\SlugHandlerOption(name="relationSlugField", value="username"),
+     *         @Gedmo\SlugHandlerOption(name="separator", value="/"),
+     *     }),
+     * }, fields={"name"}, separator="-", updatable=true, unique=true)
      */
     protected $code;
 
@@ -96,8 +96,8 @@ class Project
      *
      * @ORM\Column(type="string")
      *
-     * @Assert\NotBlank()
-     * @Assert\Length(min="10",max="300")
+     * @Assert\NotBlank
+     * @Assert\Length(min="10", max="300")
      */
     protected $description;
 
@@ -106,7 +106,7 @@ class Project
      *
      * @ORM\Column(type="string")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @Assert\Length(max="200")
      */
     protected $url;
@@ -115,10 +115,10 @@ class Project
      * @var Collection|Team[]
      *
      * @ORM\ManyToMany(targetEntity="Team")
-     * @ORM\JoinTable(name="projects_teams",joinColumns={
-     *      @ORM\JoinColumn(name="project_id",referencedColumnName="id",onDelete="CASCADE")
-     * },inverseJoinColumns={
-     *      @ORM\JoinColumn(name="team_id",referencedColumnName="id",onDelete="CASCADE"),
+     * @ORM\JoinTable(name="projects_teams", joinColumns={
+     *     @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE")
+     *     }, inverseJoinColumns={
+     *     @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE"),
      * })
      */
     protected $teams;
@@ -130,7 +130,7 @@ class Project
      *
      * @Gedmo\Timestampable(on="create")
      *
-     * @Assert\DateTime()
+     * @Assert\DateTime
      */
     protected $createdAt;
 
@@ -141,7 +141,7 @@ class Project
      *
      * @Gedmo\Timestampable(on="update")
      *
-     * @Assert\DateTime()
+     * @Assert\DateTime
      */
     protected $updatedAt;
 

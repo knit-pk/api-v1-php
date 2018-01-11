@@ -22,13 +22,13 @@ class ProjectFixtures extends Fixture
         $author = $this->getReference('user-reader');
 
         for ($i = 1; $i <= 10; ++$i) {
-            $name = sprintf('Project %d', $i);
+            $name = \sprintf('Project %d', $i);
 
             $project = new Project();
             $project->setName($name);
-            $project->setDescription(sprintf('Fantastic %s description.', $name));
+            $project->setDescription(\sprintf('Fantastic %s description.', $name));
             $project->setAuthor($author);
-            $project->setUrl(sprintf('https://github.com/%s/%s', strtolower($author->getUsername()), strtolower(str_replace(' ', '-', $name))));
+            $project->setUrl(\sprintf('https://github.com/%s/%s', \mb_strtolower($author->getUsername()), \mb_strtolower(\str_replace(' ', '-', $name))));
 
             $manager->persist($project);
         }

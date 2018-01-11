@@ -43,7 +43,7 @@ class ImageFixtures extends Fixture
 
                 $manager->persist($avatar);
 
-                $this->addReference(sprintf('image-%s', $data['name']), $avatar);
+                $this->addReference(\sprintf('image-%s', $data['name']), $avatar);
             }
         }
 

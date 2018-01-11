@@ -49,8 +49,8 @@ class ImageUploadedListener
     {
         $context = $this->requestContextAware->getContext();
 
-        $realPath = ltrim(sprintf('%s/%s', $context->getBaseUrl(), $path), '\/');
+        $realPath = \ltrim(\sprintf('%s/%s', $context->getBaseUrl(), $path), '\/');
 
-        return rtrim(sprintf('%s://%s/%s', $context->getScheme(), $context->getHost(), $realPath), '\/');
+        return \rtrim(\sprintf('%s://%s/%s', $context->getScheme(), $context->getHost(), $realPath), '\/');
     }
 }

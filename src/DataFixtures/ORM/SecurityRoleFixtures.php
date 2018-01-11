@@ -34,7 +34,7 @@ class SecurityRoleFixtures extends Fixture
             $securityRole = new SecurityRole($role);
             $securityRole->setName($name);
 
-            $this->setReference(sprintf('security-%s', strtolower($role)), $securityRole);
+            $this->setReference(\sprintf('security-%s', \mb_strtolower($role)), $securityRole);
 
             $manager->persist($securityRole);
         }

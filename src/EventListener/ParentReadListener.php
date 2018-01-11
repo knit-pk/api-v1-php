@@ -45,10 +45,9 @@ final class ParentReadListener
      * @param array   $attributes
      *
      * @throws NotFoundHttpException
+     * @throws \ApiPlatform\Core\Exception\ResourceClassNotSupportedException
      *
      * @return object|null
-     *
-     * @throws \ApiPlatform\Core\Exception\ResourceClassNotSupportedException
      */
     private function getItemData(Request $request, array $attributes)
     {

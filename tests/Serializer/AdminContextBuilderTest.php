@@ -8,25 +8,15 @@ use ApiPlatform\Core\Serializer\SerializerContextBuilderInterface;
 use App\Serializer\AdminContextBuilder;
 use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AdminContextBuilderTest extends TestCase
 {
-    /**
-     * @var SerializerContextBuilderInterface|ObjectProphecy
-     */
     private $serializerContextBuilderProphecy;
 
-    /**
-     * @var AuthorizationCheckerInterface|ObjectProphecy
-     */
     private $authorizationCheckerProphecy;
 
-    /**
-     * @var AdminSerializerGroupFactory|ObjectProphecy
-     */
     private $adminSerializerGroupFactoryProphecy;
 
     /**
@@ -40,7 +30,16 @@ class AdminContextBuilderTest extends TestCase
         $this->authorizationCheckerProphecy = $this->prophesize(AuthorizationCheckerInterface::class);
         $this->adminSerializerGroupFactoryProphecy = $this->prophesize(AdminSerializerGroupFactory::class);
 
-        $this->adminContextBuilder = new AdminContextBuilder($this->serializerContextBuilderProphecy->reveal(), $this->authorizationCheckerProphecy->reveal(), $this->adminSerializerGroupFactoryProphecy->reveal());
+        /** @var SerializerContextBuilderInterface $serializerContextBuilderMock */
+        $serializerContextBuilderMock = $this->serializerContextBuilderProphecy->reveal();
+
+        /** @var AuthorizationCheckerInterface $authorizationCheckerMock */
+        $authorizationCheckerMock = $this->authorizationCheckerProphecy->reveal();
+
+        /** @var AdminSerializerGroupFactory $adminSerializerGroupFactoryMock */
+        $adminSerializerGroupFactoryMock = $this->adminSerializerGroupFactoryProphecy->reveal();
+
+        $this->adminContextBuilder = new AdminContextBuilder($serializerContextBuilderMock, $authorizationCheckerMock, $adminSerializerGroupFactoryMock);
     }
 
     public function testNonSerializerGroupsSet()
