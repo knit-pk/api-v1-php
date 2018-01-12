@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Security\User\UserInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use DomainException;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\File;
@@ -60,6 +61,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class Image
 {
+    public const SUPPORTED_MIME_TYPES = [
+        'image/jpeg',
+        'image/png',
+    ];
+
     /**
      * @var Uuid
      *
@@ -120,7 +126,7 @@ class Image
     protected $file;
 
     /**
-     * @var User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
+     * @var User|null The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
@@ -175,6 +181,11 @@ class Image
         return $this->createdAt;
     }
 
+    public function updateUploadedAt(): void
+    {
+        $this->uploadedAt = new DateTime();
+    }
+
     public function getUploadedAt(): ?DateTime
     {
         return $this->uploadedAt;
@@ -183,10 +194,6 @@ class Image
     public function setFile(?File $image = null): void
     {
         $this->file = $image;
-
-        if ($image instanceof File) {
-            $this->uploadedAt = new DateTime();
-        }
     }
 
     public function setSize(?int $size): void
@@ -254,5 +261,26 @@ class Image
     public function __toString(): string
     {
         return (string) $this->getUrl();
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\File\File $file
+     * @param \App\Entity\User|null                       $author
+     *
+     * @throws \DomainException
+     *
+     * @return \App\Entity\Image
+     */
+    public static function fromFile(File $file, ?User $author = null): self
+    {
+        if (!\in_array($file->getMimeType(), self::SUPPORTED_MIME_TYPES, true)) {
+            throw new DomainException(\sprintf('Give file mime type is not supported. Supported ones: %s', \implode(', ', self::SUPPORTED_MIME_TYPES)));
+        }
+
+        $image = new self();
+        $image->file = $file;
+        $image->author = $author;
+
+        return $image;
     }
 }

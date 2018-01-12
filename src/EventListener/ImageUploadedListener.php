@@ -11,7 +11,7 @@ use Symfony\Component\Routing\RequestContextAwareInterface;
 use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
-class ImageUploadedListener
+final class ImageUploadedListener
 {
     private $storage;
     private $requestStack;
@@ -30,6 +30,7 @@ class ImageUploadedListener
         if ($entity instanceof Image) {
             $path = $this->storage->resolveUri($entity, 'file');
             $entity->setUrl($this->getUriForPath($path));
+            $entity->updateUploadedAt();
         }
     }
 
