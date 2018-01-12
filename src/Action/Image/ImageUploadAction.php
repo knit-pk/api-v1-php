@@ -6,20 +6,15 @@ namespace App\Action\Image;
 
 use App\Entity\Image;
 use App\Security\UserProvider\UserEntityProvider;
-use DomainException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class ImageUploadAction
+final class ImageUploadAction
 {
-    private const SUPPORTED_MIME_TYPES = [
-        'image/jpeg',
-        'image/png',
-    ];
-
     private $userEntityProvider;
 
     public function __construct(UserEntityProvider $userEntityProvider)
@@ -41,6 +36,7 @@ class ImageUploadAction
      * @param \Symfony\Component\HttpFoundation\Request           $request
      * @param \Symfony\Component\Security\Core\User\UserInterface $user
      *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \App\Security\Exception\SecurityException
      * @throws \DomainException
      *
@@ -51,17 +47,9 @@ class ImageUploadAction
         $imageFile = $request->files->get('image');
 
         if (!$imageFile instanceof UploadedFile) {
-            throw new DomainException('Image file is required.');
+            throw new HttpException(400, 'Form data field: image is required, and must be type of image file');
         }
 
-        if (!\in_array($imageFile->getMimeType(), self::SUPPORTED_MIME_TYPES, true)) {
-            throw new DomainException(\sprintf('Uploaded file must be an image. Supported mime types: %s', \implode(', ', self::SUPPORTED_MIME_TYPES)));
-        }
-
-        $image = new Image();
-        $image->setFile($imageFile);
-        $image->setAuthor($this->userEntityProvider->getUser($user));
-
-        return $image;
+        return Image::fromFile($imageFile, $this->userEntityProvider->getUser($user));
     }
 }
