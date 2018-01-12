@@ -15,21 +15,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(attributes={
- *     "normalization_context"={"groups"={"SecurityRoleRead"}},
- *     "denormalization_context"={"groups"={"SecurityRoleWrite"}},
+ *     "normalization_context": {"groups": {"SecurityRoleRead"}},
+ *     "denormalization_context": {"groups": {"SecurityRoleWrite"}},
  * },
  * collectionOperations={
- *     "get"={
- *          "method"="GET",
+ *     "get": {
+ *         "method": "GET",
  *     },
  * },
  * itemOperations={
- *     "get"={
- *          "method"="GET",
+ *     "get": {
+ *         "method": "GET",
  *     },
  * })
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="security_roles")
  */
 class SecurityRole extends Role
@@ -37,7 +37,7 @@ class SecurityRole extends Role
     /**
      * @var Uuid
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -51,7 +51,7 @@ class SecurityRole extends Role
      *
      * @ApiProperty(iri="http://schema.org/name")
      *
-     * @ORM\Column(name="name",type="string",length=70)
+     * @ORM\Column(name="name", type="string", length=70)
      *
      * @Groups({"SecurityRoleAdminRead"})
      */
@@ -62,7 +62,7 @@ class SecurityRole extends Role
      *
      * @ApiProperty(iri="http://schema.org/alternateName")
      *
-     * @ORM\Column(name="role",type="string",unique=true,length=70)
+     * @ORM\Column(name="role", type="string", unique=true, length=70)
      *
      * @Groups({"SecurityRoleAdminRead"})
      */
@@ -71,7 +71,7 @@ class SecurityRole extends Role
     /**
      * @var User[]|Collection
      *
-     * @ORM\ManyToMany(targetEntity="User",mappedBy="securityRoles",cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="securityRoles", cascade={"persist"})
      */
     protected $users;
 

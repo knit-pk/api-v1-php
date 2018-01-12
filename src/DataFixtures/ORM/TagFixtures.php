@@ -25,15 +25,15 @@ class TagFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        $publicTags = array_flip(self::PUBLIC_TAG_CODES);
+        $publicTags = \array_flip(self::PUBLIC_TAG_CODES);
 
         foreach ($this->getTagsData() as ['name' => $name]) {
             $tag = new Tag();
             $tag->setName($name);
 
-            $code = str_replace(' ', '-', strtolower($name));
+            $code = \str_replace(' ', '-', \mb_strtolower($name));
             if (isset($publicTags[$code])) {
-                $this->addReference(sprintf('tag-%s', $code), $tag);
+                $this->addReference(\sprintf('tag-%s', $code), $tag);
             }
 
             $manager->persist($tag);

@@ -24,10 +24,10 @@ final class AddThoughtAction
      * @param ThoughtfulInterface $parent
      * @param UserInterface       $user
      *
-     * @return ThoughtInterface
-     *
      * @throws \App\Security\Exception\SecurityException
      * @throws \App\Thought\Exception\NotSupportedThoughtException
+     *
+     * @return ThoughtInterface
      */
     public function __invoke(ThoughtInterface $data, ThoughtfulInterface $parent, UserInterface $user)
     {

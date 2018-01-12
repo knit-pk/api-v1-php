@@ -14,10 +14,10 @@ class AdminSerializerGroupFactory
      */
     public function createAdminGroup(string $resourceClass, string $postfix): string
     {
-        if ($position = strrpos($resourceClass, '\\')) {
-            $shortName = substr($resourceClass, 1 + $position);
+        if ($position = \mb_strrpos($resourceClass, '\\')) {
+            $shortName = \mb_substr($resourceClass, 1 + $position);
         }
 
-        return sprintf('%sAdmin%s', $shortName ?? $resourceClass, ucfirst($postfix));
+        return \sprintf('%sAdmin%s', $shortName ?? $resourceClass, \ucfirst($postfix));
     }
 }

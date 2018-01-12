@@ -31,22 +31,26 @@
     }
   ],
   "require-dev": {
-    "symfony/profiler-pack": "^1.0",
-    "symfony/web-server-bundle": "^4",
-    "javiereguiluz/easyadmin-bundle": "^1.17",
+    "api-platform/schema-generator": "^2.0",
     "doctrine/doctrine-fixtures-bundle": "^2.4",
-    "symfony/dotenv": "^4",
-    "symfony/console": "^4",
-    "phpunit/phpunit": "^6.5",
-    "phpstan/phpstan": "^0.9.1",
     "friendsofphp/php-cs-fixer": "^2.9",
-    "api-platform/schema-generator": "^2.0"
+    "javiereguiluz/easyadmin-bundle": "^1.17",
+    "phpstan/phpstan": "^0.9.1",
+    "phpstan/phpstan-doctrine": "^0.9.1",
+    "jangregor/phpstan-prophecy": "^0.1.0",
+    "phpunit/phpunit": "^6.5",
+    "symfony/console": "^4",
+    "symfony/dotenv": "^4",
+    "symfony/profiler-pack": "^1.0",
+    "symfony/web-server-bundle": "^4"
   },
   "config": {
     "preferred-install": {
       "*": "dist"
     },
-    "sort-packages": true
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "apcu-autoloader": true
   },
   "autoload": {
     "psr-4": {
@@ -60,9 +64,9 @@
   },
   "scripts": {
     "test": [
-      "phpunit",
-      "php-cs-fixer fix --dry-run --diff --allow-risky=true",
-      "phpstan analyze src tests --level=4"
+      "phpstan analyze src tests -l 6",
+      "php-cs-fixer fix --dry-run --diff",
+      "phpunit"
     ],
     "fix": "php-cs-fixer fix",
     "auto-scripts": {

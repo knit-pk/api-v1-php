@@ -25,7 +25,7 @@ class CategoryFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        $publicCategories = array_flip(self::PUBLIC_CATEGORY_CODES);
+        $publicCategories = \array_flip(self::PUBLIC_CATEGORY_CODES);
 
         foreach ($this->getCategoriesData() as ['name' => $name]) {
             $category = new Category();
@@ -33,9 +33,9 @@ class CategoryFixtures extends Fixture
 
             $manager->persist($category);
 
-            $code = str_replace(' ', '-', strtolower($name));
+            $code = \str_replace(' ', '-', \mb_strtolower($name));
             if (isset($publicCategories[$code])) {
-                $this->addReference(sprintf('category-%s', $code), $category);
+                $this->addReference(\sprintf('category-%s', $code), $category);
             }
         }
 

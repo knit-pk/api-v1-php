@@ -21,49 +21,49 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *
  * @see http://schema.org/ImageObject Documentation on Schema.org
  *
- * @Vich\Uploadable()
+ * @Vich\Uploadable
  *
  * @ApiResource(iri="http://schema.org/ImageObject",
- * attributes={
- *      "normalization_context"={"groups"={"ImageRead"}},
- *      "denormalization_context"={"groups"={"ImageWrite"}},
- * },
- * collectionOperations={
- *     "get"={
- *          "method"="GET",
+ *     attributes={
+ *         "normalization_context": {"groups": {"ImageRead"}},
+ *         "denormalization_context": {"groups": {"ImageWrite"}},
  *     },
- *     "post"={
- *          "method"="POST",
- *          "access_control"="is_granted('ROLE_READER')",
+ *     collectionOperations={
+ *         "get": {
+ *             "method": "GET",
+ *         },
+ *         "post": {
+ *             "method": "POST",
+ *             "access_control": "is_granted('ROLE_READER')",
+ *         },
+ *         "upload": {
+ *             "route_name": "api_images_upload",
+ *             "access_control": "is_granted('ROLE_READER')",
+ *         },
  *     },
- *     "upload"={
- *          "route_name"="api_images_upload",
- *          "access_control"="is_granted('ROLE_READER')",
- *     },
- * },
- * itemOperations={
- *     "get"={
- *          "method"="GET",
- *     },
- *     "put"={
- *          "method"="PUT",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
- *     },
- *     "delete"={
- *          "method"="DELETE",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
- *     },
- * })
+ *     itemOperations={
+ *         "get": {
+ *             "method": "GET",
+ *         },
+ *         "put": {
+ *             "method": "PUT",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *         },
+ *         "delete": {
+ *             "method": "DELETE",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *         },
+ *     })
  *
- * @ORM\Entity()
- * @ORM\Table(name="images")
+ *     @ORM\Entity
+ *     @ORM\Table(name="images")
  */
 class Image
 {
     /**
      * @var Uuid
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -79,43 +79,43 @@ class Image
      *
      * @ORM\Column(type="string")
      *
-     * @Assert\Url()
+     * @Assert\Url
      *
-     * @Groups({"ImageRead","ImageWrite","ImageReadLess","UserReadLess"})
+     * @Groups({"ImageRead", "ImageWrite", "ImageReadLess", "UserReadLess"})
      */
     protected $url;
 
     /**
      * @var int|null file size in bytes
      *
-     * @ORM\Column(name="file_size",type="bigint",nullable=true)
+     * @ORM\Column(name="file_size", type="bigint", nullable=true)
      *
      * @ApiProperty(iri="http://schema.org/contentSize")
      *
-     * @Groups({"ImageRead","ImageWrite"})
+     * @Groups({"ImageRead", "ImageWrite"})
      */
     protected $size;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string",unique=true,nullable=true)
+     * @ORM\Column(type="string", unique=true, nullable=true)
      */
     protected $fileName;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string",nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      *
-     * @Groups({"ImageRead","ImageWrite"})
+     * @Groups({"ImageRead", "ImageWrite"})
      */
     protected $originalName;
 
     /**
      * @var File|null
      *
-     * @Vich\UploadableField(mapping="images",fileNameProperty="fileName",originalName="originalName",size="size")
+     * @Vich\UploadableField(mapping="images", fileNameProperty="fileName", originalName="originalName", size="size")
      */
     protected $file;
 
@@ -123,16 +123,16 @@ class Image
      * @var User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE",nullable=true)
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
      *
-     * @Groups({"ImageRead","ImageWrite"})
+     * @Groups({"ImageRead", "ImageWrite"})
      */
     protected $author;
 
     /**
      * @var DateTime|null date when this media object was uploaded to this site
      *
-     * @ORM\Column(type="datetime",nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      *
      * @Groups({"ImageRead"})
      */

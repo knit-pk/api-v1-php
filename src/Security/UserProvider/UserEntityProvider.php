@@ -23,9 +23,9 @@ class UserEntityProvider
     /**
      * @param \Symfony\Component\Security\Core\User\UserInterface $user
      *
-     * @return \App\Entity\User
-     *
      * @throws \App\Security\Exception\SecurityException
+     *
+     * @return \App\Entity\User
      */
     public function getUser(SymfonyUserInterface $user): User
     {
