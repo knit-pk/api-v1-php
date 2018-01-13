@@ -3,8 +3,8 @@ ifndef APP_ENV
 endif
 
 fix-symfony-cache:
-	@printf "Fixing symfony cache.\n"
-	@chmod -R 777 ${APP_VAR_PATH}/cache/${APP_ENV}
+	@printf "## Fixing symfony cache ### \n"
+	@chmod -R 777 /var/www/app/var
 .PHONY: fix-symfony-cache
 
 cache-warmup-docker: cache-warmup
