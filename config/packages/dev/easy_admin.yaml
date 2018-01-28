@@ -9,7 +9,7 @@ easy_admin:
                     - username
                     - fullname
                     - email
-                    - { property: 'avatar', type: 'image' }
+                    - { property: 'avatar.url', type: 'image' }
                     - securityRoles
                     - enabled
                     - superAdmin
@@ -18,7 +18,7 @@ easy_admin:
                     - fullname
                     - username
                     - email
-                    - avatar
+                    - { property: 'avatar', type_options: { choice_label: 'originalName' } }
                     - enabled
                     - superAdmin
                     - lastLogin
@@ -59,7 +59,7 @@ easy_admin:
                 fields:
                     - title
                     - category
-                    - image
+                    - { property: 'image', type_options: { choice_label: 'originalName' } }
                     - description
                     - content
                     - tags
@@ -102,7 +102,7 @@ easy_admin:
             list:
                 fields:
                     - originalName
-                    - { label: 'Image', property: url, type: 'image' }
+                    - { label: 'Image', property: 'url', type: 'image' }
                     - author
                     - uploadedAt
                     - createdAt

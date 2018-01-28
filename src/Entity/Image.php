@@ -112,9 +112,11 @@ class Image
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string")
      *
      * @Groups({"ImageRead", "ImageWrite"})
+     *
+     * @Assert\NotBlank
      */
     protected $originalName;
 
@@ -191,7 +193,7 @@ class Image
         return $this->uploadedAt;
     }
 
-    public function setFile(?File $image = null): void
+    public function setFile(?File $image): void
     {
         $this->file = $image;
     }
