@@ -65,12 +65,13 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "App\\Tests\\": "tests/"
+      "App\\Tests\\": "tests/",
+      "App\\Tests\\Feature\\": "features/bootstrap/"
     }
   },
   "scripts": {
     "test": [
-      "phpstan analyze src tests -l 6",
+      "phpstan analyze src tests features -l 6",
       "php-cs-fixer fix -v --dry-run --diff --stop-on-violation",
       "phpunit"
     ],

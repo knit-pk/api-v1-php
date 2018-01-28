@@ -2,7 +2,7 @@ default:
     suites:
         default:
             contexts:
-                - FeatureContext:
+                - App\Tests\Feature\FeatureContext:
                     kernel: '@kernel'
                 - Behat\MinkExtension\Context\MinkContext
                 - behatch:context:json
