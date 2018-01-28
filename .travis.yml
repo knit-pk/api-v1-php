@@ -44,3 +44,4 @@ script:
   - composer test
   - if [[ -v DATABASE_URL ]]; then bin/console doctrine:schema:create; fi
   - if [[ -v DATABASE_URL ]]; then bin/console doctrine:fixtures:load -n; fi
+  - if [[ -v DATABASE_URL ]]; then composer test-features -n; fi
