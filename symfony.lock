@@ -14,11 +14,41 @@
     "api-platform/schema-generator": {
         "version": "v2.0.2"
     },
+    "behat/behat": {
+        "version": "v3.4.3"
+    },
+    "behat/gherkin": {
+        "version": "v4.5.1"
+    },
+    "behat/mink": {
+        "version": "v1.7.1"
+    },
+    "behat/mink-browserkit-driver": {
+        "version": "v1.3.2"
+    },
+    "behat/mink-extension": {
+        "version": "2.3.0"
+    },
+    "behat/symfony2-extension": {
+        "version": "2.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.1",
+            "ref": "6b63fb76d3bb2dd16098f12adf6d6ca844e21862"
+        }
+    },
     "behat/transliterator": {
         "version": "v1.2.0"
     },
+    "behatch/contexts": {
+        "version": "3.0.1"
+    },
     "composer/semver": {
         "version": "1.4.2"
+    },
+    "container-interop/container-interop": {
+        "version": "1.2.0"
     },
     "doctrine/annotations": {
         "version": "v1.5.0"
@@ -124,6 +154,9 @@
     },
     "jms/metadata": {
         "version": "1.6.0"
+    },
+    "justinrainbow/json-schema": {
+        "version": "5.2.6"
     },
     "league/html-to-markdown": {
         "version": "4.6.0"
@@ -317,8 +350,14 @@
     "symfony/asset": {
         "version": "v3.3.10"
     },
+    "symfony/browser-kit": {
+        "version": "v3.4.3"
+    },
     "symfony/cache": {
         "version": "v3.3.10"
+    },
+    "symfony/class-loader": {
+        "version": "v3.4.3"
     },
     "symfony/config": {
         "version": "v3.3.10"
@@ -332,6 +371,9 @@
             "ref": "5ec5bb098bc693cd92f03390dd488ea0847cfcc7"
         }
     },
+    "symfony/css-selector": {
+        "version": "v3.4.3"
+    },
     "symfony/debug": {
         "version": "v3.3.10"
     },
@@ -340,6 +382,9 @@
     },
     "symfony/doctrine-bridge": {
         "version": "v3.3.10"
+    },
+    "symfony/dom-crawler": {
+        "version": "v3.4.3"
     },
     "symfony/dotenv": {
         "version": "v3.3.10"
