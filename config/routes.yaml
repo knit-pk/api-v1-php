@@ -17,6 +17,17 @@ article_add_comment:
             resource_class: App\Entity\Article
         _api_resource_class: App\Entity\Comment
 
+article_add_rating:
+    path: '/articles/{id}/ratings'
+    methods: ['POST']
+    defaults:
+        _controller: App\Action\Thought\AddThoughtAction
+        _api_collection_operation_name: article_add_rating
+        _api_parent_context:
+            item_operation_name: api_ratings_get_item
+            resource_class: App\Entity\Article
+        _api_resource_class: App\Entity\Rating
+
 comment_add_comment_reply:
     path: '/comments/{id}/comment_replies'
     methods: ['POST']

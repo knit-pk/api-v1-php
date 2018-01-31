@@ -150,6 +150,17 @@ class Article implements ThoughtfulInterface
     protected $comments;
 
     /**
+     * @var ArrayCollection|Rating[] ratings, typically from users
+     *
+     * @ORM\OneToMany(targetEntity="Rating", mappedBy="article", cascade={"remove"})
+     *
+     * @Groups({"ArticleRead", "ArticleWrite"})
+     *
+     * @ApiSubresource
+     */
+    protected $ratings;
+
+    /**
      * @var int Aggregate field that contains total number of comments and its replies
      *
      * @ORM\Column(type="integer", options={"unsigned": true})
@@ -252,6 +263,7 @@ class Article implements ThoughtfulInterface
     {
         $this->tags = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
         $this->commentsCount = 0;
         $this->published = false;
     }
@@ -324,6 +336,21 @@ class Article implements ThoughtfulInterface
     public function getComments(): Collection
     {
         return $this->comments;
+    }
+
+    public function addRating(Rating $rating): void
+    {
+        $this->ratings[] = $rating;
+    }
+
+    public function removeRating(Rating $rating): void
+    {
+        $this->ratings->removeElement($rating);
+    }
+
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
     }
 
     public function getCommentsCount(): int
@@ -407,7 +434,7 @@ class Article implements ThoughtfulInterface
      */
     public function isThoughtSupported(ThoughtInterface $thought): bool
     {
-        return $thought instanceof Comment;
+        return $thought instanceof Comment || $thought instanceof Rating;
     }
 
     /**
@@ -419,6 +446,7 @@ class Article implements ThoughtfulInterface
     {
         return [
             Comment::class,
+            Rating::class,
         ];
     }
 }

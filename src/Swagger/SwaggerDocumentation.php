@@ -24,10 +24,14 @@ final class SwaggerDocumentation implements NormalizerInterface
         '/comment_replies/{id}' => ['get'],
         '/articles/{id}/comments' => ['get'],
         '/articles/{id}/comments/{id}' => ['get'],
+        '/articles/{id}/ratings' => ['get'],
+        '/articles/{id}/ratings/{id}' => ['get'],
         '/projects' => ['get'],
         '/projects/{id}' => ['get'],
         '/teams' => ['get'],
         '/teams/{id}' => ['get'],
+        '/ratings' => ['get'],
+        '/ratings/{id}' => ['get'],
         '/tags' => ['get'],
         '/tags/{id}' => ['get'],
         '/categories' => ['get'],
@@ -303,6 +307,42 @@ final class SwaggerDocumentation implements NormalizerInterface
                             'description' => 'Successfully created resource',
                             'schema' => [
                                 '$ref' => '#/definitions/Comment-CommentRead',
+                            ],
+                        ],
+                        '400' => [
+                            'description' => 'Invalid input',
+                        ],
+                    ],
+                ]),
+            ],
+            '/articles/{id}/ratings' => [
+                'post' => new ArrayObject([
+                    'tags' => ['Article', 'Rating'],
+                    'consumes' => 'application/json',
+                    'produces' => 'application/json',
+                    'summary' => 'Adds a Rating to an Article.',
+                    'description' => 'Adds a Rating to an Article resource as current user.',
+                    'parameters' => [
+                        [
+                            'name' => 'id',
+                            'in' => 'path',
+                            'type' => 'string',
+                            'format' => 'uuid',
+                            'required' => true,
+                        ],
+                        [
+                            'name' => 'comment',
+                            'in' => 'body',
+                            'schema' => [
+                                '$ref' => '#/definitions/Rating-RatingWriteLess',
+                            ],
+                        ],
+                    ],
+                    'responses' => [
+                        '200' => [
+                            'description' => 'Successfully created resource',
+                            'schema' => [
+                                '$ref' => '#/definitions/Rating-RatingRead',
                             ],
                         ],
                         '400' => [

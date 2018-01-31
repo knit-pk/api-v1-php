@@ -52,7 +52,7 @@ Requirements to work with project: `git`, `docker`, `docker-compose`
 
 ## Informations
 Docker images:
-- PHP (php:7.2-fpm-alpine)
+- PHP (php:7.2-fpm-alpine3.7)
 - Nginx (nginx:alpine)
 - Varnish - Http Cache (alpine:3.7)
 - MySQL (mysql:5.7)
