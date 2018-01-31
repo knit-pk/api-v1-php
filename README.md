@@ -52,13 +52,13 @@ Requirements to work with project: `git`, `docker`, `docker-compose`
 
 ## Informations
 Docker images:
-- PHP (php:7.1-fpm-alpine)
+- PHP (php:7.2-fpm-alpine)
 - Nginx (nginx:alpine)
-- Varnish - Http Cache (alpine:3.6)
+- Varnish - Http Cache (alpine:3.7)
 - MySQL (mysql:5.7)
 
 PHP Stack:
-- Symfony (v3.3.*)
+- Symfony (v4.0.*)
 - Api Platform (v2.1.*)
 
 ## Postman Collection
