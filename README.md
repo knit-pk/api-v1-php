@@ -1,5 +1,6 @@
 # KNIT Restful API
 ![travis](https://api.travis-ci.org/knit-pk/api-v1-php.svg?branch=develop)
+[![Dependency Status](https://www.versioneye.com/user/projects/5a70e3ec0fb24f66805a3837/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a70e3ec0fb24f66805a3837)
 
 Development configuration of KNIT API written in PHP, deployed using docker.
 
@@ -51,13 +52,13 @@ Requirements to work with project: `git`, `docker`, `docker-compose`
 
 ## Informations
 Docker images:
-- PHP (php:7.1-fpm-alpine)
+- PHP (php:7.2-fpm-alpine)
 - Nginx (nginx:alpine)
-- Varnish - Http Cache (alpine:3.6)
+- Varnish - Http Cache (alpine:3.7)
 - MySQL (mysql:5.7)
 
 PHP Stack:
-- Symfony (v3.3.*)
+- Symfony (v4.0.*)
 - Api Platform (v2.1.*)
 
 ## Postman Collection
