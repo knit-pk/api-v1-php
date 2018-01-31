@@ -25,10 +25,10 @@ final class SwaggerSearchFilter implements FilterInterface
         foreach ($description as $property => $data) {
             $descriptionText = $this->getDescriptionText($data['strategy']);
 
-            if ('[]' === substr($property, -2)) {
-                $descriptionText = sprintf('Multiple Selection: %1$s. Example usage: ?%2$s[]=%2$s&%2$s[]=%2$s', $descriptionText, substr($property, 0, -2));
+            if ('[]' === \mb_substr($property, -2)) {
+                $descriptionText = \sprintf('Multiple Selection: %1$s. Example usage: ?%2$s[]=%2$s&%2$s[]=%2$s', $descriptionText, \mb_substr($property, 0, -2));
             } else {
-                $descriptionText = sprintf('Filter: %s.', $descriptionText);
+                $descriptionText = \sprintf('Filter: %s.', $descriptionText);
             }
 
             $description[$property]['swagger'] = [
@@ -59,7 +59,7 @@ final class SwaggerSearchFilter implements FilterInterface
                 return 'Begins with - property must start with provided value';
                 break;
             default:
-                throw new DomainException(sprintf('Unimplemented description text for search strategy: %s', $strategy));
+                throw new DomainException(\sprintf('Unimplemented description text for search strategy: %s', $strategy));
         }
     }
 }

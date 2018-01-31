@@ -26,50 +26,50 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  *
  * @ApiResource(iri="http://schema.org/Person",
- * attributes={
- *     "filters"={"app.user.group_filter"},
- *     "normalization_context"={"groups"={"UserRead"}},
- *     "denormalization_context"={"groups"={"UserWrite"}},
- * },
- * collectionOperations={
- *     "get"={
- *          "method"="GET",
- *          "access_control"="is_granted('ROLE_READER')",
+ *     attributes={
+ *         "filters": {"app.user.group_filter"},
+ *         "normalization_context": {"groups": {"UserRead"}},
+ *         "denormalization_context": {"groups": {"UserWrite"}},
  *     },
- *     "post"={
- *          "method"="POST",
- *          "access_control"="is_granted('ROLE_USER_WRITER')",
+ *     collectionOperations={
+ *         "get": {
+ *             "method": "GET",
+ *             "access_control": "is_granted('ROLE_READER')",
+ *         },
+ *         "post": {
+ *             "method": "POST",
+ *             "access_control": "is_granted('ROLE_USER_WRITER')",
+ *         },
  *     },
- * },
- * itemOperations={
- *     "get"={
- *          "method"="GET",
- *          "access_control"="is_granted('ROLE_READER')",
- *     },
- *     "put"={
- *          "method"="PUT",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isUser(user))",
- *     },
- *     "delete"={
- *          "method"="DELETE",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isUser(user))",
- *     },
- * })
+ *     itemOperations={
+ *         "get": {
+ *             "method": "GET",
+ *             "access_control": "is_granted('ROLE_READER')",
+ *         },
+ *         "put": {
+ *             "method": "PUT",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isUser(user))",
+ *         },
+ *         "delete": {
+ *             "method": "DELETE",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isUser(user))",
+ *         },
+ *     })
  *
- * @ORM\Entity()
- * @ORM\Table(name="users")
+ *     @ORM\Entity
+ *     @ORM\Table(name="users")
  */
 class User implements UserInterface, FOSUserInterface
 {
     /**
      * @var Uuid
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
-     * @Groups({"UserRead","UserReadLess"})
+     * @Groups({"UserRead", "UserReadLess"})
      */
     protected $id;
 
@@ -78,16 +78,16 @@ class User implements UserInterface, FOSUserInterface
      *
      * @ApiProperty(iri="http://schema.org/alternateName")
      *
-     * @ORM\Column(name="username",type="string",length=180)
+     * @ORM\Column(name="username", type="string", length=180)
      *
-     * @Groups({"UserRead","UserReadLess","UserWrite"})
+     * @Groups({"UserRead", "UserReadLess", "UserWrite"})
      */
     protected $username;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="username_canonical",type="string",length=180,unique=true)
+     * @ORM\Column(name="username_canonical", type="string", length=180, unique=true)
      */
     protected $usernameCanonical;
 
@@ -96,18 +96,18 @@ class User implements UserInterface, FOSUserInterface
      *
      * @ApiProperty(iri="http://schema.org/email")
      *
-     * @ORM\Column(name="email",type="string",length=180)
+     * @ORM\Column(name="email", type="string", length=180)
      *
-     * @Assert\Email()
+     * @Assert\Email
      *
-     * @Groups({"UserRead","UserReadLess","UserWrite"})
+     * @Groups({"UserRead", "UserReadLess", "UserWrite"})
      */
     protected $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email_canonical",type="string",length=180,unique=true)
+     * @ORM\Column(name="email_canonical", type="string", length=180, unique=true)
      */
     protected $emailCanonical;
 
@@ -116,16 +116,16 @@ class User implements UserInterface, FOSUserInterface
      *
      * @ApiProperty(iri="http://schema.org/name")
      *
-     * @ORM\Column(type="string",nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      *
-     * @Groups({"UserRead","UserWrite","UserReadLess"})
+     * @Groups({"UserRead", "UserWrite", "UserReadLess"})
      */
     protected $fullname;
 
     /**
      * Encrypted password. Must be persisted.
      *
-     * @ORM\Column(name="hash",type="string")
+     * @ORM\Column(name="hash", type="string")
      *
      * @var string
      */
@@ -146,9 +146,9 @@ class User implements UserInterface, FOSUserInterface
      * @var Image
      *
      * @ORM\ManyToOne(targetEntity="Image")
-     * @ORM\JoinColumn(name="avatar_image_id",referencedColumnName="id",onDelete="RESTRICT")
+     * @ORM\JoinColumn(name="avatar_image_id", referencedColumnName="id", onDelete="RESTRICT")
      *
-     * @Groups({"UserRead","UserWrite","UserReadLess"})
+     * @Groups({"UserRead", "UserWrite", "UserReadLess"})
      */
     protected $avatar;
 
@@ -177,32 +177,32 @@ class User implements UserInterface, FOSUserInterface
     /**
      * @var SecurityRole[]|ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="SecurityRole",inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="SecurityRole", inversedBy="users")
      * @ORM\JoinTable(name="users_security_roles",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="user_id",referencedColumnName="id",onDelete="CASCADE")
-     *      },inverseJoinColumns={
-     *          @ORM\JoinColumn(name="security_role_id",referencedColumnName="id",onDelete="CASCADE")
-     *      }
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     *         }, inverseJoinColumns={
+     *         @ORM\JoinColumn(name="security_role_id", referencedColumnName="id", onDelete="CASCADE")
+     *     }
      * )
      *
-     * @Groups({"UserAdminWrite","UserAdminRead"})
+     * @Groups({"UserAdminWrite", "UserAdminRead"})
      */
     protected $securityRoles;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="enabled",type="boolean")
+     * @ORM\Column(name="enabled", type="boolean")
      *
-     * @Groups({"UserAdminWrite","UserAdminRead"})
+     * @Groups({"UserAdminWrite", "UserAdminRead"})
      */
     protected $enabled;
 
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="last_login",type="datetime",nullable=true)
+     * @ORM\Column(name="last_login", type="datetime", nullable=true)
      *
      * @Groups({"UserAdminRead"})
      */
@@ -211,7 +211,7 @@ class User implements UserInterface, FOSUserInterface
     /**
      * Random string sent to the user email address in order to verify it.
      *
-     * @ORM\Column(name="confirmation_token",type="string",length=180,unique=true,nullable=true)
+     * @ORM\Column(name="confirmation_token", type="string", length=180, unique=true, nullable=true)
      *
      * @var string
      */
@@ -220,14 +220,14 @@ class User implements UserInterface, FOSUserInterface
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="password_requested_at",type="datetime",nullable=true)
+     * @ORM\Column(name="password_requested_at", type="datetime", nullable=true)
      */
     protected $passwordRequestedAt;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="super_admin",type="boolean")
+     * @ORM\Column(name="super_admin", type="boolean")
      *
      * @Groups({"UserAdminRead"})
      */
@@ -248,7 +248,7 @@ class User implements UserInterface, FOSUserInterface
      */
     public function serialize()
     {
-        return serialize([
+        return \serialize([
             $this->id,
             $this->username,
             $this->usernameCanonical,
@@ -274,7 +274,7 @@ class User implements UserInterface, FOSUserInterface
             $this->hash,
             $this->enabled,
             $this->superAdmin,
-        ] = unserialize($serialized, ['allowed_classes' => true]);
+        ] = \unserialize($serialized, ['allowed_classes' => true]);
     }
 
     public function getId(): ?UuidInterface
@@ -331,9 +331,9 @@ class User implements UserInterface, FOSUserInterface
     /**
      * @param SecurityRole $role
      *
-     * @return self
-     *
      * @throws \DomainException
+     *
+     * @return self
      */
     public function addRole($role): self
     {
@@ -362,7 +362,7 @@ class User implements UserInterface, FOSUserInterface
             $roles[] = static::ROLE_SUPER_ADMIN;
         }
 
-        return array_values(array_unique($roles));
+        return \array_values(\array_unique($roles));
     }
 
     /**
@@ -648,7 +648,7 @@ class User implements UserInterface, FOSUserInterface
         $passwordRequestedAt = $this->getPasswordRequestedAt();
 
         return (int) ($passwordRequestedAt instanceof DateTime &&
-            $passwordRequestedAt->getTimestamp() + $ttl > time());
+            $passwordRequestedAt->getTimestamp() + $ttl > \time());
     }
 
     /**

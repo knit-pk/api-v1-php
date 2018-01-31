@@ -59,3 +59,8 @@ services:
         class: App\Swagger\Filter\SwaggerSearchFilter
         decorates: 'app.comment_reply.search_filter'
         arguments: [ '@app.swagger.comment_reply.search_filter.inner' ]
+
+    app.swagger.comment_reply.group_filter:
+        class: App\Swagger\Filter\SwaggerGroupFilter
+        decorates: 'app.comment_reply.group_filter'
+        arguments: [ '@app.swagger.comment_reply.group_filter.inner' ]

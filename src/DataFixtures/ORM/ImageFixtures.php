@@ -19,13 +19,13 @@ class ImageFixtures extends Fixture
      *
      * @param ObjectManager $manager
      *
+     * @throws \DomainException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      * @throws \Symfony\Component\Filesystem\Exception\FileNotFoundException
      * @throws \Symfony\Component\HttpFoundation\File\Exception\FileException
-     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     public function load(ObjectManager $manager): void
     {
@@ -37,13 +37,12 @@ class ImageFixtures extends Fixture
             if ($defaultAvatarImage->isFile()) {
                 $fs->copy($defaultAvatarImage->getRealPath(), $tempFile, true);
 
-                $avatar = new Image();
                 $file = new UploadedFile($tempFile, $data['name'], null, $defaultAvatarImage->getSize(), null, true);
-                $avatar->setFile($file);
+                $avatar = Image::fromFile($file);
 
                 $manager->persist($avatar);
 
-                $this->addReference(sprintf('image-%s', $data['name']), $avatar);
+                $this->addReference(\sprintf('image-%s', $data['name']), $avatar);
             }
         }
 

@@ -25,43 +25,43 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @see http://schema.org/Article Documentation on Schema.org
  *
  * @ApiResource(iri="http://schema.org/Article",
- * attributes={
- *     "filters"={"app.article.search_filter","app.article.boolean_filter","app.article.group_filter","app.article.order_filter"},
- *     "normalization_context"={"groups"={"ArticleRead"}},
- *     "denormalization_context"={"groups"={"ArticleWrite"}},
- * },
- * collectionOperations={
- *     "get"={
- *          "method"="GET",
+ *     attributes={
+ *         "filters": {"app.article.search_filter", "app.article.boolean_filter", "app.article.group_filter", "app.article.order_filter"},
+ *         "normalization_context": {"groups": {"ArticleRead"}},
+ *         "denormalization_context": {"groups": {"ArticleWrite"}},
  *     },
- *     "post"={
- *          "method"="POST",
- *          "access_control"="is_granted('ROLE_READER')",
+ *     collectionOperations={
+ *         "get": {
+ *             "method": "GET",
+ *         },
+ *         "post": {
+ *             "method": "POST",
+ *             "access_control": "is_granted('ROLE_READER')",
+ *         },
  *     },
- * },
- * itemOperations={
- *     "get"={
- *          "method"="GET",
- *     },
- *     "put"={
- *          "method"="PUT",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
- *     },
- *     "delete"={
- *          "method"="DELETE",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
- *     },
- * })
+ *     itemOperations={
+ *         "get": {
+ *             "method": "GET",
+ *         },
+ *         "put": {
+ *             "method": "PUT",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *         },
+ *         "delete": {
+ *             "method": "DELETE",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *         },
+ *     })
  *
- * @ORM\Entity()
- * @ORM\Table(name="articles")
+ *     @ORM\Entity
+ *     @ORM\Table(name="articles")
  */
 class Article implements ThoughtfulInterface
 {
     /**
      * @var Uuid
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -73,9 +73,9 @@ class Article implements ThoughtfulInterface
     /**
      * @var string
      *
-     * @ORM\Column(type="string",unique=true)
+     * @ORM\Column(type="string", unique=true)
      *
-     * @Gedmo\Slug(fields={"createdAt","title"},separator="-",updatable=true,unique=true,dateFormat="Y/m")
+     * @Gedmo\Slug(fields={"createdAt", "title"}, separator="-", updatable=true, unique=true, dateFormat="Y/m")
      *
      * @Groups({"ArticleRead"})
      */
@@ -84,14 +84,14 @@ class Article implements ThoughtfulInterface
     /**
      * @var string|null the title of the article
      *
-     * @ORM\Column(type="string",nullable=false)
+     * @ORM\Column(type="string", nullable=false)
      *
      * @ApiProperty(iri="http://schema.org/name")
      *
-     * @Assert\NotBlank()
-     * @Assert\Length(min="3",max="100")
+     * @Assert\NotBlank
+     * @Assert\Length(min="3", max="100")
      *
-     * @Groups({"ArticleRead","ArticleWrite"})
+     * @Groups({"ArticleRead", "ArticleWrite"})
      */
     protected $title;
 
@@ -102,9 +102,9 @@ class Article implements ThoughtfulInterface
      *
      * @ApiProperty(iri="http://schema.org/articleBody")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      *
-     * @Groups({"ArticleRead","ArticleWrite"})
+     * @Groups({"ArticleRead", "ArticleWrite"})
      */
     protected $content;
 
@@ -112,11 +112,11 @@ class Article implements ThoughtfulInterface
      * @var Category articles may belong to one category
      *
      * @ORM\ManyToOne(targetEntity="Category")
-     * @ORM\JoinColumn(name="category_id",referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @ApiProperty(iri="http://schema.org/articleSection")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      *
      * @Groups({"ArticleRead", "ArticleWrite"})
      */
@@ -127,43 +127,43 @@ class Article implements ThoughtfulInterface
      *
      * @ORM\ManyToMany(targetEntity="Tag")
      * @ORM\JoinTable(name="articles_tags",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="article_id",referencedColumnName="id",onDelete="CASCADE")
-     *      },inverseJoinColumns={
-     *          @ORM\JoinColumn(name="tag_id",referencedColumnName="id",onDelete="CASCADE")
-     *      },
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="article_id", referencedColumnName="id", onDelete="CASCADE")
+     *         }, inverseJoinColumns={
+     *         @ORM\JoinColumn(name="tag_id", referencedColumnName="id", onDelete="CASCADE")
+     *     },
      * )
      *
-     * @Groups({"ArticleRead","ArticleWrite"})
+     * @Groups({"ArticleRead", "ArticleWrite"})
      */
     protected $tags;
 
     /**
      * @var ArrayCollection|Comment[] comments, typically from users
      *
-     * @ORM\OneToMany(targetEntity="Comment",mappedBy="article",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="article", cascade={"remove"})
      *
-     * @Groups({"ArticleRead","ArticleWrite"})
+     * @Groups({"ArticleRead", "ArticleWrite"})
      *
-     * @ApiSubresource()
+     * @ApiSubresource
      */
     protected $comments;
 
     /**
      * @var ArrayCollection|Rating[] ratings, typically from users
      *
-     * @ORM\OneToMany(targetEntity="Rating",mappedBy="article",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Rating", mappedBy="article", cascade={"remove"})
      *
-     * @Groups({"ArticleRead","ArticleWrite"})
+     * @Groups({"ArticleRead", "ArticleWrite"})
      *
-     * @ApiSubresource()
+     * @ApiSubresource
      */
     protected $ratings;
 
     /**
      * @var int Aggregate field that contains total number of comments and its replies
      *
-     * @ORM\Column(type="integer",options={"unsigned"=true})
+     * @ORM\Column(type="integer", options={"unsigned": true})
      *
      * @ApiProperty(iri="http://schema.org/commentCount")
      *
@@ -178,10 +178,10 @@ class Article implements ThoughtfulInterface
      *
      * @ApiProperty(iri="http://schema.org/about")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      * @Assert\Length(max="300")
      *
-     * @Groups({"ArticleRead","ArticleWrite"})
+     * @Groups({"ArticleRead", "ArticleWrite"})
      */
     protected $description;
 
@@ -189,13 +189,13 @@ class Article implements ThoughtfulInterface
      * @var User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @ApiProperty(iri="http://schema.org/author")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      *
-     * @Groups({"ArticleRead","ArticleWrite"})
+     * @Groups({"ArticleRead", "ArticleWrite"})
      */
     protected $author;
 
@@ -203,22 +203,22 @@ class Article implements ThoughtfulInterface
      * @var Image|null an image of the item
      *
      * @ORM\ManyToOne(targetEntity="Image")
-     * @ORM\JoinColumn(name="image_id",referencedColumnName="id",onDelete="RESTRICT")
+     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", onDelete="RESTRICT")
      *
      * @ApiProperty(iri="http://schema.org/image")
      *
-     * @Groups({"ArticleRead","ArticleWrite"})
+     * @Groups({"ArticleRead", "ArticleWrite"})
      */
     protected $image;
 
     /**
      * @var DateTime|null date of first broadcast/publication
      *
-     * @ORM\Column(type="datetime",nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      *
      * @ApiProperty(iri="http://schema.org/datePublished")
      *
-     * @Gedmo\Timestampable(on="change",field="published",value=true)
+     * @Gedmo\Timestampable(on="change", field="published", value=true)
      *
      * @Groups({"ArticleRead"})
      */
@@ -229,7 +229,7 @@ class Article implements ThoughtfulInterface
      *
      * @ORM\Column(type="boolean")
      *
-     * @Groups({"ArticleRead","ArticleAdminUpdate"})
+     * @Groups({"ArticleRead", "ArticleAdminUpdate"})
      */
     protected $published;
 
