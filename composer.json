@@ -23,13 +23,6 @@
     "gedmo/doctrine-extensions": "^2.4.32",
     "roave/security-advisories": "dev-master"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/k911/JWTRefreshTokenBundle",
-      "no-api": true
-    }
-  ],
   "require-dev": {
     "api-platform/schema-generator": "^2.0",
     "behat/behat": "^3.4",
