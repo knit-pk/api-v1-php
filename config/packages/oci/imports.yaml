@@ -1,6 +1,0 @@
-imports:
-    - { resource: '../dev/api_platform.yaml' }
-    - { resource: '../dev/easy_admin.yaml' }
-    - { resource: '../dev/monolog.php' }
-    - { resource: '../dev/routing.yaml' }
-    - { resource: '../dev/web_profiler.yaml' }
