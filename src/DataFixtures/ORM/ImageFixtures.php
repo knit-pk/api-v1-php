@@ -8,11 +8,19 @@ use App\Entity\Image;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use SplFileInfo;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageFixtures extends Fixture
 {
     private const APP_ROOT = __DIR__.'/../../../';
+
+    private $filesystem;
+
+    public function __construct(Filesystem $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
 
     /**
      * Load data fixtures with the passed EntityManager.
@@ -26,18 +34,18 @@ class ImageFixtures extends Fixture
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      * @throws \Symfony\Component\Filesystem\Exception\FileNotFoundException
      * @throws \Symfony\Component\HttpFoundation\File\Exception\FileException
+     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     public function load(ObjectManager $manager): void
     {
         $tempFile = self::APP_ROOT.'var/temp.file';
-        $fs = $this->container->get('filesystem');
 
         foreach ($this->getImagesData() as $data) {
             $defaultAvatarImage = new SplFileInfo($data['file']);
             if ($defaultAvatarImage->isFile()) {
-                $fs->copy($defaultAvatarImage->getRealPath(), $tempFile, true);
+                $this->filesystem->copy($defaultAvatarImage->getRealPath(), $tempFile, true);
 
-                $file = new UploadedFile($tempFile, $data['name'], null, $defaultAvatarImage->getSize(), null, true);
+                $file = new UploadedFile($tempFile, $data['name'], null, null, null, true);
                 $avatar = Image::fromFile($file);
 
                 $manager->persist($avatar);

@@ -31,7 +31,7 @@
     "behat/mink-extension": "^2.3",
     "behat/symfony2-extension": "^2.1",
     "behatch/contexts": "^3.0",
-    "doctrine/doctrine-fixtures-bundle": "^2.4",
+    "doctrine/doctrine-fixtures-bundle": "^3.0",
     "friendsofphp/php-cs-fixer": "^2.9",
     "jangregor/phpstan-prophecy": "^0.1.0",
     "javiereguiluz/easyadmin-bundle": "^1.17",

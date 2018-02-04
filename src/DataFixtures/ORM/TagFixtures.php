@@ -22,6 +22,8 @@ class TagFixtures extends Fixture
      * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
+     *
+     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     public function load(ObjectManager $manager): void
     {

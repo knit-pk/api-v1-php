@@ -7,9 +7,10 @@ namespace App\DataFixtures\ORM;
 use App\Entity\Project;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class ProjectFixtures extends Fixture
+class ProjectFixtures extends Fixture implements DependentFixtureInterface
 {
     /**
      * Load data fixtures with the passed EntityManager.
