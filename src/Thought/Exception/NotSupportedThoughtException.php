@@ -16,7 +16,7 @@ final class NotSupportedThoughtException extends RuntimeException
         $thoughtfulRefection = new ReflectionClass($thoughtful);
         $thoughtReflection = new ReflectionClass($thought);
 
-        $message = sprintf('Object %s does not support thought of class %s. Supported: %s.', $thoughtfulRefection->getShortName(), $thoughtReflection->getShortName(), implode(', ', $thoughtful::getSupportedThoughts()));
+        $message = \sprintf('Object %s does not support thought of class %s. Supported: %s.', $thoughtfulRefection->getShortName(), $thoughtReflection->getShortName(), \implode(', ', $thoughtful::getSupportedThoughts()));
         parent::__construct($message, 500, $previous);
     }
 }

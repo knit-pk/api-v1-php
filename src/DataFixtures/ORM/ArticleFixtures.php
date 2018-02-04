@@ -17,6 +17,7 @@ class ArticleFixtures extends Fixture
      *
      * @param ObjectManager $manager
      *
+     * @throws \RuntimeException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \Doctrine\DBAL\DBALException
@@ -34,31 +35,31 @@ class ArticleFixtures extends Fixture
         $image = $this->getReference('image-card-photo-4.jpg');
 
         for ($i = 1; $i <= 10; ++$i) {
-            shuffle($usersCollection);
-            /** @var \App\Entity\User $author */
-            $author = $this->getReference(sprintf('user-%s', $usersCollection[0]));
+            \shuffle($usersCollection);
+            /** @var \App\Entity\User $commentAuthor */
+            $commentAuthor = $this->getReference(\sprintf('user-%s', $usersCollection[0]));
 
-            shuffle($categoryCollection);
+            \shuffle($categoryCollection);
             /** @var \App\Entity\Category $category */
-            $category = $this->getReference(sprintf('category-%s', $categoryCollection[0]));
+            $category = $this->getReference(\sprintf('category-%s', $categoryCollection[0]));
 
-            $articleTitle = sprintf('Article %d', $i);
+            $articleTitle = \sprintf('Article %d', $i);
 
             $article = new Article();
             $article->setTitle($articleTitle);
-            $article->setContent(sprintf('Awesome short %s about.', $articleTitle));
-            $article->setDescription(sprintf('Awesome %s content.', $articleTitle));
-            $article->setAuthor($author);
+            $article->setContent(\sprintf('Awesome short %s about.', $articleTitle));
+            $article->setDescription(\sprintf('Awesome %s content.', $articleTitle));
+            $article->setAuthor($commentAuthor);
             $article->setCategory($category);
             $article->setImage($image);
 
             // Add random number of random tags
-            shuffle($tagCollection);
-            $tagsPerArticle = random_int(1, $tagCollectionTotalItems);
+            \shuffle($tagCollection);
+            $tagsPerArticle = \random_int(1, $tagCollectionTotalItems);
             foreach ($tagCollection as $randomTag) {
-                /** @var \App\Entity\Tag $tag */
-                $tag = $this->getReference(sprintf('tag-%s', $randomTag));
-                $article->addTag($tag);
+                /** @var \App\Entity\Tag $tagReference */
+                $tagReference = $this->getReference(\sprintf('tag-%s', $randomTag));
+                $article->addTag($tagReference);
                 if (0 === --$tagsPerArticle) {
                     break;
                 }
@@ -71,30 +72,44 @@ class ArticleFixtures extends Fixture
         foreach ($this->getArticlesData() as $data) {
             $article = new Article();
             if (isset($data['image'])) {
-                $article->setImage($this->getReference($data['image']));
+                /** @var \App\Entity\Image $image */
+                $image = $this->getReference($data['image']);
+                $article->setImage($image);
             }
             $article->setTitle($data['title']);
-            $article->setAuthor($this->getReference($data['author']));
-            $article->setCategory($this->getReference($data['category']));
+
+            /** @var \App\Entity\User $author */
+            $author = $this->getReference($data['author']);
+            $article->setAuthor($author);
+
+            /** @var \App\Entity\Category $category */
+            $category = $this->getReference($data['category']);
+            $article->setCategory($category);
             $article->setContent($data['content']);
             $article->setDescription($data['description']);
 
-            foreach ($data['tags'] as $tag) {
-                $article->addTag($this->getReference($tag));
+            foreach ($data['tags'] as $tagReference) {
+                /** @var \App\Entity\Tag $tag */
+                $tag = $this->getReference($tagReference);
+                $article->addTag($tag);
             }
 
             if (isset($data['comments'])) {
                 foreach ($data['comments'] as $commentData) {
                     $comment = new Comment();
-                    $comment->setAuthor($this->getReference($commentData['author']));
+                    /** @var \App\Entity\User $commentAuthor */
+                    $commentAuthor = $this->getReference($commentData['author']);
+                    $comment->setAuthor($commentAuthor);
                     $comment->setText($commentData['text']);
                     $comment->setArticle($article);
 
                     if (isset($commentData['replies'])) {
                         foreach ($commentData['replies'] as $replyData) {
                             $reply = new CommentReply();
+                            /** @var \App\Entity\User $replyAuthor */
+                            $replyAuthor = $this->getReference($replyData['author']);
                             $reply->setText($replyData['text']);
-                            $reply->setAuthor($this->getReference($replyData['author']));
+                            $reply->setAuthor($replyAuthor);
                             $reply->setComment($comment);
 
                             $manager->persist($reply);
@@ -322,18 +337,19 @@ Jest jeszcze kilka innych, ale bardziej skomplikowanych sposobów, powodzenia! :
      */
     private function createTriggers()
     {
+        /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->container->get('doctrine.orm.entity_manager')->getConnection();
         $driverName = $connection->getDriver()->getName();
         $sqlName = 'create_comment_triggers';
-        $sqlFile = sprintf('%s/../Resources/sql/%s/%s.sql', __DIR__, $driverName, $sqlName);
+        $sqlFile = \sprintf('%s/../Resources/sql/%s/%s.sql', __DIR__, $driverName, $sqlName);
 
-        if (!is_file($sqlFile)) {
-            dump(sprintf('Notice: SQL File %s could not be found for driver %s', $sqlName, $driverName));
+        if (!\is_file($sqlFile)) {
+            dump(\sprintf('Notice: SQL File %s could not be found for driver %s', $sqlName, $driverName));
 
             return;
         }
 
-        $connection->exec(file_get_contents($sqlFile));
+        $connection->exec(\file_get_contents($sqlFile));
     }
 
     public function getDependencies(): array

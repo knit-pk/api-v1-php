@@ -14,34 +14,34 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(attributes={
- *      "filters"={"app.category.search_filter"},
- *      "normalization_context"={"groups"={"CategoryRead"}},
- *      "denormalization_context"={"groups"={"CategoryWrite"}},
+ *     "filters": {"app.category.search_filter"},
+ *     "normalization_context": {"groups": {"CategoryRead"}},
+ *     "denormalization_context": {"groups": {"CategoryWrite"}},
  * },
  * collectionOperations={
- *     "get"={
- *          "method"="GET",
+ *     "get": {
+ *         "method": "GET",
  *     },
- *     "post"={
- *          "access_control"="is_granted('ROLE_READER')",
- *          "method"="POST",
+ *     "post": {
+ *         "access_control": "is_granted('ROLE_READER')",
+ *         "method": "POST",
  *     },
  * },
  * itemOperations={
- *     "get"={
- *          "method"="GET",
+ *     "get": {
+ *         "method": "GET",
  *     },
- *     "put"={
- *          "method"="PUT",
- *          "access_control"="is_granted('ROLE_ADMIN')",
+ *     "put": {
+ *         "method": "PUT",
+ *         "access_control": "is_granted('ROLE_ADMIN')",
  *     },
- *     "delete"={
- *          "method"="DELETE",
- *          "access_control"="is_granted('ROLE_ADMIN')",
+ *     "delete": {
+ *         "method": "DELETE",
+ *         "access_control": "is_granted('ROLE_ADMIN')",
  *     },
  * })
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="categories")
  */
 class Category
@@ -49,7 +49,7 @@ class Category
     /**
      * @var Uuid
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -63,7 +63,7 @@ class Category
      *
      * @ORM\Column(type="string", unique=true)
      *
-     * @Gedmo\Slug(fields={"name"},separator="-",updatable=true,unique=true)
+     * @Gedmo\Slug(fields={"name"}, separator="-", updatable=true, unique=true)
      *
      * @Groups({"CategoryRead"})
      */
@@ -76,10 +76,10 @@ class Category
      *
      * @ApiProperty(iri="http://schema.org/name")
      *
-     * @Assert\NotBlank()
-     * @Assert\Length(min="3",max="100")
+     * @Assert\NotBlank
+     * @Assert\Length(min="3", max="100")
      *
-     * @Groups({"CategoryRead","CategoryWrite"})
+     * @Groups({"CategoryRead", "CategoryWrite"})
      */
     protected $name;
 

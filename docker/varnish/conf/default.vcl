@@ -5,14 +5,6 @@ import std;
 backend default {
     .host = "api";
     .port = "80";
-    // Health check
-    .probe = {
-        .url = "/";
-        .timeout = 5s;
-        .interval = 10s;
-        .window = 5;
-        .threshold = 3;
-    }
 }
 
 // Hosts allowed to send BAN requests
@@ -113,7 +105,7 @@ sub vcl_hit {
     if (std.healthy(req.backend_hint)) {
         // The backend is healthy
         // Fetch the object from the backend
-        return (fetch);
+        return (miss);
     }
 
     if (obj.ttl + obj.grace > 0s) {

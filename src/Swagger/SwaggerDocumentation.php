@@ -66,7 +66,7 @@ final class SwaggerDocumentation implements NormalizerInterface
     {
         $security = [];
 
-        foreach (array_values(self::SECURITY_METHODS) as $arrayValue) {
+        foreach (\array_values(self::SECURITY_METHODS) as $arrayValue) {
             $security[] = new ArrayObject([$arrayValue => []]);
         }
 
@@ -100,11 +100,11 @@ final class SwaggerDocumentation implements NormalizerInterface
             /** @var ArrayObject $swagger */
             foreach ($methods as $method => $swagger) {
                 if (
-                    !array_key_exists($path, self::NOT_SECURED_PATHS) ||
+                    !\array_key_exists($path, self::NOT_SECURED_PATHS) ||
                     !\in_array($method, self::NOT_SECURED_PATHS[$path], true)
                 ) {
                     if (!$swagger instanceof ArrayObject) {
-                        throw new RuntimeException(sprintf('[Swagger Documentation] Item `swagger.paths[%s][%s]` expected to be represented by an ArrayObject.', $path, $method));
+                        throw new RuntimeException(\sprintf('[Swagger Documentation] Item `swagger.paths[%s][%s]` expected to be represented by an ArrayObject.', $path, $method));
                     }
 
                     $swagger->offsetSet('security', $security);
@@ -254,7 +254,7 @@ final class SwaggerDocumentation implements NormalizerInterface
             '/images/upload' => [
                 'post' => new ArrayObject([
                     'tags' => ['Image'],
-                    'consumes' => 'application/x-www-form-urlencoded',
+                    'consumes' => 'multipart/form-data',
                     'produces' => 'application/json',
                     'summary' => 'Create an Image resource from file.',
                     'description' => 'Create an Image resource from uploaded file.',

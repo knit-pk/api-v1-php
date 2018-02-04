@@ -25,48 +25,48 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @see http://schema.org/Comment Documentation on Schema.org
  *
  * @ApiResource(iri="http://schema.org/Comment",
- * attributes={
- *     "filters"={"app.comment.search_filter","app.comment.group_filter","app.comment.order_filter","app.comment.date_filter"},
- *     "normalization_context"={"groups"={"CommentRead"}},
- *     "denormalization_context"={"groups"={"CommentWrite"}},
- * },
- * collectionOperations={
- *     "get"={
- *          "method"="GET",
+ *     attributes={
+ *         "filters": {"app.comment.search_filter", "app.comment.group_filter", "app.comment.order_filter", "app.comment.date_filter"},
+ *         "normalization_context": {"groups": {"CommentRead"}},
+ *         "denormalization_context": {"groups": {"CommentWrite"}},
  *     },
- *     "post"={
- *          "method"="POST",
- *          "access_control"="is_granted('ROLE_READER')",
+ *     collectionOperations={
+ *         "get": {
+ *             "method": "GET",
+ *         },
+ *         "post": {
+ *             "method": "POST",
+ *             "access_control": "is_granted('ROLE_READER')",
+ *         },
+ *         "article_add_comment": {
+ *             "route_name": "article_add_comment",
+ *             "access_control": "is_granted('ROLE_READER')",
+ *             "denormalization_context": {"groups": {"CommentWriteLess"}},
+ *         },
  *     },
- *     "article_add_comment"={
- *          "route_name"="article_add_comment",
- *          "access_control"="is_granted('ROLE_READER')",
- *          "denormalization_context"={"groups"={"CommentWriteLess"}},
- *     },
- * },
- * itemOperations={
- *     "get"={
- *          "method"="GET",
- *     },
- *     "put"={
- *          "method"="PUT",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
- *     },
- *     "delete"={
- *          "method"="DELETE",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
- *     },
- * })
+ *     itemOperations={
+ *         "get": {
+ *             "method": "GET",
+ *         },
+ *         "put": {
+ *             "method": "PUT",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *         },
+ *         "delete": {
+ *             "method": "DELETE",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *         },
+ *     })
  *
- * @ORM\Entity()
- * @ORM\Table(name="comments")
+ *     @ORM\Entity
+ *     @ORM\Table(name="comments")
  */
 class Comment implements ThoughtInterface, ThoughtfulInterface
 {
     /**
      * @var Uuid
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -78,12 +78,12 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
     /**
      * @var Article
      *
-     * @ORM\ManyToOne(targetEntity="Article",inversedBy="comments")
-     * @ORM\JoinColumn(name="article_id",referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Article", inversedBy="comments")
+     * @ORM\JoinColumn(name="article_id", referencedColumnName="id", onDelete="CASCADE")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      *
-     * @Groups({"CommentRead","CommentWrite"})
+     * @Groups({"CommentRead", "CommentWrite"})
      */
     protected $article;
 
@@ -91,13 +91,13 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
      * @var User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @ApiProperty(iri="http://schema.org/author")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      *
-     * @Groups({"CommentRead","CommentWrite"})
+     * @Groups({"CommentRead", "CommentWrite"})
      */
     protected $author;
 
@@ -105,7 +105,7 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
      * @var Collection|CommentReply[]
      *
      * One Comment has Many Replies
-     * @ORM\OneToMany(targetEntity="CommentReply",mappedBy="comment",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="CommentReply", mappedBy="comment", cascade={"remove"})
      *
      * @Groups({"CommentRead"})
      */
@@ -118,9 +118,9 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
      *
      * @ApiProperty(iri="http://schema.org/text")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      *
-     * @Groups({"CommentRead","CommentWrite","CommentWriteLess"})
+     * @Groups({"CommentRead", "CommentWrite", "CommentWriteLess"})
      */
     protected $text;
 

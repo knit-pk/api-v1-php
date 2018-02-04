@@ -1,4 +1,5 @@
-FROM php:7.2-fpm-alpine
+FROM composer:1.6 as composer
+FROM php:7.2-fpm-alpine3.7 as php
 
 ARG TIMEZONE="Europe/Warsaw"
 ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -36,7 +37,8 @@ RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} >
 RUN apk del tzdata
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative
 
 # Copy phpini
 COPY php.ini /usr/local/etc/php/php.ini
@@ -48,10 +50,9 @@ COPY startup.sh /usr/local/bin/docker-app-startup
 COPY supervisord.conf /etc/supervisord.conf
 
 # Make structure with proper permissions for application and logs
-RUN mkdir -p /var/app/cache && \
-    mkdir /var/app/log && \
-    chown -R www-data:www-data /var/app && \
-    chmod 777 /var/app/cache
+RUN mkdir -p /var/www/app/var && \
+    chown www-data:www-data /var/www/app/var && \
+    chmod 777 /var/www/app/var
 RUN mkdir -p /var/log/supervisor && \
     touch /var/log/supervisor/supervisor.log && \
     touch /var/log/supervisor/docker-app-startup.log

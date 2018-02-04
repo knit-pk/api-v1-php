@@ -2,7 +2,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    version: '0.4.0'
+    version: '0.5.0'
     title: 'KNIT RESTful API'
     description: 'KNIT RESTful API build using ApiPlatform'
     public_upload.prefix: 'media/upload'
@@ -29,7 +29,7 @@ services:
         resource: '../src/*'
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
-        exclude: '../src/{Entity,Migrations,Repository,DataFixtures}'
+        exclude: '../src/{Entity,Migrations,Repository,DataFixtures,Swagger}'
 
     # actions are imported separately to make sure they
     # have the tag that allows to type-hint services
