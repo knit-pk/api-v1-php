@@ -28,11 +28,9 @@ services:
     backend:
         depends_on:
             - mysql
-#            - oracle
             - redis
         build:
             context: ./docker/php
-            dockerfile: Dockerfile.mysql
         environment:
             - DOT_ENV=.env.mysql
         volumes:

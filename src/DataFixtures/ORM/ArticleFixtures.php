@@ -8,10 +8,19 @@ use App\Entity\Article;
 use App\Entity\Comment;
 use App\Entity\CommentReply;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 
-class ArticleFixtures extends Fixture
+class ArticleFixtures extends Fixture implements DependentFixtureInterface
 {
+    private $connection;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->connection = $entityManager->getConnection();
+    }
+
     /**
      * Load data fixtures with the passed EntityManager.
      *
@@ -337,9 +346,7 @@ Jest jeszcze kilka innych, ale bardziej skomplikowanych sposobów, powodzenia! :
      */
     private function createTriggers()
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = $this->container->get('doctrine.orm.entity_manager')->getConnection();
-        $driverName = $connection->getDriver()->getName();
+        $driverName = $this->connection->getDriver()->getName();
         $sqlName = 'create_comment_triggers';
         $sqlFile = \sprintf('%s/../Resources/sql/%s/%s.sql', __DIR__, $driverName, $sqlName);
 
@@ -349,7 +356,7 @@ Jest jeszcze kilka innych, ale bardziej skomplikowanych sposobów, powodzenia! :
             return;
         }
 
-        $connection->exec(\file_get_contents($sqlFile));
+        $this->connection->exec(\file_get_contents($sqlFile));
     }
 
     public function getDependencies(): array

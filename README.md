@@ -40,14 +40,27 @@ Requirements to work with project: `git`, `docker`, `docker-compose`
 - Rebuild docker images
     ```bash
     $ docker-compose build
-    $ docker-compose up -d 
+    $ docker-compose up -d
     ```
+
+- Follow log output from containers
+    ```bash
+    $ docker-compose logs --follow
+    ```
+
+Remarks: Please verify whether php container name is set accordingly in following commands via `docker ps` command.
+If repository was cloned as instructed to `api` directory, container name: `api_backend_1` should be proper.
 
 - Feed database with default data.
 
-  Remarks: Please verify whether php container name is set accordingly via `docker ps` command.
     ```bash
-    $ docker exec -it api_php_1 bin/console doctrine:fixtures:load -n
+    $ docker exec -it api_backend_1 make fixtures-reload
+    ```
+
+- Clean and rebuild application cache.
+
+    ```bash
+    $ docker exec -it api_backend_1 make cache-warmup-docker
     ```
 
 ## Informations
