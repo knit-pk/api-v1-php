@@ -7,13 +7,16 @@ namespace App\DataFixtures\ORM;
 use App\Entity\Image;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Generator;
 use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageFixtures extends Fixture
 {
     private const APP_ROOT = __DIR__.'/../../../';
+    private const IMAGE_FIXTURES = __DIR__.'/../Resources/images';
 
     private $filesystem;
 
@@ -57,17 +60,23 @@ class ImageFixtures extends Fixture
         $manager->flush();
     }
 
-    private function getImagesData(): array
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     *
+     * @return \Generator|array[]
+     */
+    private function getImagesData(): Generator
     {
-        return [
-            [
-                'file' => self::APP_ROOT.'src/DataFixtures/Resources/images/avatar.png',
-                'name' => 'avatar.png',
-            ],
-            [
-                'file' => self::APP_ROOT.'src/DataFixtures/Resources/images/card-photo-4.jpg',
-                'name' => 'card-photo-4.jpg',
-            ],
-        ];
+        $finder = Finder::create()
+            ->in(self::IMAGE_FIXTURES)
+            ->name('*.{png,jpg}');
+
+        foreach ($finder->getIterator() as $imageFile) {
+            yield [
+                'file' => $imageFile->getRealPath(),
+                'name' => $imageFile->getFilename(),
+            ];
+        }
     }
 }
