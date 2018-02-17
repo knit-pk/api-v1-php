@@ -1,6 +1,6 @@
 # KNIT Restful API
 ![travis](https://api.travis-ci.org/knit-pk/api-v1-php.svg?branch=develop)
-[![Dependency Status](https://www.versioneye.com/user/projects/5a70e3ec0fb24f66805a3837/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a70e3ec0fb24f66805a3837)
+[![Dependency Status](https://www.versioneye.com/user/projects/5a887caa0fb24f6da09a6179/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a887caa0fb24f6da09a6179)
 
 Development configuration of KNIT API written in PHP, deployed using docker.
 
