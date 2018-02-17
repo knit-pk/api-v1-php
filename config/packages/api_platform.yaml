@@ -14,6 +14,11 @@ api_platform:
     # Enable the FOSUserBundle integration.
     enable_fos_user: true
 
+    # Enable GraphiQL endpoint
+    graphql:
+        graphiql:
+            enabled: true
+
     # The list of enabled formats. The first one will be the default.
     formats:
         json:
