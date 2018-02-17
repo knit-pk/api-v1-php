@@ -34,7 +34,6 @@
     "behatch/contexts": "^3.0",
     "doctrine/doctrine-fixtures-bundle": "^3.0",
     "friendsofphp/php-cs-fixer": "^2.9",
-    "jangregor/phpstan-prophecy": "^0.1.0",
     "javiereguiluz/easyadmin-bundle": "^1.17",
     "phpstan/phpstan": "^0.9.1",
     "phpstan/phpstan-doctrine": "^0.9.1",
