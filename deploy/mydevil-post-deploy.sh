@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+cd /home/k911-main/domains/knit-test-api.tk/app-api-$APP_VERSION
 
 php71 bin/console cache:clear
 php71 bin/console cache:warmup
