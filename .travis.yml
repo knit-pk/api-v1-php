@@ -50,18 +50,19 @@ addons:
   ssh_known_hosts: s11.mydevil.net
 
 before_deploy:
-  - openssl aes-256-cbc -K $encrypted_abb59573aead_key -iv $encrypted_abb59573aead_iv -in ./deploy/mydevil_rsa.enc -out /tmp/mydevil_rsa -d
+  - "export APP_VERSION=$(cat ./config/services.yaml | grep version | sed -E \"s/\\s+version: '(.*)'/v\\1/\") && echo $APP_VERSION"
+  - openssl aes-256-cbc -K $encrypted_abb59573aead_key -iv $encrypted_abb59573aead_iv -in ./deploy/mydevil.tar.enc -out /tmp/mydevil.tar -d
+  - tar xvf /tmp/mydevil.tar -C /tmp
   - eval "$(ssh-agent -s)"
   - chmod 600 /tmp/mydevil_rsa
   - ssh-add /tmp/mydevil_rsa
-  - openssl aes-256-cbc -K $encrypted_abb59573aead_key -iv $encrypted_abb59573aead_iv -in ./deploy/mydevil_env.enc -out .env.mydevil -d
 
 deploy:
   - provider: script
     skip_cleanup: true
     script: bash ./deploy/mydevil-deploy.sh
     on:
-      branch: develop
+      branch: feature/travis-deploy
       php: '7.1'
   - provider: script
     skip_cleanup: true

@@ -1,14 +1,5 @@
 #!/usr/bin/env sh
 
-if [[ ! -f composer.lock || ! -d src ]]; then
-    if [ ! -f .env.mydevil ]; then
-        echo "Env file not found."
-        exit 2
-    fi;
-    echo "You must execute this script from root path of app.";
-    exit 1
-fi;
-
 php71 bin/console cache:clear
 php71 bin/console cache:warmup
 gmake generate-jwt-keys
