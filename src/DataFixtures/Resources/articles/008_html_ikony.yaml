@@ -1,0 +1,68 @@
+title: Poradnik jak umieszczać ikony w kodzie HTML
+description: Każdy z nas na pewno choć raz w życiu użył icon fontów – czy to Fontello, czy Font Awesome. Jednak nie każdy z nas zastanawiał się, jaki jest idealny sposób na wstawianie ich na stronę.
+author: user-user_writer
+image: image-crew-22252.jpg
+content: |
+  Każdy z nas na pewno choć raz w życiu użył icon fontów – czy to Fontello, czy Font Awesome. Jednak nie każdy z nas zastanawiał się, jaki jest idealny sposób na wstawianie ich na stronę.
+
+  ## Tradycyjne sposoby
+  Zacznijmy od tego, że ikonki nie są jakimiś semantycznymi elementami – to co *najwyżej* obrazki, więc `i` jest z założenia złe, co W3C już dawno ustaliło. Zatem nie ma co słuchać poradnika na Font Awesome i lepiej zostać przy `span`.
+
+  Jeśli wstawiana ikonka jest tylko ozdobnikiem, a treść, jaką prezentuje, jest przekazywana także w inny sposób (np. przez tekst występujący obok niej), to wtedy mamy do czynienia z najprostszą sytuacją:
+
+  ```
+  <span class="icon icon_email" aria-hidden="true"></span>
+  ```
+
+  Czemu pusty element? Ponieważ to najprostszy sposób na stworzenie elementu, który będzie ignorowany przez czytniki ekranowe. Dodanie `[aria-hidden=true]` sprawi, że czytnik ominie ten element (i tylko ten). Jest to konieczne, ponieważ czytniki ekranowe **czytają** znaczki Unicode, które są wstawione w pseudoelementy (np. ★ zostanie przeczytane przez VoiceOver jako “black star”). I tak, icon fonty używają niby tak odległych kodów Unicode, że nie powinny być do nich przypisane żadne znaki, ale emojis dodaje się do standardu tak dużo, że w końcu mogą zacząć pojawiać się jakieś konflikty. Zwłaszcza, że przecież system też może wykorzystać te rejony Unicode.
+
+  Natomiast jeśli ikonka niesie treść sama w sobie (nie towarzyszy jej żaden tekst), to wówczas można zrobić tak:
+
+  ```
+  <span class="icon icon_email" aria-label="E-mail"></span>
+  ```
+
+  Tak, powinno być użyte **co najmniej** `[aria-label]`. `[title]` też może zadziałać, ale pojawia się pewien problem: `[title]` jest czytany tylko wówczas, gdy zawartość elementu nie jest możliwa do przeczytania. Czyli wracamy do problemu z Unicode. W przypadku `[aria-label]` problemu nie ma, bo jest on czytany zamiast zawartości elementu (zawsze, nawet jak zawartość to całkowicie normalny tekst).
+
+  ## Bardziej dostępne sposoby
+  Niemniej to jest dość słaby sposób, ponieważ działa tylko i wyłącznie dla czytników ekranowych. A co w sytuacjach, gdy style się nie doczytają, strona będzie użyta w przeglądarce tekstowej etc.? Innymi słowy mówiąc: jak sprawić, żeby ikonka działała naprawdę zawsze?
+
+  ```
+  <span class="icon icon_email" aria-hidden="true"></span>
+  <span class="visuallyhidden">E-mail</span>
+  ```
+
+  Implementację `.visuallyhidden` warto skopiować z HTML5 Boilerplate – .sr-only z BS-a wciąż nie jest zaktualizowane zgodnie z najnowszym feedbackiem ze strony FB czy Drupala.
+
+  W jeszcze idealniejszym świecie wszystko wyglądałoby jakoś tak:
+
+  ``` js
+  <span class="icon">
+  <span class="icon__image" data-icon="email" aria-hidden="true"></span>
+  <span class="icon__label">E-mail</span>
+  </span>
+  ```
+
+  Przykładowa implementacja, oparta na… image replacement. Chyba jedyny problem z tym to fakt, jak się dowiedzieć, czy icon font się wczytał i kiedy pokazać ikonę zamiast etykiety. Niemniej tego typu kod radzi sobie z większością scenariuszów, jakie wyżej opisałem.
+
+  ## A może by tak SVG?
+  Ale to wciąż wszystko hacki – bo przecież tym jest sama idea icon fontów. A prawda jest taka, że mamy rok 2017 i aż się prosi, żeby po prostu stosować SVG. Wówczas ikonki wyglądają tak:
+
+  ```
+  <img src="nasz-svg#name-of-view" alt="Tekst alternatywny">
+  ```
+
+  Oczywiście `[alt]` jak dla normalnego obrazka: jeśli ikonka to ozdobnik – pusty, jeśli niesie treść – wiadomo. Można nawet używać sprite’ów i – jak widać – wsparcie jest zadziwiająco dobre.
+
+  ## Casus
+  Ktoś pewnie jeszcze zapyta: “A co z `[title]`? Przecież dostarcza informacji o ikonce użytkownikom myszki!”. No i właśnie tutaj jest największy problem: tylko użytkownikom myszki. Jeślibyśmy chcieli zrobić naprawdę dobry tooltip dla ikonek, który by działał np. też dla użytkowników klawiatury, warto rozważyć oskryptowane alternatywy.
+category: category-article
+tags:
+  - tag-it
+  - tag-computer-security
+comments:
+  - author: user-reader
+    text: Nice article!
+    replies:
+      - author: user-user_writer
+        text: Thanks!

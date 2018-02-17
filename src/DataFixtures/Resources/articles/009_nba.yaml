@@ -1,0 +1,55 @@
+title: Polska noc w NBA. Gortat szaleje
+description: Polska Noc w NBA to już wydarzenie cykliczne. Po raz siódmy Marcin Gortat i jego fundacja MG 13 stali się ambasadorami akcji, a po raz piąty zorganizowana została ona w amerykańskiej stolicy. W całym przedsięwzięciu pomagała Ambasada RP w USA oraz jego klub Washington Wizards.
+author: user-user_writer
+image: image-aaron-burden-205148.jpg
+content: |
+  Polska Noc w NBA to już wydarzenie cykliczne. **Po raz siódmy Marcin Gortat i jego fundacja MG 13 stali się ambasadorami akcji, a po raz piąty zorganizowana została ona w amerykańskiej stolicy.** W całym przedsięwzięciu pomagała Ambasada RP w USA oraz jego klub Washington Wizards.
+
+  Jeszcze na długo przed spotkaniem do uczestników i wszystkich zainteresowanych **Nocą Polskiego Dziedzictwa** w specjalnie zmontowanym z tej okazji wideo zwrócił się prezydent ~~Andrzej Duda~~. Głowa polskiego państwa przypomniała między innymi o m.in. o przypadającej w tym roku 100. rocznicy odzyskania przez nasz kraj niepodległości i roli, jaką w tych wydarzeniach odegrało USA:
+
+  >Pochodzący z Łodzi jedyny polski koszykarz w NBA ściągnął na ten wieczór do stolicy USA między innymi członków fundacji MG13, zwycięzców turniejów koszykarskich organizowanych przez niego w Polsce dla dzieci i młodzieży.
+
+  ## Pupperter
+
+  `npm install --save puppeteer`
+
+  W przerwie uhonorowano polskich weteranów wojennych oraz podziwiano pokaz taneczny zespołu Cheerleaders Gdynia.
+
+  ```const puppeteer = require('puppeteer');
+
+  async function getPic() {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto('https://google.com');
+  await page.screenshot({path: 'google.png'});
+
+  await browser.close();
+  }
+  ```
+
+  Sam mecz był niezwykle atrakcyjny, a do jego rozstrzygnięcia potrzebna była dogrywka. Długo się na nią nie zapowiadało, bo **Czarodzieje byli dużo lepszym zespołem w pierwszej połowie**. Pierwszą kwartę wygrali zdecydowanie 33:18, na półmetku prowadzili zaś wysoko 59:39.
+
+  ## Trzecia kwarta
+
+  W trzeciej i czwartej odsłonie Wizards zmarnowali jednak całą wcześniej wypracowaną zaliczkę, która w pewnym momencie wynosiła nawet 23 "oczka". Brooklyn Nets co prawda nigdy nie prowadzili, ale byli w stanie doprowadzić do remisu i dodatkowego pięciominutowego fragmentu gry.
+
+  1. Najlepszym strzelcem był Bradley Beal, który uzyskał 24 punkty Był to jego 10 z rzędu mecz z dorobkiem 20 punktów lub więcej.
+  2. Dobrze grał także rozgrywający gospodarzy John Wall, który rzucił 23 punkty i miał 16 asyst, a brylował przede wszystkim w dogrywce. Lider ekipy ze stolicy USA nie był jednak zadowolony z tego występu drużyny.
+  3. Druga połowa był w naszym wykonaniu po prostu okropna. Musimy wyciągnąć wnioski i grać zdecydowanie lepiej - stwierdził Wall.
+
+  Marcin Gortat nie chciał wypaść blado przed licznie zgromadzonymi rodakami i zagrał jeden z najlepszych meczów w sezonie. Na parkiecie przebywał przez 30 minut, w trakcie których trafił sześć z ośmiu rzutów z gry i cztery z sześciu wolnych. Dorobek 16 punktów uzupełnił aż 13 zbiórkami, dwoma asystami, przechwytem i blokiem. W statystykach zapisano mu także stratę i jedno przewinienie.
+
+  ## Podsumowanie
+
+  Washington Wizards z bilansem 25 zwycięstw i 18 porażek zajmują piąte miejsce w Konferencji Wschodniej, kolejną potyczkę stoczą z Milwaukee Bucks w nocy z poniedziałku na wtorek (bilans 22-19).
+category: category-article
+tags:
+  - tag-computer-security
+  - tag-free
+  - tag-development
+comments:
+  - author: user-reader
+    text: Nice article!
+    replies:
+      - author: user-user_writer
+        text: Thanks!
