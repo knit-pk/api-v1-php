@@ -9,11 +9,6 @@ if [[ ! -f composer.lock || ! -d src ]]; then
     exit 1
 fi;
 
-mv .env.mydevil .env
-rm -rf .idea .git .env.* .directory .gitignore vendor logs public/bundles config/jwt var supervisord.pid public/media/upload/*
- 
-php71 /usr/local/bin/composer install -n -a --no-progress --no-ansi --no-suggest --no-scripts
-
 php71 bin/console cache:clear
 php71 bin/console cache:warmup
 gmake generate-jwt-keys

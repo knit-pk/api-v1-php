@@ -54,6 +54,7 @@ before_deploy:
   - eval "$(ssh-agent -s)"
   - chmod 600 /tmp/mydevil_rsa
   - ssh-add /tmp/mydevil_rsa
+  - openssl aes-256-cbc -K $encrypted_abb59573aead_key -iv $encrypted_abb59573aead_iv -in ./deploy/mydevil_env.enc -out .env.mydevil -d
 
 deploy:
   - provider: script
