@@ -134,9 +134,6 @@
     "guzzlehttp/psr7": {
         "version": "1.4.2"
     },
-    "jangregor/phpstan-prophecy": {
-        "version": "0.1"
-    },
     "javiereguiluz/easyadmin-bundle": {
         "version": "1.17",
         "recipe": {
@@ -583,6 +580,9 @@
     },
     "webmozart/assert": {
         "version": "1.2.0"
+    },
+    "webonyx/graphql-php": {
+        "version": "v0.11.5"
     },
     "willdurand/negotiation": {
         "version": "v2.3.1"

@@ -1,6 +1,4 @@
 includes:
-    # Prophecy
-    - vendor/jangregor/phpstan-prophecy/src/extension.neon
     # Doctrine
     - vendor/phpstan/phpstan-doctrine/extension.neon
 parameters:
