@@ -1,0 +1,15 @@
+title: Template Article
+description: Brief description of Article
+author: user-user_writer
+image: image-card-photo-4.jpg
+content: |
+  Multiline Markdown content
+category: category-article
+tags:
+  - tag-university
+comments:
+  - author: user-reader
+    text: Nice article!
+    replies:
+      - author: user-user_writer
+        text: Thanks!

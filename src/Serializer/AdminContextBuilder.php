@@ -49,10 +49,9 @@ final class AdminContextBuilder implements SerializerContextBuilderInterface
      * @param array|null $extractedAttributes
      *
      * @throws RuntimeException
+     * @throws \DomainException
      *
      * @return array
-     *
-     * @throws \DomainException
      */
     public function createFromRequest(Request $request, bool $normalization, array $extractedAttributes = null): array
     {
@@ -74,7 +73,7 @@ final class AdminContextBuilder implements SerializerContextBuilderInterface
                     $group = 'create';
                     break;
                 default:
-                    throw new DomainException(sprintf('Unsupported HTTP method for Admin context denormalization: %s.', $request->getMethod()));
+                    throw new DomainException(\sprintf('Unsupported HTTP method for Admin context denormalization: %s.', $request->getMethod()));
             }
             $context['groups'][] = $this->adminSerializerGroupFactory->createAdminGroup($context['resource_class'], $group);
         }

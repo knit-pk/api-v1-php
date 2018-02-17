@@ -23,48 +23,48 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @see http://schema.org/Comment Documentation on Schema.org
  *
  * @ApiResource(iri="http://schema.org/Comment",
- * attributes={
- *     "filters"={"app.comment_reply.search_filter","app.comment_reply.order_filter","app.comment_reply.date_filter"},
- *     "normalization_context"={"groups"={"ReplyRead"}},
- *     "denormalization_context"={"groups"={"ReplyWrite"}},
- * },
- * collectionOperations={
- *     "get"={
- *          "method"="GET",
+ *     attributes={
+ *         "filters": {"app.comment_reply.search_filter", "app.comment_reply.order_filter", "app.comment_reply.date_filter", "app.comment_reply.group_filter"},
+ *         "normalization_context": {"groups": {"ReplyRead"}},
+ *         "denormalization_context": {"groups": {"ReplyWrite"}},
  *     },
- *     "post"={
- *          "method"="POST",
- *          "access_control"="is_granted('ROLE_READER')",
+ *     collectionOperations={
+ *         "get": {
+ *             "method": "GET",
+ *         },
+ *         "post": {
+ *             "method": "POST",
+ *             "access_control": "is_granted('ROLE_READER')",
+ *         },
+ *         "comment_add_comment_reply": {
+ *             "route_name": "comment_add_comment_reply",
+ *             "access_control": "is_granted('ROLE_READER')",
+ *             "denormalization_context": {"groups": {"ReplyWriteLess"}},
+ *         },
  *     },
- *     "comment_add_comment_reply"={
- *          "route_name"="comment_add_comment_reply",
- *          "access_control"="is_granted('ROLE_READER')",
- *          "denormalization_context"={"groups"={"ReplyWriteLess"}},
- *     },
- * },
- * itemOperations={
- *     "get"={
- *          "method"="GET",
- *     },
- *     "put"={
- *          "method"="PUT",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
- *     },
- *     "delete"={
- *          "method"="DELETE",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
- *     },
- * })
+ *     itemOperations={
+ *         "get": {
+ *             "method": "GET",
+ *         },
+ *         "put": {
+ *             "method": "PUT",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *         },
+ *         "delete": {
+ *             "method": "DELETE",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *         },
+ *     })
  *
- * @ORM\Entity()
- * @ORM\Table(name="comment_replies")
+ *     @ORM\Entity
+ *     @ORM\Table(name="comment_replies")
  */
 class CommentReply implements ThoughtInterface
 {
     /**
      * @var Uuid
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -77,13 +77,13 @@ class CommentReply implements ThoughtInterface
      * @var User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id",referencedColumnName="id",onDelete="CASCADE")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
      *
      * @ApiProperty(iri="http://schema.org/author")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      *
-     * @Groups({"ReplyRead","ReplyWrite","ReplyReadLess"})
+     * @Groups({"ReplyRead", "ReplyWrite", "ReplyReadLess"})
      */
     protected $author;
 
@@ -91,10 +91,10 @@ class CommentReply implements ThoughtInterface
      * @var Comment
      *
      * Many Replies have One Comment
-     * @ORM\ManyToOne(targetEntity="Comment",inversedBy="replies")
-     * @ORM\JoinColumn(name="comment_id",referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Comment", inversedBy="replies")
+     * @ORM\JoinColumn(name="comment_id", referencedColumnName="id")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      *
      * @Groups({"ReplyWrite"})
      */
@@ -107,9 +107,9 @@ class CommentReply implements ThoughtInterface
      *
      * @ApiProperty(iri="http://schema.org/text")
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      *
-     * @Groups({"ReplyRead","ReplyWrite","ReplyReadLess","ReplyWriteLess"})
+     * @Groups({"ReplyRead", "ReplyWrite", "ReplyReadLess", "ReplyWriteLess"})
      */
     protected $text;
 
@@ -122,7 +122,7 @@ class CommentReply implements ThoughtInterface
      *
      * @Gedmo\Timestampable(on="update")
      *
-     * @Groups({"ReplyRead","ReplyReadLess"})
+     * @Groups({"ReplyRead", "ReplyReadLess"})
      */
     protected $updatedAt;
 
@@ -135,7 +135,7 @@ class CommentReply implements ThoughtInterface
      *
      * @Gedmo\Timestampable(on="create")
      *
-     * @Groups({"ReplyRead","ReplyReadLess"})
+     * @Groups({"ReplyRead", "ReplyReadLess"})
      */
     protected $createdAt;
 

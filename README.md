@@ -1,5 +1,6 @@
 # KNIT Restful API
 ![travis](https://api.travis-ci.org/knit-pk/api-v1-php.svg?branch=develop)
+[![Dependency Status](https://www.versioneye.com/user/projects/5a887caa0fb24f6da09a6179/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a887caa0fb24f6da09a6179)
 
 Development configuration of KNIT API written in PHP, deployed using docker.
 
@@ -39,25 +40,38 @@ Requirements to work with project: `git`, `docker`, `docker-compose`
 - Rebuild docker images
     ```bash
     $ docker-compose build
-    $ docker-compose up -d 
+    $ docker-compose up -d
     ```
+
+- Follow log output from containers
+    ```bash
+    $ docker-compose logs --follow
+    ```
+
+Remarks: Please verify whether php container name is set accordingly in following commands via `docker ps` command.
+If repository was cloned as instructed to `api` directory, container name: `api_backend_1` should be proper.
 
 - Feed database with default data.
 
-  Remarks: Please verify whether php container name is set accordingly via `docker ps` command.
     ```bash
-    $ docker exec -it api_php_1 bin/console doctrine:fixtures:load -n
+    $ docker exec -it api_backend_1 make fixtures-reload
+    ```
+
+- Clean and rebuild application cache.
+
+    ```bash
+    $ docker exec -it api_backend_1 make cache-warmup-docker
     ```
 
 ## Informations
 Docker images:
-- PHP (php:7.1-fpm-alpine)
+- PHP (php:7.2-fpm-alpine3.7)
 - Nginx (nginx:alpine)
-- Varnish - Http Cache (alpine:3.6)
+- Varnish - Http Cache (alpine:3.7)
 - MySQL (mysql:5.7)
 
 PHP Stack:
-- Symfony (v3.3.*)
+- Symfony (v4.0.*)
 - Api Platform (v2.1.*)
 
 ## Postman Collection

@@ -14,34 +14,34 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(attributes={
- *      "filters"={"app.tag.search_filter"},
- *      "normalization_context"={"groups"={"TagRead"}},
- *      "denormalization_context"={"groups"={"TagWrite"}},
+ *     "filters": {"app.tag.search_filter"},
+ *     "normalization_context": {"groups": {"TagRead"}},
+ *     "denormalization_context": {"groups": {"TagWrite"}},
  * },
  * collectionOperations={
- *     "get"={
- *          "method"="GET",
+ *     "get": {
+ *         "method": "GET",
  *     },
- *     "post"={
- *          "access_control"="is_granted('ROLE_READER')",
- *          "method"="POST",
+ *     "post": {
+ *         "access_control": "is_granted('ROLE_READER')",
+ *         "method": "POST",
  *     },
  * },
  * itemOperations={
- *     "get"={
- *          "method"="GET",
+ *     "get": {
+ *         "method": "GET",
  *     },
- *     "put"={
- *          "method"="PUT",
- *          "access_control"="is_granted('ROLE_ADMIN')",
+ *     "put": {
+ *         "method": "PUT",
+ *         "access_control": "is_granted('ROLE_ADMIN')",
  *     },
- *     "delete"={
- *          "method"="DELETE",
- *          "access_control"="is_granted('ROLE_ADMIN')",
+ *     "delete": {
+ *         "method": "DELETE",
+ *         "access_control": "is_granted('ROLE_ADMIN')",
  *     },
  * })
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="tags")
  */
 class Tag
@@ -49,7 +49,7 @@ class Tag
     /**
      * @var Uuid
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -63,7 +63,7 @@ class Tag
      *
      * @ORM\Column(type="string", unique=true)
      *
-     * @Gedmo\Slug(fields={"name"},separator="-",updatable=true,unique=true)
+     * @Gedmo\Slug(fields={"name"}, separator="-", updatable=true, unique=true)
      *
      * @Groups({"TagRead"})
      */
@@ -76,10 +76,10 @@ class Tag
      *
      * @ApiProperty(iri="http://schema.org/name")
      *
-     * @Assert\NotBlank()
-     * @Assert\Length(min="3",max="100")
+     * @Assert\NotBlank
+     * @Assert\Length(min="3", max="100")
      *
-     * @Groups({"TagRead","TagWrite"})
+     * @Groups({"TagRead", "TagWrite"})
      */
     protected $name;
 

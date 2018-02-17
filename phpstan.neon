@@ -1,0 +1,6 @@
+includes:
+    # Doctrine
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+parameters:
+    ignoreErrors:
+        # Put false positives here

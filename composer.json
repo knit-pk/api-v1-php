@@ -6,47 +6,50 @@
   "prefer-stable": true,
   "minimum-stability": "dev",
   "require": {
-    "php": ">= 7.1",
-    "symfony/framework-bundle": "^4",
-    "nelmio/cors-bundle": "^1.5",
+    "php": "^7.2",
     "api-platform/api-pack": "^1.0",
-    "symfony/monolog-bundle": "^3.1",
-    "vich/uploader-bundle": "^1.8",
     "friendsofsymfony/user-bundle": "^2.0",
-    "lexik/jwt-authentication-bundle": "^2.4",
+    "gedmo/doctrine-extensions": "^2.4.32",
     "gesdinet/jwt-refresh-token-bundle": "^0.3",
-    "symfony/flex": "^1.0",
-    "symfony/yaml": "^4",
     "guzzlehttp/guzzle": "^6.3",
+    "lexik/jwt-authentication-bundle": "^2.4",
+    "nelmio/cors-bundle": "^1.5",
     "predis/predis": "^1.1",
     "ramsey/uuid-doctrine": "^1.4",
-    "gedmo/doctrine-extensions": "^2.4.32",
-    "roave/security-advisories": "dev-master"
+    "roave/security-advisories": "dev-master",
+    "symfony/flex": "^1.0",
+    "symfony/framework-bundle": "^4",
+    "symfony/monolog-bundle": "^3.1",
+    "symfony/yaml": "^4",
+    "vich/uploader-bundle": "^1.8",
+    "webonyx/graphql-php": "^0.11.5"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/k911/JWTRefreshTokenBundle",
-      "no-api": true
-    }
-  ],
   "require-dev": {
-    "symfony/profiler-pack": "^1.0",
-    "symfony/web-server-bundle": "^4",
-    "javiereguiluz/easyadmin-bundle": "^1.17",
-    "doctrine/doctrine-fixtures-bundle": "^2.4",
-    "symfony/dotenv": "^4",
-    "symfony/console": "^4",
-    "phpunit/phpunit": "^6.5",
-    "phpstan/phpstan": "^0.9.1",
+    "api-platform/schema-generator": "^2.0",
+    "behat/behat": "^3.4",
+    "behat/mink": "^1.7",
+    "behat/mink-browserkit-driver": "^1.3",
+    "behat/mink-extension": "^2.3",
+    "behat/symfony2-extension": "^2.1",
+    "behatch/contexts": "^3.0",
+    "doctrine/doctrine-fixtures-bundle": "^3.0",
     "friendsofphp/php-cs-fixer": "^2.9",
-    "api-platform/schema-generator": "^2.0"
+    "javiereguiluz/easyadmin-bundle": "^1.17",
+    "phpstan/phpstan": "^0.9.1",
+    "phpstan/phpstan-doctrine": "^0.9.1",
+    "phpunit/phpunit": "^7",
+    "symfony/console": "^4",
+    "symfony/dotenv": "^4",
+    "symfony/profiler-pack": "^1.0",
+    "symfony/web-server-bundle": "^4"
   },
   "config": {
     "preferred-install": {
       "*": "dist"
     },
-    "sort-packages": true
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "apcu-autoloader": true
   },
   "autoload": {
     "psr-4": {
@@ -55,14 +58,18 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "App\\Tests\\": "tests/"
+      "App\\Tests\\": "tests/",
+      "App\\Tests\\Feature\\": "features/bootstrap/"
     }
   },
   "scripts": {
     "test": [
-      "phpunit",
-      "php-cs-fixer fix --dry-run --diff --allow-risky=true",
-      "phpstan analyze src tests --level=4"
+      "phpstan analyze src tests features -l 6",
+      "php-cs-fixer fix -v --dry-run --diff --stop-on-violation",
+      "phpunit"
+    ],
+    "test-features": [
+      "vendor/bin/behat"
     ],
     "fix": "php-cs-fixer fix",
     "auto-scripts": {

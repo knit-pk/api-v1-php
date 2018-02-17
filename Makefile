@@ -2,20 +2,20 @@ ifndef APP_ENV
 	include .env
 endif
 
-fix-easy-admin-cache:
-	@printf "Fixing easy admin cache.\n"
-	@chmod 777 ${APP_VAR_PATH}/cache/${APP_ENV}/easy_admin
-.PHONY: fix-easy-admin-cache
+fix-symfony-cache:
+	@printf "## Fixing symfony cache ### \n"
+	@chmod -R 777 /var/www/app/var
+.PHONY: fix-symfony-cache
 
 cache-warmup-docker: cache-warmup
-	@${MAKE} fix-easy-admin-cache
+	@${MAKE} fix-symfony-cache
 .PHONY: cache-warmup-docker
 
 ###> symfony/framework-bundle ###
 CONSOLE := $(shell which bin/console)
 sf_console:
 ifndef CONSOLE
-	@printf "Run \033[32mcomposer require cli\033[39m to install the Symfony console.\n"
+	@printf "Run `composer require cli` to install the Symfony console.\n"
 endif
 
 cache-clear:
@@ -41,12 +41,12 @@ endif
 	@$(CONSOLE) | grep server:start > /dev/null || ${MAKE} serve_as_php
 	@$(CONSOLE) server:start
 
-	@printf "Quit the server with \033[32;49mbin/console server:stop\033[39m\n"
+	@printf "Quit the server with `bin/console server:stop`\n"
 
 serve_as_php:
-	@printf "\033[32;49mServer listening on http://127.0.0.1:8000\033[39m\n"
+	@printf "Server listening on http://127.0.0.1:8000\n"
 	@printf "Quit the server with CTRL-C.\n"
-	@printf "Run \033[32mcomposer require symfony/web-server-bundle\033[39m for a better web server\n"
+	@printf "Run `composer require symfony/web-server-bundle` for a better web server\n"
 	php -S 127.0.0.1:8000 -t public
 
 serve:
@@ -63,7 +63,7 @@ endif
 	mkdir -p config/jwt
 	openssl genrsa -passout pass:${JWT_PASSPHRASE} -out ${JWT_PRIVATE_KEY_PATH} -aes256 4096
 	openssl rsa -passin pass:${JWT_PASSPHRASE} -pubout -in ${JWT_PRIVATE_KEY_PATH} -out ${JWT_PUBLIC_KEY_PATH}
-	@echo "\033[32mRSA key pair successfully generated\033[39m"
+	@echo "RSA key pair successfully generated"
 ###< lexik/jwt-authentication-bundle ###
 
 fixtures-reload:

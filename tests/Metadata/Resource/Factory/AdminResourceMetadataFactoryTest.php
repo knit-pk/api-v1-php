@@ -10,30 +10,17 @@ use App\Metadata\Resource\Factory\AdminResourceMetadataFactory;
 use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 class AdminResourceMetadataFactoryTest extends TestCase
 {
-    /**
-     * @var ResourceMetadataFactoryInterface|ObjectProphecy
-     */
     private $resourceMetadataFactoryProphecy;
 
-    /**
-     * @var AuthorizationCheckerInterface|ObjectProphecy
-     */
     private $authorizationCheckerProphecy;
 
-    /**
-     * @var AdminSerializerGroupFactory|ObjectProphecy
-     */
     private $adminSerializerGroupFactoryProphecy;
 
-    /**
-     * @var AdminResourceMetadataFactory
-     */
     private $adminResourceMetadataFactory;
 
     protected function setUp()
@@ -42,7 +29,16 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $this->authorizationCheckerProphecy = $this->prophesize(AuthorizationCheckerInterface::class);
         $this->adminSerializerGroupFactoryProphecy = $this->prophesize(AdminSerializerGroupFactory::class);
 
-        $this->adminResourceMetadataFactory = new AdminResourceMetadataFactory($this->resourceMetadataFactoryProphecy->reveal(), $this->authorizationCheckerProphecy->reveal(), $this->adminSerializerGroupFactoryProphecy->reveal());
+        /** @var ResourceMetadataFactoryInterface $resourceMetadataFactoryMock */
+        $resourceMetadataFactoryMock = $this->resourceMetadataFactoryProphecy->reveal();
+
+        /** @var AuthorizationCheckerInterface $authorizationCheckerMock */
+        $authorizationCheckerMock = $this->authorizationCheckerProphecy->reveal();
+
+        /** @var AdminSerializerGroupFactory $adminSerializerGroupFactoryMock */
+        $adminSerializerGroupFactoryMock = $this->adminSerializerGroupFactoryProphecy->reveal();
+
+        $this->adminResourceMetadataFactory = new AdminResourceMetadataFactory($resourceMetadataFactoryMock, $authorizationCheckerMock, $adminSerializerGroupFactoryMock);
     }
 
     public function noContextProphecyProvider(): array
@@ -59,8 +55,6 @@ class AdminResourceMetadataFactoryTest extends TestCase
      *
      * @param string $method
      * @param mixed  $result
-     *
-     * @throws \ApiPlatform\Core\Exception\ResourceClassNotFoundException
      */
     public function testNoContext(string $method, $result)
     {
@@ -127,9 +121,6 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $this->assertSame($resourceMetadata->getAttributes(), $newResourceMetadata->getAttributes());
     }
 
-    /**
-     * @throws \ApiPlatform\Core\Exception\ResourceClassNotFoundException
-     */
     public function testAttributesNormalizationWithOperationsDenormalization()
     {
         $resourceClass = 'Test';

@@ -14,33 +14,33 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(attributes={
- *     "normalization_context"={"groups"={"TeamRead"}},
- *     "denormalization_context"={"groups"={"TeamWrite"}},
+ *     "normalization_context": {"groups": {"TeamRead"}},
+ *     "denormalization_context": {"groups": {"TeamWrite"}},
  * },
  * collectionOperations={
- *     "get"={
- *          "method"="GET",
+ *     "get": {
+ *         "method": "GET",
  *     },
- *     "post"={
- *          "method"="POST",
- *          "access_control"="is_granted('ROLE_USER_WRITER')",
+ *     "post": {
+ *         "method": "POST",
+ *         "access_control": "is_granted('ROLE_USER_WRITER')",
  *     },
  * },
  * itemOperations={
- *     "get"={
- *          "method"="GET",
+ *     "get": {
+ *         "method": "GET",
  *     },
- *     "put"={
- *          "method"="PUT",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     "put": {
+ *         "method": "PUT",
+ *         "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
  *     },
- *     "delete"={
- *          "method"="DELETE",
- *          "access_control"="is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *     "delete": {
+ *         "method": "DELETE",
+ *         "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
  *     },
  * })
  *
- * @ORM\Entity()
+ * @ORM\Entity
  * @ORM\Table(name="teams")
  */
 class Team
@@ -48,7 +48,7 @@ class Team
     /**
      * @var Uuid
      *
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="uuid")
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
@@ -62,10 +62,10 @@ class Team
      *
      * @ORM\Column(type="string")
      *
-     * @Assert\NotBlank()
-     * @Assert\Length(min="3",max="100")
+     * @Assert\NotBlank
+     * @Assert\Length(min="3", max="100")
      *
-     * @Groups({"TeamRead","TeamWrite"})
+     * @Groups({"TeamRead", "TeamWrite"})
      */
     protected $name;
 
@@ -73,7 +73,7 @@ class Team
      * @var Collection|Team[]
      *
      * One Team has Many Teams
-     * @ORM\OneToMany(targetEntity="Team",mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Team", mappedBy="parent")
      *
      * @Groups({"TeamRead"})
      */
@@ -83,8 +83,8 @@ class Team
      * @var Team
      *
      * Many Teams have One parent Team
-     * @ORM\ManyToOne(targetEntity="Team",inversedBy="children")
-     * @ORM\JoinColumn(name="parent_team_id",referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Team", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_team_id", referencedColumnName="id")
      *
      * @Groups({"TeamWrite"})
      */
@@ -94,13 +94,13 @@ class Team
      * @var Collection|User[]
      *
      * @ORM\ManyToMany(targetEntity="User")
-     * @ORM\JoinTable(name="teams_users",joinColumns={
-     *      @ORM\JoinColumn(name="team_id",referencedColumnName="id",onDelete="CASCADE")
-     * },inverseJoinColumns={
-     *      @ORM\JoinColumn(name="user_id",referencedColumnName="id",onDelete="CASCADE"),
+     * @ORM\JoinTable(name="teams_users", joinColumns={
+     *     @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
+     *     }, inverseJoinColumns={
+     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE"),
      * })
      *
-     * @Groups({"TeamRead","TeamWrite"})
+     * @Groups({"TeamRead", "TeamWrite"})
      */
     protected $users;
 

@@ -6,9 +6,10 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     public const DEFAULT_USERS = [
         'Super Admin' => [
@@ -51,10 +52,10 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager): void
     {
-        $publicUsers = array_flip(self::PUBLIC_USERNAMES);
+        $publicUsers = \array_flip(self::PUBLIC_USERNAMES);
 
         /** @var \App\Entity\SecurityRole $defaultRole */
-        $defaultRole = $this->getReference(sprintf('security-%s', strtolower(USER::ROLE_DEFAULT)));
+        $defaultRole = $this->getReference(\sprintf('security-%s', \mb_strtolower(USER::ROLE_DEFAULT)));
 
         /** @var \App\Entity\Image $avatar */
         $avatar = $this->getReference('image-avatar.png');
@@ -64,8 +65,8 @@ class UserFixtures extends Fixture
          * @var array  $roles
          */
         foreach (self::DEFAULT_USERS as $fullname => $roles) {
-            $username = strtolower(str_replace(' ', '_', $fullname));
-            $email = sprintf('%s@%s.pl', $username, strtolower(str_replace(' ', '-', $fullname)));
+            $username = \mb_strtolower(\str_replace(' ', '_', $fullname));
+            $email = \sprintf('%s@%s.pl', $username, \mb_strtolower(\str_replace(' ', '-', $fullname)));
 
             $user = new User();
             $user->setFullname($fullname);
@@ -77,7 +78,7 @@ class UserFixtures extends Fixture
 
             foreach ($roles as $role) {
                 /** @var \App\Entity\SecurityRole $securityRole */
-                $securityRole = $this->getReference(sprintf('security-%s', strtolower($role)));
+                $securityRole = $this->getReference(\sprintf('security-%s', \mb_strtolower($role)));
                 $user->addSecurityRole($securityRole);
             }
 
@@ -85,7 +86,7 @@ class UserFixtures extends Fixture
             $user->addSecurityRole($defaultRole);
 
             if (isset($publicUsers[$username])) {
-                $this->setReference(sprintf('user-%s', $username), $user);
+                $this->setReference(\sprintf('user-%s', $username), $user);
             }
 
             $manager->persist($user);

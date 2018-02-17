@@ -12,7 +12,7 @@ make generate-jwt-keys
 
 # Install vendor packages, and publish public/bundles
 composer install -n -o --no-progress --no-ansi --no-suggest
-make fix-easy-admin-cache
+make fix-symfony-cache
 
 # Wait until database is ready
 if dockerize -wait ${DOCKERIZE_WAIT_FOR} -timeout 30s; then
@@ -23,3 +23,5 @@ if dockerize -wait ${DOCKERIZE_WAIT_FOR} -timeout 30s; then
 else
     echo "Could not migrate data to database"
 fi
+
+make cache-warmup-docker

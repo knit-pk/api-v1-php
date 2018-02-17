@@ -16,25 +16,25 @@ class TagFixtures extends Fixture
         'fun',
         'programming',
         'poland',
+        'ski-jumping',
+        'computer-security',
     ];
 
     /**
      * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
+     *
+     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     public function load(ObjectManager $manager): void
     {
-        $publicTags = array_flip(self::PUBLIC_TAG_CODES);
-
         foreach ($this->getTagsData() as ['name' => $name]) {
             $tag = new Tag();
             $tag->setName($name);
 
-            $code = str_replace(' ', '-', strtolower($name));
-            if (isset($publicTags[$code])) {
-                $this->addReference(sprintf('tag-%s', $code), $tag);
-            }
+            $code = \str_replace(' ', '-', \mb_strtolower($name));
+            $this->addReference(\sprintf('tag-%s', $code), $tag);
 
             $manager->persist($tag);
         }
@@ -61,6 +61,7 @@ class TagFixtures extends Fixture
             ['name' => 'Web'],
             ['name' => 'University'],
             ['name' => 'Fun'],
+            ['name' => 'Ski Jumping'],
         ];
     }
 }
