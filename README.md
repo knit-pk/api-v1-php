@@ -63,6 +63,12 @@ If repository was cloned as instructed to `api` directory, container name: `api_
     $ docker exec -it api_backend_1 make cache-warmup-docker
     ```
 
+- Running feature tests
+
+    ```bash
+    $ docker exec -it api_backend_1 composer test-features
+    ```
+
 ## Informations
 Docker images:
 - PHP (php:7.2-fpm-alpine3.7)
