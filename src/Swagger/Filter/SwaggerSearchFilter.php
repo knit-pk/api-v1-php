@@ -4,20 +4,25 @@ declare(strict_types=1);
 
 namespace App\Swagger\Filter;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\FilterInterface;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ContextAwareFilterInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Doctrine\ORM\QueryBuilder;
 use DomainException;
 
-final class SwaggerSearchFilter implements FilterInterface
+final class SwaggerSearchFilter implements ContextAwareFilterInterface
 {
     private $decorated;
 
-    public function __construct(FilterInterface $decorated)
+    public function __construct(ContextAwareFilterInterface $decorated)
     {
         $this->decorated = $decorated;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \DomainException
+     */
     public function getDescription(string $resourceClass): array
     {
         $description = $this->decorated->getDescription($resourceClass);
@@ -40,9 +45,12 @@ final class SwaggerSearchFilter implements FilterInterface
         return $description;
     }
 
-    public function apply(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
+    /**
+     * {@inheritdoc}
+     */
+    public function apply(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null, array $context = [])
     {
-        $this->decorated->apply($queryBuilder, $queryNameGenerator, $resourceClass, $operationName);
+        $this->decorated->apply($queryBuilder, $queryNameGenerator, $resourceClass, $operationName, $context);
     }
 
     private function getDescriptionText(string $strategy): string

@@ -16,6 +16,14 @@ final class SwaggerGroupFilter implements FilterInterface
 
     private $whitelist;
 
+    /**
+     * SwaggerGroupFilter constructor.
+     *
+     * @param \ApiPlatform\Core\Serializer\Filter\FilterInterface $decorated
+     *
+     * @throws \DomainException
+     * @throws \ReflectionException
+     */
     public function __construct(FilterInterface $decorated)
     {
         $reflection = new ReflectionClass($decorated);
