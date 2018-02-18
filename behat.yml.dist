@@ -4,9 +4,9 @@ default:
             contexts:
                 - App\Tests\Feature\FeatureContext:
                     kernel: '@kernel'
+                - App\Tests\Feature\JsonContext
                 - Behat\MinkExtension\Context\MinkContext
-                - behatch:context:json
-                - behatch:context:rest
+                - Behatch\Context\RestContext
     extensions:
         Behat\Symfony2Extension:
             kernel:
