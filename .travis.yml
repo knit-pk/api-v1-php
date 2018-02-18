@@ -32,7 +32,7 @@ matrix:
         - psql -c 'CREATE DATABASE knit_api_test;' -U postgres
       env:
         - DATABASE_URL="pgsql://postgres@127.0.0.1:5432/knit_api_test"
-    - php: '7.2'
+    - php: '7.1'
 
 before_install:
   - export PATH="$PATH:$HOME/.composer/vendor/bin"
@@ -45,3 +45,28 @@ script:
   - if [[ -v DATABASE_URL ]]; then bin/console doctrine:schema:create; fi
   - if [[ -v DATABASE_URL ]]; then bin/console doctrine:fixtures:load -n; fi
   - if [[ -v DATABASE_URL ]]; then composer test-features -n; fi
+
+addons:
+  ssh_known_hosts: s11.mydevil.net
+
+before_deploy:
+  - "export APP_VERSION=$(cat ./config/services.yaml | grep version | sed -E \"s/\\s+version: '(.*)'/v\\1/\") && echo $APP_VERSION"
+  - openssl aes-256-cbc -K $encrypted_abb59573aead_key -iv $encrypted_abb59573aead_iv -in ./deploy/mydevil.tar.enc -out /tmp/mydevil.tar -d
+  - tar xvf /tmp/mydevil.tar -C /tmp
+  - eval "$(ssh-agent -s)"
+  - chmod 600 /tmp/mydevil_rsa
+  - ssh-add /tmp/mydevil_rsa
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: bash ./deploy/mydevil-deploy.sh
+    on:
+      branch: develop
+      php: '7.1'
+  - provider: script
+    skip_cleanup: true
+    script: ssh k911-main@s11.mydevil.net "export APP_VERSION=$APP_VERSION && bash -s" < ./deploy/mydevil-post-deploy.sh
+    on:
+      branch: develop
+      php: '7.1'

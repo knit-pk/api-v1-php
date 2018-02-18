@@ -1,18 +1,5 @@
 #!/usr/bin/env sh
-
-if [[ ! -f composer.lock || ! -d src ]]; then
-    if [ ! -f .env.mydevil ]; then
-        echo "Env file not found."
-        exit 2
-    fi;
-    echo "You must execute this script from root path of app.";
-    exit 1
-fi;
-
-mv .env.mydevil .env
-rm -rf .idea .git .env.* .directory .gitignore vendor logs public/bundles config/jwt var supervisord.pid public/media/upload/*
- 
-php71 /usr/local/bin/composer install -n -a --no-progress --no-ansi --no-suggest --no-scripts
+cd /home/k911-main/domains/knit-test-api.tk/app-api-$APP_VERSION
 
 php71 bin/console cache:clear
 php71 bin/console cache:warmup

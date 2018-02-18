@@ -6,7 +6,7 @@
   "prefer-stable": true,
   "minimum-stability": "dev",
   "require": {
-    "php": "^7.2",
+    "php": "^7.1",
     "api-platform/api-pack": "^1.0",
     "friendsofsymfony/user-bundle": "^2.0",
     "gedmo/doctrine-extensions": "^2.4.32",
