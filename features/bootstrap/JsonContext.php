@@ -10,45 +10,73 @@ use RuntimeException;
 class JsonContext extends BaseContext
 {
     /**
-     * @Then the JSON collection should not be empty
+     * @Then the JSON collection :collectionNode should not be empty
+     *
+     * @param string $collectionNode
      *
      * @throws \Exception
      */
-    public function theJsonCollectionShouldNotBeEmpty(): void
+    public function theJsonCollectionShouldNotBeEmpty(string $collectionNode): void
     {
-        $collection = $this->getJsonCollection();
+        $collection = $this->getJsonCollection($collectionNode);
 
         $this->assertFalse(empty($collection), 'JSON is an empty collection');
     }
 
     /**
-     * @Then the JSON collection every node :node should be equal to :text
-     *
-     * @param string       $node
-     * @param string|mixed $text
+     * @Then the JSON collection should not be empty
      *
      * @throws \Exception
      */
-    public function theJsonCollectionEveryNodeShouldBeEqualTo(string $node, $text): void
+    public function theJsonRootCollectionShouldNotBeEmpty(): void
     {
-        $collection = $this->getJsonCollection();
+        $this->theJsonCollectionShouldNotBeEmpty('');
+    }
 
-        $items = \count($collection);
-        for ($itemNo = 0; $itemNo < $items; ++$itemNo) {
-            $this->theJsonNodeShouldBeEqualTo(\sprintf('[%d].%s', $itemNo, $node), $text);
+    /**
+     * @Then the JSON items in collection :collectionNode should have node :node that is equal to :value
+     *
+     * @param string       $collectionNode
+     * @param string       $node
+     * @param string|mixed $value
+     *
+     * @throws \Exception
+     */
+    public function theJsonCollectionEveryNodeShouldBeEqualTo(string $collectionNode, string $node, $value): void
+    {
+        $jsonCollection = $this->getJsonCollection($collectionNode);
+        $itemsCount = \count($jsonCollection);
+
+        for ($itemNo = 0; $itemNo < $itemsCount; ++$itemNo) {
+            $this->theJsonNodeShouldBeEqualTo(\sprintf('%s[%d].%s', $collectionNode, $itemNo, $node), $value);
         }
     }
 
     /**
+     * @Then the JSON items in collection should have node :node that is equal to :value
+     *
+     * @param string       $node
+     * @param string|mixed $value
+     *
+     * @throws \Exception
+     */
+    public function theJsonRootCollectionEveryNodeShouldBeEqualTo(string $node, $value): void
+    {
+        $this->theJsonCollectionEveryNodeShouldBeEqualTo('', $node, $value);
+    }
+
+    /**
+     * @param string $collectionNode
+     *
      * @throws \Exception
      *
      * @return array
      */
-    private function getJsonCollection(): array
+    private function getJsonCollection(string $collectionNode): array
     {
         $json = $this->getJson();
 
-        $actual = $this->inspector->evaluate($json, '');
+        $actual = $this->inspector->evaluate($json, $collectionNode);
 
         if (!\is_array($actual)) {
             throw new RuntimeException('JSON is not a collection');
