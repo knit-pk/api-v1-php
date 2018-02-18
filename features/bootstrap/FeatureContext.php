@@ -44,14 +44,19 @@ final class FeatureContext implements Context
     }
 
     /**
-     * @Then the response should be received
+     * @Then the success response should be received
      *
      * @throws \RuntimeException
      */
-    public function theResponseShouldBeReceived()
+    public function theSuccessResponseShouldBeReceived()
     {
         if (null === $this->response) {
             throw new RuntimeException('No response received');
+        }
+
+        if (200 !== $this->response->getStatusCode()) {
+            throw new RuntimeException($this->response->getContent());
+            throw new RuntimeException(\sprintf('Status code is %d', $this->response->getStatusCode()));
         }
     }
 }
