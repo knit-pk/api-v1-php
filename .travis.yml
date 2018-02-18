@@ -10,10 +10,6 @@ env:
   global:
     - APP_ENV=test
     - APP_DEBUG=1
-    - APP_SECRET=a17636f12ff5ffc0c4f03a98d088e74adba75e55
-    - JWT_PRIVATE_KEY_PATH=config/jwt/private.pem
-    - JWT_PUBLIC_KEY_PATH=config/jwt/public.pem
-    - JWT_PASSPHRASE=56c247d4c281f5de0d8d9d894f2b605157fd379c
 
 matrix:
   include:

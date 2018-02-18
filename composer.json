@@ -69,7 +69,7 @@
       "phpunit"
     ],
     "test-features": [
-      "vendor/bin/behat"
+      "./vendor/bin/behat -n -vvv --colors"
     ],
     "fix": "php-cs-fixer fix",
     "auto-scripts": {

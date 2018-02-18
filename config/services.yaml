@@ -12,6 +12,10 @@ parameters:
     session.storage.options:
         cache_limiter: 0
 
+    # Default environment variables values
+    env(JWT_PRIVATE_KEY_PATH): config/jwt/private.pem
+    env(JWT_PUBLIC_KEY_PATH): config/jwt/public.pem
+
 services:
     # default configuration for services in *this* file
     _defaults:
