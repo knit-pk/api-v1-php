@@ -1,12 +1,10 @@
 supervisord.pid
-.env.mydevil
-.env.debug
+.env.*
+!.env.test
+!.env.mysql
 
-/logs
-/config/jwt
-/docker/oracle/instantclient-12c
-/docker/oracle/database-12c
-/docker/php/instantclient
+/logs/
+/config/jwt/
 /public/media/upload/*
 
 !/public/media/upload/.gitkeep
