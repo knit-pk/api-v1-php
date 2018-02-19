@@ -38,20 +38,24 @@ final class FeatureContext implements Context
      *
      * @throws \Exception
      */
-    public function aDemoScenarioSendsARequestTo(string $path)
+    public function aDemoScenarioSendsARequestTo(string $path): void
     {
         $this->response = $this->kernel->handle(Request::create($path));
     }
 
     /**
-     * @Then the response should be received
+     * @Then the success response should be received
      *
      * @throws \RuntimeException
      */
-    public function theResponseShouldBeReceived()
+    public function theSuccessResponseShouldBeReceived(): void
     {
         if (null === $this->response) {
             throw new RuntimeException('No response received');
+        }
+
+        if (200 !== $this->response->getStatusCode()) {
+            throw new RuntimeException(\sprintf('Status code was %d', $this->response->getStatusCode()));
         }
     }
 }

@@ -30,13 +30,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "normalization_context": {"groups": {"ArticleRead"}},
  *         "denormalization_context": {"groups": {"ArticleWrite"}},
  *     },
+ *     graphql={
+ *         "query": {
+ *             "normalization_context": {"groups": {"ArticleRead", "UserReadLess", "ImageReadLess", "TagRead", "CategoryRead"}},
+ *         },
+ *     },
  *     collectionOperations={
  *         "get": {
  *             "method": "GET",
  *         },
  *         "post": {
  *             "method": "POST",
- *             "access_control": "is_granted('ROLE_READER')",
+ *             "access_control": "is_granted(ROLE_READER)",
  *         },
  *     },
  *     itemOperations={
@@ -45,11 +50,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         },
  *         "put": {
  *             "method": "PUT",
- *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *             "access_control": "is_granted(ROLE_ADMIN) or(user and object.isAuthor(user))",
  *         },
  *         "delete": {
  *             "method": "DELETE",
- *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
+ *             "access_control": "is_granted(ROLE_ADMIN) or(user and object.isAuthor(user))",
  *         },
  *     })
  *
@@ -112,7 +117,7 @@ class Article implements ThoughtfulInterface
      * @var Category articles may belong to one category
      *
      * @ORM\ManyToOne(targetEntity="Category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      *
      * @ApiProperty(iri="http://schema.org/articleSection")
      *
@@ -189,7 +194,7 @@ class Article implements ThoughtfulInterface
      * @var User The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      *
      * @ApiProperty(iri="http://schema.org/author")
      *
