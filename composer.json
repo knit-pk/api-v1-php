@@ -64,7 +64,8 @@
   },
   "scripts": {
     "test": [
-      "phpstan analyze src tests features -l 6",
+      "phpstan analyze src -l 6",
+      "phpstan analyze features tests -l 5",
       "php-cs-fixer fix -v --dry-run --diff --stop-on-violation",
       "phpunit"
     ],
