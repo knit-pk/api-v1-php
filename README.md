@@ -16,8 +16,7 @@ Requirements to work with project: `git`, `docker`, `docker-compose`
 
 1. Clone repository
    ```bash
-   $ git clone https://github.com/knit-pk/api-v1-php.git api
-   $ cd api
+   $ git clone https://github.com/knit-pk/api-v1-php.git knit-api
    ```
 2. Run project
    ```bash
@@ -54,19 +53,19 @@ If repository was cloned as instructed to `api` directory, container name: `api_
 - Feed database with default data.
 
     ```bash
-    $ docker exec -it api_backend_1 make fixtures-reload
+    $ docker-compose exec backend make fixtures-reload
     ```
 
 - Clean and rebuild application cache.
 
     ```bash
-    $ docker exec -it api_backend_1 make cache-warmup-docker
+    $ docker-compose exec backend make cache-warmup-docker
     ```
 
 - Running feature tests
 
     ```bash
-    $ docker exec -it api_backend_1 composer test-features
+    $ docker-compose exec backend composer test-features
     ```
 
 ## Informations
