@@ -431,11 +431,7 @@ class Article implements ThoughtfulInterface
     }
 
     /**
-     * Determines whether given thought is supported by an thoughtful object.
-     *
-     * @param ThoughtInterface $thought
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isThoughtSupported(ThoughtInterface $thought): bool
     {
@@ -443,11 +439,9 @@ class Article implements ThoughtfulInterface
     }
 
     /**
-     * Returns an array of supported thought objects' class names.
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public static function getSupportedThoughts(): array
+    public function getSupportedThoughts(): array
     {
         return [
             Comment::class,
