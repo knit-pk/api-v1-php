@@ -8,7 +8,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class JWTUser implements UserInterface, JWTUserInterface
+final class JWTUser implements UserInterface, JWTUserInterface
 {
     private $id;
     private $username;
@@ -24,7 +24,7 @@ class JWTUser implements UserInterface, JWTUserInterface
     /**
      * {@inheritdoc}
      */
-    public static function createFromPayload($username, array $payload)
+    public static function createFromPayload($username, array $payload): self
     {
         return new self(
             $payload['id'],

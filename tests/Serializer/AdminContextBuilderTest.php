@@ -42,7 +42,7 @@ class AdminContextBuilderTest extends TestCase
         $this->adminContextBuilder = new AdminContextBuilder($serializerContextBuilderMock, $authorizationCheckerMock, $adminSerializerGroupFactoryMock);
     }
 
-    public function testNonSerializerGroupsSet()
+    public function testNonSerializerGroupsSet(): void
     {
         $request = new Request();
         $normalization = true;
@@ -59,7 +59,7 @@ class AdminContextBuilderTest extends TestCase
         $this->assertSame($context, $this->adminContextBuilder->createFromRequest($request, $normalization, $extractedAttributes));
     }
 
-    public function testNonAdminGranted()
+    public function testNonAdminGranted(): void
     {
         $request = new Request();
 
@@ -78,7 +78,7 @@ class AdminContextBuilderTest extends TestCase
         $this->assertSame($context, $this->adminContextBuilder->createFromRequest($request, $normalization, $extractedAttributes));
     }
 
-    public function testNormalization()
+    public function testNormalization(): void
     {
         $request = new Request();
 
@@ -102,7 +102,7 @@ class AdminContextBuilderTest extends TestCase
         $this->assertSame($context, $this->adminContextBuilder->createFromRequest($request, $normalization, $extractedAttributes));
     }
 
-    public function testDenormalizationOnPut()
+    public function testDenormalizationOnPut(): void
     {
         $request = new Request();
         $request->setMethod('PUT');
@@ -132,7 +132,7 @@ class AdminContextBuilderTest extends TestCase
         $this->assertSame($context, $this->adminContextBuilder->createFromRequest($request, $normalization, $extractedAttributes));
     }
 
-    public function testDenormalizationOnPost()
+    public function testDenormalizationOnPost(): void
     {
         $request = new Request();
         $request->setMethod('POST');
@@ -180,7 +180,7 @@ class AdminContextBuilderTest extends TestCase
      *
      * @param string $method
      */
-    public function testNotSupportedHttpMethodForDenormalization(string $method)
+    public function testNotSupportedHttpMethodForDenormalization(string $method): void
     {
         $request = new Request();
         $request->setMethod($method);
