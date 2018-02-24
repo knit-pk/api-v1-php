@@ -3,12 +3,10 @@
   "description": "KNIT API PHP",
   "type": "project",
   "license": "proprietary",
-  "prefer-stable": true,
-  "minimum-stability": "dev",
   "require": {
     "php": "^7.1",
-    "api-platform/api-pack": "^1.0",
-    "friendsofsymfony/user-bundle": "^2.0",
+    "api-platform/api-pack": "^1.1",
+    "friendsofsymfony/user-bundle": "^2.1.1",
     "gedmo/doctrine-extensions": "^2.4.32",
     "gesdinet/jwt-refresh-token-bundle": "^0.3",
     "guzzlehttp/guzzle": "^6.3",
@@ -48,8 +46,7 @@
       "*": "dist"
     },
     "sort-packages": true,
-    "optimize-autoloader": true,
-    "apcu-autoloader": true
+    "optimize-autoloader": true
   },
   "autoload": {
     "psr-4": {

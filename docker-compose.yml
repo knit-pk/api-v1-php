@@ -40,6 +40,18 @@ services:
             - ./logs/php:/var/log/php
             - ./logs/supervisor:/var/log/supervisor
 
+    ppm:
+        depends_on:
+            - mysql
+            - redis
+        image: phppm/nginx
+        command: --debug=1 -vv --app-env=dev --static-directory=public/
+        volumes:
+            - .:/var/www
+            - /var/www/var
+        ports:
+            - "8090:80"
+
     # Nginx
     api:
         depends_on:
