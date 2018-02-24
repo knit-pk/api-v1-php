@@ -36,7 +36,7 @@ final class AddThoughtAction
             throw new NotSupportedThoughtException($parent, $data);
         }
 
-        $data->setAuthor($this->userEntityProvider->getUser($user));
+        $data->setAuthor($this->userEntityProvider->getReference($user));
         $data->setSubject($parent);
 
         return $data;

@@ -36,7 +36,7 @@ class JWTUser implements UserInterface, JWTUserInterface
     /**
      * {@inheritdoc}
      */
-    public function getRoles()
+    public function getRoles(): array
     {
         return $this->roles;
     }
@@ -44,7 +44,7 @@ class JWTUser implements UserInterface, JWTUserInterface
     /**
      * {@inheritdoc}
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return '';
     }
@@ -60,7 +60,7 @@ class JWTUser implements UserInterface, JWTUserInterface
     /**
      * {@inheritdoc}
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 

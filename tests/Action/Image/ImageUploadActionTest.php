@@ -60,7 +60,7 @@ class ImageUploadActionTest extends TestCase
         /** @var \App\Entity\User $userEntityMock */
         $userEntityMock = $this->prophesize(User::class)->reveal();
 
-        $this->userEntityProviderProphecy->getUser($user)->willReturn($userEntityMock)->shouldBeCalled();
+        $this->userEntityProviderProphecy->getReference($user)->willReturn($userEntityMock)->shouldBeCalled();
 
         return $userEntityMock;
     }

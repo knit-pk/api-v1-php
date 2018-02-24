@@ -50,6 +50,6 @@ final class ImageUploadAction
             throw new HttpException(400, 'Field `image` is required, and must be a file');
         }
 
-        return Image::fromFile($imageFile, $this->userEntityProvider->getUser($user));
+        return Image::fromFile($imageFile, $this->userEntityProvider->getReference($user));
     }
 }
