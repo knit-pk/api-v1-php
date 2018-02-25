@@ -64,10 +64,10 @@
       "phpstan analyze src -l 6 --ansi",
       "phpstan analyze features tests -l 5 --ansi",
       "php-cs-fixer fix -v --dry-run --diff --stop-on-violation --ansi",
-      "phpunit --colors=always"
+      "phpunit --coverage-clover clover.xml --colors=always"
     ],
     "test-features": [
-      "./vendor/bin/behat -n -vvv --colors"
+      "behat -n -vvv --colors"
     ],
     "fix": "php-cs-fixer fix -v --ansi",
     "auto-scripts": {

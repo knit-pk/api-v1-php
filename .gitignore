@@ -2,6 +2,7 @@ supervisord.pid
 .env.*
 !.env.test
 !.env.mysql
+clover.xml
 
 /logs/
 /config/jwt/
