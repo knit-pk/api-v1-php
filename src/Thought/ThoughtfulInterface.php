@@ -20,5 +20,5 @@ interface ThoughtfulInterface
      *
      * @return array
      */
-    public static function getSupportedThoughts(): array;
+    public function getSupportedThoughts(): array;
 }

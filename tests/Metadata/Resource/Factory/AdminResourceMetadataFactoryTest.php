@@ -23,7 +23,7 @@ class AdminResourceMetadataFactoryTest extends TestCase
 
     private $adminResourceMetadataFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMetadataFactoryProphecy = $this->prophesize(ResourceMetadataFactoryInterface::class);
         $this->authorizationCheckerProphecy = $this->prophesize(AuthorizationCheckerInterface::class);
@@ -56,7 +56,7 @@ class AdminResourceMetadataFactoryTest extends TestCase
      * @param string $method
      * @param mixed  $result
      */
-    public function testNoContext(string $method, $result)
+    public function testNoContext(string $method, $result): void
     {
         $resourceClass = 'Test';
         $itemOperations = [];
@@ -76,7 +76,7 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $this->assertSame($resourceMetadata->getAttributes(), $newResourceMetadata->getAttributes());
     }
 
-    public function testAttributesNormalizationWithDenormalization()
+    public function testAttributesNormalizationWithDenormalization(): void
     {
         $resourceClass = 'Test';
         $itemOperations = [];
@@ -121,7 +121,7 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $this->assertSame($resourceMetadata->getAttributes(), $newResourceMetadata->getAttributes());
     }
 
-    public function testAttributesNormalizationWithOperationsDenormalization()
+    public function testAttributesNormalizationWithOperationsDenormalization(): void
     {
         $resourceClass = 'Test';
         $itemOperations = [

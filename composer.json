@@ -61,14 +61,15 @@
   },
   "scripts": {
     "test": [
-      "phpstan analyze src tests features -l 6",
-      "php-cs-fixer fix -v --dry-run --diff --stop-on-violation",
-      "phpunit"
+      "phpstan analyze src -l 6 --ansi",
+      "phpstan analyze features tests -l 5 --ansi",
+      "php-cs-fixer fix -v --dry-run --diff --stop-on-violation --ansi",
+      "phpunit --coverage-clover clover.xml --colors=always"
     ],
     "test-features": [
-      "./vendor/bin/behat -n -vvv --colors"
+      "behat -n -vvv --colors"
     ],
-    "fix": "php-cs-fixer fix",
+    "fix": "php-cs-fixer fix -v --ansi",
     "auto-scripts": {
       "cache:clear": "symfony-cmd",
       "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
