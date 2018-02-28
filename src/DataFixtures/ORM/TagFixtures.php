@@ -14,16 +14,6 @@ class TagFixtures extends Fixture
 {
     private const TAG_FIXTURES = __DIR__.'/../Resources/fixtures/tags.yaml';
 
-    public const PUBLIC_TAG_CODES = [
-        'it',
-        'university',
-        'fun',
-        'programming',
-        'poland',
-        'ski-jumping',
-        'computer-security',
-    ];
-
     /**
      * Load data fixtures with the passed EntityManager.
      *

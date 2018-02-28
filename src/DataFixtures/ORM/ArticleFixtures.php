@@ -43,48 +43,6 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
     {
         $this->createTriggers();
 
-        $categoryCollection = CategoryFixtures::PUBLIC_CATEGORY_CODES;
-        $usersCollection = UserFixtures::PUBLIC_USERNAMES;
-        $tagCollection = TagFixtures::PUBLIC_TAG_CODES;
-        $tagCollectionTotalItems = \count($tagCollection);
-
-        /** @var \App\Entity\Image $image */
-        $image = $this->getReference('image-card-photo-4.jpg');
-
-        for ($i = 1; $i <= 10; ++$i) {
-            \shuffle($usersCollection);
-            /** @var \App\Entity\User $commentAuthor */
-            $commentAuthor = $this->getReference(\sprintf('user-%s', $usersCollection[0]));
-
-            \shuffle($categoryCollection);
-            /** @var \App\Entity\Category $category */
-            $category = $this->getReference(\sprintf('category-%s', $categoryCollection[0]));
-
-            $articleTitle = \sprintf('Article %d', $i);
-
-            $article = new Article();
-            $article->setTitle($articleTitle);
-            $article->setContent(\sprintf('Awesome short %s about.', $articleTitle));
-            $article->setDescription(\sprintf('Awesome %s content.', $articleTitle));
-            $article->setAuthor($commentAuthor);
-            $article->setCategory($category);
-            $article->setImage($image);
-
-            // Add random number of random tags
-            \shuffle($tagCollection);
-            $tagsPerArticle = \random_int(1, $tagCollectionTotalItems);
-            foreach ($tagCollection as $randomTag) {
-                /** @var \App\Entity\Tag $tagReference */
-                $tagReference = $this->getReference(\sprintf('tag-%s', $randomTag));
-                $article->addTag($tagReference);
-                if (0 === --$tagsPerArticle) {
-                    break;
-                }
-            }
-
-            $manager->persist($article);
-        }
-
         // Predefined articles
         foreach ($this->getArticleFixtures() as $fixture) {
             $article = new Article();

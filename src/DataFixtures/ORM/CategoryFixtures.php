@@ -14,12 +14,6 @@ class CategoryFixtures extends Fixture
 {
     private const CATEGORY_FIXTURES = __DIR__.'/../Resources/fixtures/categories.yaml';
 
-    public const PUBLIC_CATEGORY_CODES = [
-        'news',
-        'article',
-        'announcement',
-    ];
-
     /**
      * Load data fixtures with the passed EntityManager.
      *
