@@ -62,6 +62,8 @@ class TagFixtures extends Fixture
             ['name' => 'University'],
             ['name' => 'Fun'],
             ['name' => 'Ski Jumping'],
+            ['name' => 'Python'],
+            ['name' => 'Machine Learning'],
         ];
     }
 }

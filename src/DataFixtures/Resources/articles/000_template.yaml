@@ -3,7 +3,25 @@ description: Brief description of Article
 author: user-user_writer
 image: image-card-photo-4.jpg
 content: |
-  Multiline Markdown content
+  Multiline Markdown content here.
+
+  You can use also references in here like:
+
+  ```
+  `$$ref-user-user_writer` = $$ref-user-user_writer
+  ```
+
+  if reference will not be found it will not be transformed resulting in:
+
+  ```
+  `$$ref-wrong-reference` = $$ref-wrong-reference
+  ```
+
+  if you want to prevent transforming reference text, use backticks:
+
+  ```
+  ``$$ref-wrong-reference``
+  ```
 category: category-article
 tags:
   - tag-university

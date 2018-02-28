@@ -31,6 +31,9 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
      *
      * @param ObjectManager $manager
      *
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      * @throws \RuntimeException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
@@ -83,42 +86,48 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
         }
 
         // Predefined articles
-        foreach ($this->getArticlesData() as $data) {
+        foreach ($this->getArticleFixtures() as $fixture) {
             $article = new Article();
-            if (isset($data['image'])) {
+            if (isset($fixture['image'])) {
                 /** @var \App\Entity\Image $image */
-                $image = $this->getReference($data['image']);
+                $image = $this->getReference($fixture['image']);
                 $article->setImage($image);
             }
-            $article->setTitle($data['title']);
+            $article->setTitle($fixture['title']);
 
             /** @var \App\Entity\User $author */
-            $author = $this->getReference($data['author']);
+            $author = $this->getReference($fixture['author']);
             $article->setAuthor($author);
 
             /** @var \App\Entity\Category $category */
-            $category = $this->getReference($data['category']);
+            $category = $this->getReference($fixture['category']);
             $article->setCategory($category);
-            $article->setContent($data['content']);
-            $article->setDescription($data['description']);
+            $article->setContent($this->parseContent($fixture['content']));
+            $article->setDescription($fixture['description']);
 
-            foreach ($data['tags'] as $tagReference) {
+            /** @var string[] $tags */
+            $tags = $fixture['tags'];
+            foreach ($tags as $tagReference) {
                 /** @var \App\Entity\Tag $tag */
                 $tag = $this->getReference($tagReference);
                 $article->addTag($tag);
             }
 
-            if (isset($data['comments'])) {
-                foreach ($data['comments'] as $commentData) {
+            if (isset($fixture['comments'])) {
+                /** @var array[] $comments */
+                $comments = $fixture['comments'];
+                foreach ($comments as $commentFixture) {
                     $comment = new Comment();
                     /** @var \App\Entity\User $commentAuthor */
-                    $commentAuthor = $this->getReference($commentData['author']);
+                    $commentAuthor = $this->getReference($commentFixture['author']);
                     $comment->setAuthor($commentAuthor);
-                    $comment->setText($commentData['text']);
+                    $comment->setText($commentFixture['text']);
                     $comment->setArticle($article);
 
-                    if (isset($commentData['replies'])) {
-                        foreach ($commentData['replies'] as $replyData) {
+                    if (isset($commentFixture['replies'])) {
+                        /** @var array[] $replies */
+                        $replies = $commentFixture['replies'];
+                        foreach ($replies as $replyData) {
                             $reply = new CommentReply();
                             /** @var \App\Entity\User $replyAuthor */
                             $replyAuthor = $this->getReference($replyData['author']);
@@ -148,7 +157,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
      *
      * @return Generator|array[]
      */
-    public function getArticlesData(): Generator
+    private function getArticleFixtures(): Generator
     {
         $finder = Finder::create()
             ->in(self::ARTICLE_FIXTURES)
@@ -160,11 +169,34 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
     }
 
     /**
+     * @param string $content
+     *
+     * @return string
+     */
+    private function parseContent(string $content): string
+    {
+        return \preg_replace_callback('~\`?\$\$ref-([\w\-\.\_]+)\`?~', function (array $matches) {
+            $fullMatch = $matches[0];
+
+            if ('`' === $fullMatch[0] && '`' === $fullMatch[-1]) {
+                return \mb_substr($fullMatch, 1, -1);
+            }
+
+            $reference = $matches[1];
+            if ($this->hasReference($reference)) {
+                return (string) $this->getReference($reference);
+            }
+
+            return $fullMatch;
+        }, $content);
+    }
+
+    /**
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \Doctrine\DBAL\DBALException
      */
-    private function createTriggers()
+    private function createTriggers(): void
     {
         $driverName = $this->connection->getDriver()->getName();
         $sqlName = 'create_comment_triggers';
