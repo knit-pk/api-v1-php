@@ -10,7 +10,7 @@ content: |
 
   ## Uczenie ze wzmocnieniem
   Uczenie ze wzmocnieniem jest to forma uczenia maszynowego, w której agent (algorytm uczący się) na początku nie posiada żadnych informacji o środowisku, w którym się znajduje, jedynie otrzymuje kary lub nagrody za swoje postępowanie (wykonany ruch w środowisku). Agentowi nie dostarcza się żadnych przykładów trenujących, ocenia się tylko jego dotychczasową skuteczność. Agent musi sam nauczyć się działać tak, aby zmaksymalizować otrzymane nagrody.
-  ![Image of agent's learning circle](../images/agent-learning-circle.png)
+  ![Image of agent's learning circle]($$ref-image-agent-learning-circle.png)
   OpenAi Gym dostarcza nam wiele [środowisk](https://gym.openai.com/envs/) (gier), na których możemy ćwiczyć algorytmy maszynowego uczenia.
   Każde środowisko implementuje interfejs [Env](https://github.com/openai/gym/blob/master/gym/core.py). Dzięki temu interakcja z różnymi grami przebiega w taki sam sposób.
 
@@ -30,7 +30,7 @@ content: |
 
   ## Opis środowiska CartPole-v0
   Celem gry jest utrzymanie pręta w pozycji stojącej. Pręt znajduje się na wózku, którym agent porusza w lewo i w prawo.
-  ![Image of CartPole environment](../images/CartPole-environment.png)
+  ![Image of CartPole environment]($$ref-image-CartPole-environment.png)
   Stworzenie środowiska i pobranie od niego informacji:
   ```python
   env = gym.make('CartPole-v0')
@@ -90,7 +90,7 @@ tags:
   - tag-it
   - tag-machine-learning
   - tag-python
-image: wstep-openai-gym-card.png
+image: image-wstep-openai-gym-card.png
 comments:
   - author: user-reader
     text: Super artykuł!
