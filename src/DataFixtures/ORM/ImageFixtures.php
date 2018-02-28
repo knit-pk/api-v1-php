@@ -12,11 +12,13 @@ use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Yaml\Yaml;
 
 class ImageFixtures extends Fixture
 {
     private const APP_ROOT = __DIR__.'/../../../';
-    private const IMAGE_FIXTURES = __DIR__.'/../Resources/images';
+    private const IMAGE_FILE_FIXTURES = __DIR__.'/../Resources/images';
+    private const IMAGE_FIXTURES = __DIR__.'/../Resources/fixtures/images.yaml';
 
     private $filesystem;
 
@@ -30,6 +32,7 @@ class ImageFixtures extends Fixture
      *
      * @param ObjectManager $manager
      *
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
      * @throws \LogicException
      * @throws \InvalidArgumentException
      * @throws \DomainException
@@ -46,23 +49,30 @@ class ImageFixtures extends Fixture
         $tempFile = self::APP_ROOT.'var/temp.file';
 
         foreach ($this->getImageFixtures() as $fixture) {
-            $defaultAvatarImage = new SplFileInfo($fixture['file']);
-            if ($defaultAvatarImage->isFile()) {
-                $this->filesystem->copy($defaultAvatarImage->getRealPath(), $tempFile, true);
+            $imageFile = $fixture['file'];
+            if ($imageFile instanceof SplFileInfo) {
+                $this->filesystem->copy($imageFile->getRealPath(), $tempFile, true);
 
                 $file = new UploadedFile($tempFile, $fixture['name'], null, null, null, true);
-                $avatar = Image::fromFile($file);
-
-                $manager->persist($avatar);
-
-                $this->addReference(\sprintf('image-%s', $fixture['name']), $avatar);
+                $image = Image::fromFile($file);
+            } else {
+                $image = new Image();
+                $image->setOriginalName($fixture['name']);
+                $image->setUrl($fixture['url']);
             }
+
+            if ($fixture['public']) {
+                $this->addReference(\sprintf('image-%s', $fixture['name']), $image);
+            }
+
+            $manager->persist($image);
         }
 
         $manager->flush();
     }
 
     /**
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
      * @throws \LogicException
      * @throws \InvalidArgumentException
      *
@@ -71,13 +81,28 @@ class ImageFixtures extends Fixture
     private function getImageFixtures(): Generator
     {
         $finder = Finder::create()
-            ->in(self::IMAGE_FIXTURES)
+            ->in(self::IMAGE_FILE_FIXTURES)
             ->name('*.{png,jpg,jpeg}');
 
         foreach ($finder->getIterator() as $imageFile) {
             yield [
-                'file' => $imageFile->getRealPath(),
+                'file' => $imageFile,
                 'name' => $imageFile->getFilename(),
+                'public' => true,
+            ];
+        }
+
+        $fixtures = Yaml::parseFile(self::IMAGE_FIXTURES);
+        $defaults = $fixtures['_defaults'];
+
+        /** @var array[] $images */
+        $images = $fixtures['images'];
+        foreach ($images as $image) {
+            yield [
+                'file' => null,
+                'name' => $image['name'],
+                'url' => $image['url'],
+                'public' => $image['public'] ?? $defaults['public'],
             ];
         }
     }

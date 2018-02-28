@@ -1,0 +1,31 @@
+_defaults:
+  public: true
+  enabled: true
+  super_admin: false
+  avatar: image-avatar.png
+  roles: ['security-role_default']
+  
+users:
+  - fullname: Super Admin
+    roles: ['security-role_super_admin']
+    super_admin: true
+  - fullname: Admin
+    roles: ['security-role_admin']
+  - fullname: Reader
+    roles: ['security-role_reader']
+  - fullname: Writer
+    roles: ['security-role_writer']
+  - fullname: User
+  - fullname: User Writer
+    roles: ['security-role_user_writer']
+  - fullname: Articles Author
+    roles: ['security-role_writer']
+  - fullname: Konrad Obal
+    username: k911
+    avatar: image-k911-gravatar
+    email: konradobal@gmail.com
+  - fullname: Maks Rojek
+    username: maksrojek
+    avatar: image-mrojek-github
+    email: maksrojek@gmail.com
+    roles: ['security-role_reader', 'security-role_writer']

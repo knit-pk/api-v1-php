@@ -41,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         },
  *         "post": {
  *             "method": "POST",
- *             "access_control": "is_granted(ROLE_READER)",
+ *             "access_control": "is_granted('ROLE_READER')",
  *         },
  *     },
  *     itemOperations={
@@ -50,11 +50,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         },
  *         "put": {
  *             "method": "PUT",
- *             "access_control": "is_granted(ROLE_ADMIN) or(user and object.isAuthor(user))",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
  *         },
  *         "delete": {
  *             "method": "DELETE",
- *             "access_control": "is_granted(ROLE_ADMIN) or(user and object.isAuthor(user))",
+ *             "access_control": "is_granted('ROLE_ADMIN') or (user and object.isAuthor(user))",
  *         },
  *     })
  *

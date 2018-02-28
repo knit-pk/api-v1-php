@@ -8,32 +8,12 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Generator;
+use Symfony\Component\Yaml\Yaml;
 
 class UserFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const DEFAULT_USERS = [
-        'Super Admin' => [
-            User::ROLE_SUPER_ADMIN,
-        ],
-        'Admin' => [
-            User::ROLE_ADMIN,
-        ],
-        'Reader' => [
-            User::ROLE_READER,
-        ],
-        'Writer' => [
-            User::ROLE_WRITER,
-        ],
-        'User' => [
-            User::ROLE_USER,
-        ],
-        'User Writer' => [
-            User::ROLE_USER_WRITER,
-        ],
-        'Articles Author' => [
-            User::ROLE_USER,
-        ],
-    ];
+    private const USER_FIXTURES = __DIR__.'/../Resources/fixtures/users.yaml';
 
     public const PUBLIC_USERNAMES = [
         'reader',
@@ -48,44 +28,35 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
      *
      * @param ObjectManager $manager
      *
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
      * @throws \DomainException
      */
     public function load(ObjectManager $manager): void
     {
-        $publicUsers = \array_flip(self::PUBLIC_USERNAMES);
-
-        /** @var \App\Entity\SecurityRole $defaultRole */
-        $defaultRole = $this->getReference(\sprintf('security-%s', \mb_strtolower(USER::ROLE_DEFAULT)));
-
-        /** @var \App\Entity\Image $avatar */
-        $avatar = $this->getReference('image-avatar.png');
-
-        /**
-         * @var string
-         * @var array  $roles
-         */
-        foreach (self::DEFAULT_USERS as $fullname => $roles) {
-            $username = \mb_strtolower(\str_replace(' ', '_', $fullname));
-            $email = \sprintf('%s@%s.pl', $username, \mb_strtolower(\str_replace(' ', '-', $fullname)));
-
+        foreach ($this->getUserFixtures() as $fixture) {
+            $username = $fixture['username'];
             $user = new User();
-            $user->setFullname($fullname);
+
+            $user->setFullname($fixture['fullname']);
             $user->setUsername($username);
-            $user->setEmail($email);
-            $user->setEnabled(true);
-            $user->setPlainPassword($username);
+            $user->setEmail($fixture['email']);
+            $user->setSuperAdmin($fixture['super_admin']);
+            $user->setEnabled($fixture['enabled']);
+            $user->setPlainPassword($fixture['password']);
+
+            /** @var \App\Entity\Image $avatar */
+            $avatar = $this->getReference($fixture['avatar']);
             $user->setAvatar($avatar);
 
+            /** @var string[] $roles */
+            $roles = $fixture['roles'];
             foreach ($roles as $role) {
                 /** @var \App\Entity\SecurityRole $securityRole */
-                $securityRole = $this->getReference(\sprintf('security-%s', \mb_strtolower($role)));
+                $securityRole = $this->getReference($role);
                 $user->addSecurityRole($securityRole);
             }
 
-            // Add default role
-            $user->addSecurityRole($defaultRole);
-
-            if (isset($publicUsers[$username])) {
+            if ($fixture['public']) {
                 $this->setReference(\sprintf('user-%s', $username), $user);
             }
 
@@ -101,5 +72,37 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             SecurityRoleFixtures::class,
             ImageFixtures::class,
         ];
+    }
+
+    /**
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
+     *
+     * @return \Generator
+     */
+    private function getUserFixtures(): Generator
+    {
+        $fixtures = Yaml::parseFile(self::USER_FIXTURES);
+
+        $defaults = $fixtures['_defaults'];
+
+        /** @var array[] $users */
+        $users = $fixtures['users'];
+        foreach ($users as $user) {
+            $fullname = $user['fullname'];
+            $username = $user['username'] ?? \mb_strtolower(\str_replace(' ', '_', $fullname));
+            $email = $user['email'] ?? \sprintf('%s@%s.pl', $username, \mb_strtolower(\str_replace(' ', '-', $fullname)));
+
+            yield [
+                'fullname' => $fullname,
+                'username' => $username,
+                'email' => $email,
+                'super_admin' => $user['super_admin'] ?? $defaults['super_admin'] ?? false,
+                'password' => $user['password'] ?? $defaults['password'] ?? $username,
+                'enabled' => $user['enabled'] ?? $defaults['enabled'] ?? true,
+                'avatar' => $user['avatar'] ?? $defaults['avatar'],
+                'roles' => \array_unique(\array_merge($defaults['roles'], $user['roles'] ?? [])),
+                'public' => $user['public'] ?? $defaults['public'],
+            ];
+        }
     }
 }

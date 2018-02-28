@@ -1,0 +1,23 @@
+_defaults:
+  public: true
+
+tags:
+  - name: IT
+  - name: Business
+  - name: Computer Security
+  - name: Programming
+  - name: Development
+  - name: Conference
+  - name: Hackathon
+  - name: Party
+  - name: Meeting
+  - name: Cracow
+  - name: Poland
+  - name: Free
+  - name: Mobile
+  - name: Web
+  - name: University
+  - name: Fun
+  - name: Ski Jumping
+  - name: Python
+  - name: Machine Learning
