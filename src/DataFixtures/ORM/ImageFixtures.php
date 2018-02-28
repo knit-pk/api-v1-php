@@ -30,6 +30,8 @@ class ImageFixtures extends Fixture
      *
      * @param ObjectManager $manager
      *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      * @throws \DomainException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
@@ -43,17 +45,17 @@ class ImageFixtures extends Fixture
     {
         $tempFile = self::APP_ROOT.'var/temp.file';
 
-        foreach ($this->getImagesData() as $data) {
-            $defaultAvatarImage = new SplFileInfo($data['file']);
+        foreach ($this->getImageFixtures() as $fixture) {
+            $defaultAvatarImage = new SplFileInfo($fixture['file']);
             if ($defaultAvatarImage->isFile()) {
                 $this->filesystem->copy($defaultAvatarImage->getRealPath(), $tempFile, true);
 
-                $file = new UploadedFile($tempFile, $data['name'], null, null, null, true);
+                $file = new UploadedFile($tempFile, $fixture['name'], null, null, null, true);
                 $avatar = Image::fromFile($file);
 
                 $manager->persist($avatar);
 
-                $this->addReference(\sprintf('image-%s', $data['name']), $avatar);
+                $this->addReference(\sprintf('image-%s', $fixture['name']), $avatar);
             }
         }
 
@@ -66,11 +68,11 @@ class ImageFixtures extends Fixture
      *
      * @return \Generator|array[]
      */
-    private function getImagesData(): Generator
+    private function getImageFixtures(): Generator
     {
         $finder = Finder::create()
             ->in(self::IMAGE_FIXTURES)
-            ->name('*.{png,jpg}');
+            ->name('*.{png,jpg,jpeg}');
 
         foreach ($finder->getIterator() as $imageFile) {
             yield [

@@ -1,0 +1,103 @@
+title: Wprowadzenie do OpenAI Gym
+content: |
+  ## OpenAI
+  OpenAI jest organizacją non-profit zajmującą się badaniem oraz rozwojem sztucznej inteligencji.
+  Jej członkowie pracują nad tak zwaną przyjazną sztuczną inteligencją, która [przysłuży się ludzkości](https://openai.com/about/#mission).
+  Głównym jej celem jest zachęcenie do współpracy innych instytucji poprzez publiczne udostępnianie wyników.
+
+  ## OpenAI Gym
+  [OpenAI gym](https://github.com/openai/gym) jest zestawem narzędzi służącym do opracowywania i porównywania algorytmów uczenia maszynowego ze wzmocnieniem. W tym momencie biblioteka ta przeznaczona jest jedynie dla języka Python. Dodatkowo jest kompatybilna z bibliotekami powszechie wykorzystywanymi  w uczeniu maszynowym takimi jak TensorFlow oraz Theano.
+
+  ## Uczenie ze wzmocnieniem
+  Uczenie ze wzmocnieniem jest to forma uczenia maszynowego, w której agent (algorytm uczący się) na początku nie posiada żadnych informacji o środowisku, w którym się znajduje, jedynie otrzymuje kary lub nagrody za swoje postępowanie (wykonany ruch w środowisku). Agentowi nie dostarcza się żadnych przykładów trenujących, ocenia się tylko jego dotychczasową skuteczność. Agent musi sam nauczyć się działać tak, aby zmaksymalizować otrzymane nagrody.
+  ![Image of agent's learning circle]($$ref-image-agent-learning-circle.png)
+  OpenAi Gym dostarcza nam wiele [środowisk](https://gym.openai.com/envs/) (gier), na których możemy ćwiczyć algorytmy maszynowego uczenia.
+  Każde środowisko implementuje interfejs [Env](https://github.com/openai/gym/blob/master/gym/core.py). Dzięki temu interakcja z różnymi grami przebiega w taki sam sposób.
+
+  ### Tworzenie środowiska:
+  ```python
+  env = gym.make('nazwa_środowiska') #np. 'CartPole-v0'
+  ```
+
+  ### Główne metody interfejsu Env:
+  - env.step(action)- wykonanie ruchu/czynności, zwraca informacje:
+    - observation (object) - obiekt (specyficzny dla środowiska) reprezentujący obserwację środowiska. Są to dane opisujące stan środowiska, np. kąt nachylenia pręta, prędkość poruszania się, współrzędne samochodu który sterujemy, współrzędne piłki którą mamy odbić. Są to dane na podstawie których nasz agent będzie podejmował decyzję jaki następny ruch wykonać.
+    - reward (float) - nagroda za wykonany ruch. Agent dąży do tego aby otrzymać jak najwięcej punktów. Jest to informacja o tym czy był to dobry ruch.
+    - done (boolean) - flaga określająca zakończenie epizodu (jednego przebiegu gry), zwraca true w chwili zakończenia gry. Każde środowisko ma określone warunki zakończenia.
+    - info (dict) - informacje diagnostyczne do debugowania, nie powinny być wykorzystywane do nauki agenta.
+  - env.reset() - resetuje środowisko do stanu początkowego, zwraca obiekt observation.
+  - env.render() - renderowanie aktualnego stanu środowiska.
+
+  ## Opis środowiska CartPole-v0
+  Celem gry jest utrzymanie pręta w pozycji stojącej. Pręt znajduje się na wózku, którym agent porusza w lewo i w prawo.
+  ![Image of CartPole environment]($$ref-image-CartPole-environment.png)
+  Stworzenie środowiska i pobranie od niego informacji:
+  ```python
+  env = gym.make('CartPole-v0')
+  observation, reward, done, info = env.step(0)
+  ```
+  - observation - wektor składający się z 4 wartości, np. [0.3247529 -0.00372142 -0.04940884 0.00957897]
+  Znaczenie wartości i ich zakres:
+
+  || Observation | Min | Max |
+  |:---:|:---:|:---:|:---:|
+  | 0 | Pozycja wagonika | -2.4 | 2.4 |
+  | 1 | Prędkość wagonika | -&#8734; | &#8734; |
+  | 2 | Kąt nachylenia pręta | ~ -41.8&#176;|~ 41.8&#176;|
+  | 3 | Prędkość czubka pręta | -&#8734; | &#8734; |
+
+  - reward - 1 za każdy krok
+  - done - warunki zakończenia:
+      - kąt pręta &#177;20.9&#176;,
+      - pozycja wagonika &#177;2.4,
+      - czas trwania epizodu przekroczy 200 (ilość wykonanych ruchów).
+
+  Przykład agenta wykonującego losowe ruchy:
+  ```python
+  import gym
+  import time
+
+  env = gym.make('CartPole-v0')
+  env.reset()
+  for t in range(200):
+      env.render()
+      time.sleep(1)
+      action = env.action_space.sample()
+      observation, reward, done, info = env.step(action)
+      if done:
+          print('Epizod zakończył się po {} krokach'.format(t+1)
+          break
+  ```
+
+  Przed wejściem do pętli, resetujemy środowisko do stanu początkowego: `env.reset()`.
+  Poniższy kod używamy w celu wyświetlenia na ekranie naszej gry oraz spowolnienie jej wykonania. Bez uśpienia na sekundę program wykonałby się tak szybko, że nie zdążylibyśmy zobaczyć jego działania.
+  ```python
+  env.render()
+  time.sleep(1)
+  ```
+  W każdym przejściu pętli wybieramy losową akcję z przestrzeni możliwych akcji tego środowiska.
+  ```python
+  action = env.action_space.sample()
+  ```
+  Program kończy swoje działanie gdy do zmiennej `done` zostanie przypisana wartość True.
+
+  Powyższy kod dostępny jest na githubie koła: [ai-section](https://github.com/knit-pk/ai-section).
+description: Wprowadzenie do uczenia maszynowego ze wzmocnieniem.
+category: category-article
+author: user-user_writer
+tags:
+  - tag-programming
+  - tag-it
+  - tag-machine-learning
+  - tag-python
+image: image-wstep-openai-gym-card.png
+comments:
+  - author: user-reader
+    text: Super artykuł!
+    replies:
+      - author: user-user_writer
+        text: Dzięki
+      - author: user-reader
+        text: '@user-user_writer Nie ma za co!'
+  - author: user-user
+    text: O kurde, nigdy tego nie ogarnę..

@@ -13,11 +13,6 @@ final class SwaggerDocumentation implements NormalizerInterface
 {
     private const SWAGGER_RESOURCES = __DIR__.'/Resources/';
 
-    private const SECURITY_METHODS = [
-        'header' => 'BearerAuthHeader',
-        'query' => 'QueryParamToken',
-    ];
-
     /**
      * @var \Symfony\Component\Serializer\Normalizer\NormalizerInterface
      */
