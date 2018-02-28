@@ -7,9 +7,13 @@ namespace App\DataFixtures\ORM;
 use App\Entity\Tag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Generator;
+use Symfony\Component\Yaml\Yaml;
 
 class TagFixtures extends Fixture
 {
+    private const TAG_FIXTURES = __DIR__.'/../Resources/fixtures/tags.yaml';
+
     public const PUBLIC_TAG_CODES = [
         'it',
         'university',
@@ -25,16 +29,19 @@ class TagFixtures extends Fixture
      *
      * @param ObjectManager $manager
      *
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
      * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     public function load(ObjectManager $manager): void
     {
-        foreach ($this->getTagsData() as ['name' => $name]) {
+        foreach ($this->getTagFixtures() as $fixture) {
             $tag = new Tag();
-            $tag->setName($name);
+            $tag->setName($fixture['name']);
 
-            $code = \str_replace(' ', '-', \mb_strtolower($name));
-            $this->addReference(\sprintf('tag-%s', $code), $tag);
+            if ($fixture['public']) {
+                $code = \str_replace(' ', '-', \mb_strtolower($fixture['name']));
+                $this->addReference(\sprintf('tag-%s', $code), $tag);
+            }
 
             $manager->persist($tag);
         }
@@ -42,28 +49,24 @@ class TagFixtures extends Fixture
         $manager->flush();
     }
 
-    private function getTagsData(): array
+    /**
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
+     *
+     * @return \Generator
+     */
+    private function getTagFixtures(): Generator
     {
-        return [
-            ['name' => 'IT'],
-            ['name' => 'Business'],
-            ['name' => 'Computer Security'],
-            ['name' => 'Programming'],
-            ['name' => 'Development'],
-            ['name' => 'Conference'],
-            ['name' => 'Hackathon'],
-            ['name' => 'Party'],
-            ['name' => 'Meeting'],
-            ['name' => 'Cracow'],
-            ['name' => 'Poland'],
-            ['name' => 'Free'],
-            ['name' => 'Mobile'],
-            ['name' => 'Web'],
-            ['name' => 'University'],
-            ['name' => 'Fun'],
-            ['name' => 'Ski Jumping'],
-            ['name' => 'Python'],
-            ['name' => 'Machine Learning'],
-        ];
+        $fixtures = Yaml::parseFile(self::TAG_FIXTURES);
+
+        $defaults = $fixtures['_defaults'];
+
+        /** @var array[] $tags */
+        $tags = $fixtures['tags'];
+        foreach ($tags as $tag) {
+            yield [
+                'name' => $tag['name'],
+                'public' => $tag['public'] ?? $defaults['public'],
+            ];
+        }
     }
 }

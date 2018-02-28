@@ -1,0 +1,16 @@
+_defaults:
+  public: true
+
+security_roles:
+  - name: User
+    role: ROLE_USER
+  - name: Reader
+    role: ROLE_READER
+  - name: Writer
+    role: ROLE_WRITER
+  - name: User Writer
+    role: ROLE_USER_WRITER
+  - name: Admin
+    role: ROLE_ADMIN
+  - name: Super Admin
+    role: ROLE_SUPER_ADMIN

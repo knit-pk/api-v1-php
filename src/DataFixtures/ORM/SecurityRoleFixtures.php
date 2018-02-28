@@ -8,33 +8,35 @@ use App\Entity\SecurityRole;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Generator;
+use Symfony\Component\Yaml\Yaml;
 
 class SecurityRoleFixtures extends Fixture
 {
-    public const SECURITY_ROLES = [
-        User::ROLE_USER,
-        User::ROLE_READER,
-        User::ROLE_WRITER,
-        User::ROLE_USER_WRITER,
-        User::ROLE_ADMIN,
-        User::ROLE_SUPER_ADMIN,
-    ];
+    private const SECURITY_ROLE_FIXTURES = __DIR__.'/../Resources/fixtures/security_roles.yaml';
 
     /**
      * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
+     *
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
+     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     public function load(ObjectManager $manager): void
     {
-        foreach ($this->getSecurityRolesData() as [
-                'role' => $role,
-                'name' => $name,
-            ]) {
-            $securityRole = new SecurityRole($role);
-            $securityRole->setName($name);
+        foreach ($this->getSecurityRoleFixtures() as $fixture) {
+            $securityRole = new SecurityRole($fixture['role']);
+            $securityRole->setName($fixture['name']);
 
-            $this->setReference(\sprintf('security-%s', \mb_strtolower($role)), $securityRole);
+            if ($fixture['public']) {
+                $code = \str_replace(' ', '-', \mb_strtolower($fixture['role']));
+                $this->addReference(\sprintf('security-%s', $code), $securityRole);
+            }
+
+            if (User::ROLE_DEFAULT === $securityRole->getRole()) {
+                $this->addReference('security-role_default', $securityRole);
+            }
 
             $manager->persist($securityRole);
         }
@@ -42,33 +44,25 @@ class SecurityRoleFixtures extends Fixture
         $manager->flush();
     }
 
-    public function getSecurityRolesData(): array
+    /**
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
+     *
+     * @return \Generator
+     */
+    private function getSecurityRoleFixtures(): Generator
     {
-        return [
-            [
-                'name' => 'User',
-                'role' => User::ROLE_USER,
-            ],
-            [
-                'name' => 'Reader',
-                'role' => User::ROLE_READER,
-            ],
-            [
-                'name' => 'Writer',
-                'role' => User::ROLE_WRITER,
-            ],
-            [
-                'name' => 'User Writer',
-                'role' => User::ROLE_USER_WRITER,
-            ],
-            [
-                'name' => 'Admin',
-                'role' => User::ROLE_ADMIN,
-            ],
-            [
-                'name' => 'Super Admin',
-                'role' => User::ROLE_SUPER_ADMIN,
-            ],
-        ];
+        $fixtures = Yaml::parseFile(self::SECURITY_ROLE_FIXTURES);
+
+        $defaults = $fixtures['_defaults'];
+
+        /** @var array[] $securityRoles */
+        $securityRoles = $fixtures['security_roles'];
+        foreach ($securityRoles as $securityRole) {
+            yield [
+                'name' => $securityRole['name'],
+                'role' => $securityRole['role'],
+                'public' => $securityRole['public'] ?? $defaults['public'],
+            ];
+        }
     }
 }

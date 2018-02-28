@@ -71,7 +71,7 @@ content: |
   Powyższy kod dostępny jest na githubie koła: [ai-section](https://github.com/knit-pk/ai-section).
 description: Wprowadzenie do algorytmu Q-learning na przykładzie gry Zamarznięte Jezioro z biblioteki OpenAI Gym.
 category: category-article
-author: user-user_writer
+author: user-maksrojek
 tags:
   - tag-programming
   - tag-it
