@@ -1,0 +1,7 @@
+_defaults:
+  public: true
+
+categories:
+  - name: News
+  - name: Article
+  - name: Announcement

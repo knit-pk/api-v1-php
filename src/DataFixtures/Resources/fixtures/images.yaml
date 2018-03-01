@@ -1,0 +1,8 @@
+_defaults:
+  public: true
+
+images:
+  - name: k911-gravatar
+    url: https://s.gravatar.com/avatar/1733f5bab4bbd46fb854cece3080455b?s=400
+  - name: mrojek-github
+    url: https://avatars1.githubusercontent.com/u/17177857?s=400&v=4

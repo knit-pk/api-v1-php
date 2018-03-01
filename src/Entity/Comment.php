@@ -281,7 +281,7 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSupportedThoughts(): array
+    public function getSupportedThoughts(): array
     {
         return [CommentReply::class];
     }

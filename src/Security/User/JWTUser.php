@@ -8,7 +8,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class JWTUser implements UserInterface, JWTUserInterface
+final class JWTUser implements UserInterface, JWTUserInterface
 {
     private $id;
     private $username;
@@ -24,7 +24,7 @@ class JWTUser implements UserInterface, JWTUserInterface
     /**
      * {@inheritdoc}
      */
-    public static function createFromPayload($username, array $payload)
+    public static function createFromPayload($username, array $payload): self
     {
         return new self(
             $payload['id'],
@@ -36,7 +36,7 @@ class JWTUser implements UserInterface, JWTUserInterface
     /**
      * {@inheritdoc}
      */
-    public function getRoles()
+    public function getRoles(): array
     {
         return $this->roles;
     }
@@ -44,7 +44,7 @@ class JWTUser implements UserInterface, JWTUserInterface
     /**
      * {@inheritdoc}
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return '';
     }
@@ -60,7 +60,7 @@ class JWTUser implements UserInterface, JWTUserInterface
     /**
      * {@inheritdoc}
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 

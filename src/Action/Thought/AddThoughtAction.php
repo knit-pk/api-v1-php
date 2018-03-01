@@ -26,16 +26,17 @@ final class AddThoughtAction
      *
      * @throws \App\Security\Exception\SecurityException
      * @throws \App\Thought\Exception\NotSupportedThoughtException
+     * @throws \ReflectionException
      *
      * @return ThoughtInterface
      */
-    public function __invoke(ThoughtInterface $data, ThoughtfulInterface $parent, UserInterface $user)
+    public function __invoke(ThoughtInterface $data, ThoughtfulInterface $parent, UserInterface $user): ThoughtInterface
     {
         if (!$parent->isThoughtSupported($data)) {
             throw new NotSupportedThoughtException($parent, $data);
         }
 
-        $data->setAuthor($this->userEntityProvider->getUser($user));
+        $data->setAuthor($this->userEntityProvider->getReference($user));
         $data->setSubject($parent);
 
         return $data;

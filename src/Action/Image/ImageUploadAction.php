@@ -42,14 +42,14 @@ final class ImageUploadAction
      *
      * @return \App\Entity\Image
      */
-    public function __invoke(Request $request, UserInterface $user)
+    public function __invoke(Request $request, UserInterface $user): Image
     {
         $imageFile = $request->files->get('image');
 
         if (!$imageFile instanceof UploadedFile) {
-            throw new HttpException(400, 'Form data field: image is required, and must be type of image file');
+            throw new HttpException(400, 'Field `image` is required, and must be a file');
         }
 
-        return Image::fromFile($imageFile, $this->userEntityProvider->getUser($user));
+        return Image::fromFile($imageFile, $this->userEntityProvider->getReference($user));
     }
 }

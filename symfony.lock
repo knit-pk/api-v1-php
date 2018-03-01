@@ -101,6 +101,15 @@
     "doctrine/orm": {
         "version": "v2.5.12"
     },
+    "easycorp/easyadmin-bundle": {
+        "version": "1.17",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.17",
+            "ref": "66070ea553247b0cd5275e21d0fe5399a25f40be"
+        }
+    },
     "easyrdf/easyrdf": {
         "version": "0.9.1"
     },
@@ -116,9 +125,6 @@
     "friendsofsymfony/user-bundle": {
         "version": "v2.0.1"
     },
-    "gecko-packages/gecko-php-unit": {
-        "version": "v3.0"
-    },
     "gedmo/doctrine-extensions": {
         "version": "v2.4.31"
     },
@@ -133,15 +139,6 @@
     },
     "guzzlehttp/psr7": {
         "version": "1.4.2"
-    },
-    "javiereguiluz/easyadmin-bundle": {
-        "version": "1.17",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.17",
-            "ref": "66070ea553247b0cd5275e21d0fe5399a25f40be"
-        }
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"

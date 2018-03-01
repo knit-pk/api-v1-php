@@ -9,4 +9,4 @@ Feature:
 
   Scenario: It receives a response from Symfony's kernel
     When a demo scenario sends a request to "/"
-    Then the response should be received
+    Then the success response should be received

@@ -3,12 +3,10 @@
   "description": "KNIT API PHP",
   "type": "project",
   "license": "proprietary",
-  "prefer-stable": true,
-  "minimum-stability": "dev",
   "require": {
-    "php": "^7.2",
-    "api-platform/api-pack": "^1.0",
-    "friendsofsymfony/user-bundle": "^2.0",
+    "php": "^7.1",
+    "api-platform/api-pack": "^1.1",
+    "friendsofsymfony/user-bundle": "^2.1.1",
     "gedmo/doctrine-extensions": "^2.4.32",
     "gesdinet/jwt-refresh-token-bundle": "^0.3",
     "guzzlehttp/guzzle": "^6.3",
@@ -34,7 +32,7 @@
     "behatch/contexts": "^3.0",
     "doctrine/doctrine-fixtures-bundle": "^3.0",
     "friendsofphp/php-cs-fixer": "^2.9",
-    "javiereguiluz/easyadmin-bundle": "^1.17",
+    "easycorp/easyadmin-bundle": "^1.17",
     "phpstan/phpstan": "^0.9.1",
     "phpstan/phpstan-doctrine": "^0.9.1",
     "phpunit/phpunit": "^7",
@@ -48,8 +46,7 @@
       "*": "dist"
     },
     "sort-packages": true,
-    "optimize-autoloader": true,
-    "apcu-autoloader": true
+    "optimize-autoloader": true
   },
   "autoload": {
     "psr-4": {
@@ -64,14 +61,15 @@
   },
   "scripts": {
     "test": [
-      "phpstan analyze src tests features -l 6",
-      "php-cs-fixer fix -v --dry-run --diff --stop-on-violation",
-      "phpunit"
+      "phpstan analyze src -l 6 --ansi",
+      "phpstan analyze features tests -l 5 --ansi",
+      "php-cs-fixer fix -v --dry-run --diff --stop-on-violation --ansi",
+      "phpunit --coverage-clover clover.xml --colors=always"
     ],
     "test-features": [
-      "vendor/bin/behat"
+      "behat -n -vvv --colors"
     ],
-    "fix": "php-cs-fixer fix",
+    "fix": "php-cs-fixer fix -v --ansi",
     "auto-scripts": {
       "cache:clear": "symfony-cmd",
       "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"

@@ -2,7 +2,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    version: '0.5.0'
+    version: '0.6.0'
     title: 'KNIT RESTful API'
     description: 'KNIT RESTful API build using ApiPlatform'
     public_upload.prefix: 'media/upload'
@@ -11,6 +11,10 @@ parameters:
     router.request_context.base_url: /
     session.storage.options:
         cache_limiter: 0
+
+    # Default environment variables values
+    env(JWT_PRIVATE_KEY_PATH): config/jwt/private.pem
+    env(JWT_PUBLIC_KEY_PATH): config/jwt/public.pem
 
 services:
     # default configuration for services in *this* file
