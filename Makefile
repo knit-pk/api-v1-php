@@ -4,7 +4,7 @@ endif
 
 fix-symfony-cache:
 	@printf "## Fixing symfony cache ### \n"
-	@chmod -R 777 /var/www/app/var
+	@chown -R www-data:www-data var
 .PHONY: fix-symfony-cache
 
 cache-warmup-docker: cache-warmup

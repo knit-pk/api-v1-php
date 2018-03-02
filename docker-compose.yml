@@ -29,16 +29,12 @@ services:
         depends_on:
             - mysql
             - redis
-        build:
-            context: ./docker/php
+        build: .
         environment:
             - DOT_ENV=.env.mysql
         volumes:
-            - .:/var/www/app
-            - /var/www/app/var
-            - ./logs/app:/var/www/app/var/log
-            - ./logs/php:/var/log/php
-            - ./logs/supervisor:/var/log/supervisor
+            - .:/usr/src/api
+            - /usr/src/api/var
 
     ppm:
         depends_on:
@@ -48,7 +44,6 @@ services:
         command: --debug=1 -vv --app-env=dev --static-directory=public/
         volumes:
             - .:/var/www
-            - /var/www/var
         ports:
             - "8090:80"
 
@@ -61,9 +56,8 @@ services:
         ports:
             - "8080:80"
         volumes:
-            - ./logs/nginx:/var/log/nginx
-            - ./public:/var/www/app/public
-            - ./vendor:/var/www/app/vendor
+            - ./public:/usr/src/api/public
+            - ./vendor:/usr/src/api/vendor
 
     ## Debug/DevOps
 
