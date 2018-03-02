@@ -16,6 +16,7 @@ matrix:
     - php: '7.2'
       services:
         - mysql
+        - docker
       addons:
         apt:
           sources:
@@ -25,6 +26,7 @@ matrix:
       before_script:
         - mysql -e 'CREATE DATABASE knit_api_test;'
       env:
+        - APP_DOCKER_PUSH=1
         - DATABASE_URL="mysql://travis@127.0.0.1:3306/knit_api_test?charset=utf8mb4&serverVersion=5.7"
     - php: '7.2'
       services:
@@ -77,3 +79,9 @@ deploy:
     on:
       branch: develop
       php: '7.1'
+  - provider: script
+    skip_cleanup: true
+    script: bash ./deploy/docker-app-push.sh
+    on:
+      tags: true
+      condition: "$APP_DOCKER_PUSH = 1"
