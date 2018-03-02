@@ -1,6 +1,6 @@
 # KNIT Restful API
 ![travis](https://api.travis-ci.org/knit-pk/api-v1-php.svg?branch=develop)
-[![Dependency Status](https://www.versioneye.com/user/projects/5a887caa0fb24f6da09a6179/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a887caa0fb24f6da09a6179)
+[![Dependency Status](https://www.versioneye.com/user/projects/5a99ba910fb24f2cfe29ccd2/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a99ba910fb24f2cfe29ccd2)
 
 Development configuration of KNIT API written in PHP, deployed using docker.
 
@@ -20,9 +20,9 @@ Requirements to work with project: `git`, `docker`, `docker-compose`
    ```
 2. Run project
    ```bash
-   $ docker-compose up -d # Build and run docker containers
+   $ cd knit-api
+   $ docker-compose up
    ```
-3. (Recommended) Verify that application started without errors: `/logs/supervisor/docker-app-startup.log`.
 
 ## Useful commands
 
@@ -36,19 +36,15 @@ Requirements to work with project: `git`, `docker`, `docker-compose`
     $ docker-compose down
     ```
 
-- Rebuild docker images
+- Rebuild and run docker images
     ```bash
-    $ docker-compose build
-    $ docker-compose up -d
+    $ docker-compose up -d --build
     ```
 
 - Follow log output from containers
     ```bash
     $ docker-compose logs --follow
     ```
-
-Remarks: Please verify whether php container name is set accordingly in following commands via `docker ps` command.
-If repository was cloned as instructed to `api` directory, container name: `api_backend_1` should be proper.
 
 - Feed database with default data.
 
@@ -71,13 +67,13 @@ If repository was cloned as instructed to `api` directory, container name: `api_
 ## Informations
 Docker images:
 - PHP (php:7.2-fpm-alpine3.7)
-- Nginx (nginx:alpine)
+- Nginx (nginx:4-alpine)
 - Varnish - Http Cache (alpine:3.7)
 - MySQL (mysql:5.7)
 
 PHP Stack:
 - Symfony (v4.0.*)
-- Api Platform (v2.1.*)
+- Api Platform (v2.2.*)
 
 ## Postman Collection
 Always for newest version:

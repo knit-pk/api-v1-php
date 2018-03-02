@@ -2,7 +2,7 @@ FROM composer:1.6 as composer
 FROM php:7.2-fpm-alpine3.7 as php
 
 ARG TIMEZONE="Europe/Warsaw"
-ENV COMPOSER_ALLOW_SUPERUSER=1
+
 ENV TZ=${TIMEZONE}
 ENV DOT_ENV=.env.mysql
 ENV DOCKERIZE_VERSION=v0.6.0 \
@@ -36,30 +36,25 @@ RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} >
 # Remove unneded packages
 RUN apk del tzdata
 
-# Install Composer
+# Prepare run scripts
 COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY deploy/php.ini /usr/local/etc/php/php.ini
+COPY deploy/docker-app-entrypoint.sh /usr/local/bin/docker-app-entrypoint
+RUN chmod +x /usr/local/bin/docker-app-entrypoint
+
+WORKDIR /usr/src/api
+ENTRYPOINT ["docker-app-entrypoint"]
+CMD ["php-fpm"]
+
+ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative
 
-# Copy phpini
-COPY php.ini /usr/local/etc/php/php.ini
+# Prevent the reinstallation of vendors at every changes in the source code
+COPY composer.json composer.lock ./
+RUN composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest
 
-# Copy script that runs on container startup
-COPY startup.sh /usr/local/bin/docker-app-startup
+COPY . /usr/src/api
 
-# Supervisor configuration
-COPY supervisord.conf /etc/supervisord.conf
-
-# Make structure with proper permissions for application and logs
-RUN mkdir -p /var/www/app/var && \
-    chown www-data:www-data /var/www/app/var && \
-    chmod 777 /var/www/app/var
-RUN mkdir -p /var/log/supervisor && \
-    touch /var/log/supervisor/supervisor.log && \
-    touch /var/log/supervisor/docker-app-startup.log
-RUN mkdir -p /var/log/php && \
-    touch /var/log/php/fpm.log 
-
-# Run supervisor
-ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf"]
-
-WORKDIR /var/www/app
+RUN mkdir -p var/cache var/logs var/sessions \
+	&& composer dump-autoload --classmap-authoritative --no-dev \
+	&& chown -R www-data:www-data var
