@@ -10,6 +10,7 @@ Dockerfile*
 .env
 !var/.gitignore
 var/*
+.git/
 .idea/
 docker/
 config/jwt/
