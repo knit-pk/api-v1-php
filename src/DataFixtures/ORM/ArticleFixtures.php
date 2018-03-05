@@ -11,6 +11,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Sluggable\Util\Urlizer;
 use Generator;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
@@ -52,13 +53,14 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
                 $article->setImage($image);
             }
             $article->setTitle($fixture['title']);
+            /** @var \App\Entity\Category $category */
+            $category = $this->getReference($fixture['category']);
+            $article->setCode(\sprintf('%s/%s/%s', $category->getCode(), \mb_strtolower(Urlizer::transliterate($article->getTitle(), '-')), \mb_substr((string) $article->getId(), 0, 6)));
 
             /** @var \App\Entity\User $author */
             $author = $this->getReference($fixture['author']);
             $article->setAuthor($author);
 
-            /** @var \App\Entity\Category $category */
-            $category = $this->getReference($fixture['category']);
             $article->setCategory($category);
             $article->setContent($this->parseContent($fixture['content']));
             $article->setDescription($fixture['description']);
