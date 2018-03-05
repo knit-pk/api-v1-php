@@ -1,72 +1,92 @@
 title: Maszynowe uczenie ze wzmocnieniem - algorytm Q-learning
 content: |
-  Q-learning - algorytm uczenia się ze wzmocnieniem, który polega na stworzeniu odwzorowania Q(s,a), dla stanów s i akcji a, oraz aktualizacji tej funkcji na podstawie otrzymanych nagród ze środowiska. Funkcja ta wyraża wartość wykonania akcji a w stanie s. Zakładamy, że ilość stanów i akcji jest skończona, oraz podejmowane akcje agenta odbywają się w dyskretnych przedziałach czasowych, dlatego będziemy stosować reprezentację tego odwzorowania w postaci macierzy o wymiarach n&#10799;m, gdzie n - ilość możliwych stanów, m - ilość akcji (ruchów, które może wykonać agent).
-  Wzór aktualizacji wartości macierzy Q(s, a):
+  Q-learning - algorytm uczenia się ze wzmocnieniem, który polega na stworzeniu odwzorowania $Q(s,a)$, dla stanów $s$ i akcji $a$, oraz aktualizacji tej funkcji na podstawie otrzymanych nagród ze środowiska. Funkcja ta wyraża wartość wykonania akcji $a$ w stanie $s$. Zakładamy, że ilość stanów i akcji jest skończona, oraz podejmowane akcje agenta odbywają się w dyskretnych przedziałach czasowych, dlatego będziemy stosować reprezentację tego odwzorowania w postaci macierzy o wymiarach $n \times m$, gdzie $n$ - ilość możliwych stanów, $m$ - ilość akcji (ruchów, które może wykonać agent).
+
+  __Wzór aktualizacji wartości macierzy__ $Q(s, a)$:
   $$Q(s_t,a_t) = Q(s_t,a_t) + \alpha (r + \gamma \cdot max_a Q(s_{t+1},a) - Q(s_t,a_t))$$
   gdzie:
-  - &#945; - współczynnik nauki, wielkość kroku,
-  - &#947; - współczynnik, który mówi nam jak bardzo przyszły stan będzie wpływał na wartość obecnego,
+  - $\alpha$ - współczynnik nauki, wielkość kroku,
+  - $\gamma$ - współczynnik, który mówi nam jak bardzo przyszły stan będzie wpływał na wartość obecnego,
   - $s_t$ - obecny stan,
   - $s_{t+1}$ - następny stan,
-  - r - nagroda za wykonanie akcji,
-  - a - akcja.
+  - $r$ - nagroda za wykonanie akcji,
+  - $a$ - akcja.
 
-  Pseudokod algorytmu:
-  1. Ustal parametry &#945; oraz &#947;.
-  2. Stwórz macierz Q z elementami ustawionymi na wartość 0.
+  __Pseudokod algorytmu:__
+  1. Ustal parametry $\alpha$ oraz $\gamma$.
+  2. Stwórz macierz $Q$ z elementami ustawionymi na wartość 0.
   3. Ustal obecny stan na stan początkowy.
   4. Dla każdego epizodu:
-      a) wybierz jedną z akcji a (na podstawie ustalonej zasady wyboru, np. o największej wartości w macierzy Q),
-      b) wykonaj akcję a, otrzymaj nagrodę r, oraz informację o nowym stanie $s_{t+1}$,
-      c) zaktualizuj macierz Q według podanego powyżej wzoru,
-      d) obecny stan jest teraz równy nowemu stanowi: $s_t \leftarrow s_{t+1}$,
-      e) jeśli obecny stan jest stanem końcowym, zakończ epizod.
+      4.1. Wybierz jedną z akcji $a$ (na podstawie ustalonej zasady wyboru, np. o największej wartości w macierzy $Q$),
+      4.2. Wykonaj akcję $a$, otrzymaj nagrodę $r$ oraz informację o nowym stanie $s_{t+1}$,
+      4.3. Zaktualizuj macierz $Q$ według podanego powyżej wzoru,
+      4.4. Obecny stan jest teraz równy nowemu stanowi: $s_t \leftarrow s_{t+1}$,
+      4.5. Jeśli obecny stan jest stanem końcowym, zakończ epizod.
 
-  ## Zamarznięte jezioro
+  ## __Zamarznięte jezioro__
   Działanie algorytmu pokażemy na przykładzie gry “Zamarznięte jezioro”. Polega na znalezieniu najszybszej drogi z jednego końca “jeziora” na drugi. Agent powinien omijać “przeręble”, czyli miejsca, które powodują zakończenie epizodu.
-  Zasady gry:
+
+  __Zasady gry:__
   - ilość dostępnych akcji: 4 - poruszanie się: w lewo, w prawo, do góry, do dołu,
   - ilość stanów: 16,
   - prawdopodobieństwo wybrania innej akcji niż zakładano, równe 6/10,
   - brak kary za wpadnięcie do przerębla.
 
-  Kolejny ruch wybierany jest jako największa wartość w macierzy Q dla danego stanu, która odpowiada ruchowi w jednym z czterech kierunków.
-  Plansza wygląda następująco:
-  ['S', 'F', 'F', 'F',
-  'F', 'H', 'F', 'H',
-  'F', 'F', 'F', 'H',
-  'H', 'F', 'F', 'G']
-  gdzie: S - punkt startowy, F - lód, po którym można się poruszać, H - dziura, do której wpadnięcie kończy epizod.
+  Kolejny ruch wybierany jest jako największa wartość w macierzy $Q$ dla danego stanu, która odpowiada ruchowi w jednym z czterech kierunków.
+
+  __Plansza wygląda następująco:__
+  $$\left[\begin{array}{cccc}
+  S & F & F & F	\\
+  F & H & F & H	\\
+  F & F & F & H	\\
+  H & F & F & G
+  \end{array}\right]$$
+
+  gdzie:
+  - $S$ - punkt startowy,
+  - $F$ - lód, po którym można się poruszać,
+  - $H$ - dziura, do której wpadnięcie kończy epizod.
 
   __Kod źródłowy:__
   ```python
   import gym
   import numpy as np
 
+
   env = gym.make('FrozenLake-v0')
-  Q = np.zeros([env.observation_space.n, env.action_space.n])
+  obs_n = env.observation_space.n
+  act_n = env.action_space.n
+  Q = np.zeros([obs_n, act_n])
   a = .8 #alpha
   y = .95 #gamma
   num_episodes = 2000
-  for i in range(num_episodes):
-      state = env.reset()
-      done = False
-      for j in range(100):
-          action = np.argmax(Q[state,:] + np.random.randn(1,env.action_space.n)*(1./(i+1)))
-          next_state, reward, done, _ = env.step(action)
-          Q[state, action] = Q[state, action] + a*(reward + y*np.max(Q[next_state,:]) - Q[state, action])
-          state = next_state
-          if done:
-              break
-  ```
-  Na początku ustawiana jest macierz Q na same zera. Rozmiar tej macierzy to ilość_stanów &#10799; ilość_ruchów, czyli 16 &#10799; 4.
-  Wybór ruchu dokonywany jest na podstawie wartości w macierzy Q. Wybierany jest ruch, który odpowiada wartości maksymalnej.
-  ```python
-  action = np.argmax(Q[state,:] + np.random.randn(1,env.action_space.n)*(1./(i+1)))
-  ```
-  Do wartości w macierzy Q dodawane są losowe wartości, które wraz z kolejnymi wywołaniami pętli maleją do zera. Dodajemy je ponieważ środowisko nie posiada kary za wpadnięcie do przerębla (stan H). Bez takiego szumu, w początkowych momentach nauki agenta, gdy wartości w macierzy Q są równe zero, mogłoby dojść do zapętlenia. Na przykład dla stanu początkowego mamy wartości [0, 0, 0, 0], funkcja argmax() zawsze zwracałaby pierwszy indeks, czyli agent chodziłby zawsze w lewo. Po dodaniu szumu, agent wybierze losowo jeden z czterech ruchów.
 
-  Tak stworzony agent, przy 2000 epizodów, posiada skuteczność na poziomie 50-60 procent (stosunek wygranych do przegranych epizodów).
+  for i in range(num_episodes):
+    state = env.reset()
+    done = False
+
+    for j in range(100):
+      noise = np.random.randn(1, act_n) * (1. / (i + 1))
+      action = np.argmax(Q[state, :] + noise)
+      next_state, reward, done, _ = env.step(action)
+
+      best_move = np.max(Q[next_state, :])
+      Q[state, action] += a * (reward + y * best_move - Q[state, action])
+
+      state = next_state
+
+      if done:
+        break
+  ```
+  Na początku ustawiana jest macierz $Q$ na same zera. Rozmiar tej macierzy to $ilosc \_ stanów \times ilosc \_ ruchow$, czyli $16 \times 4$. Wybór ruchu dokonywany jest na podstawie wartości w macierzy $Q$. Wybierany jest ruch, który odpowiada wartości maksymalnej.
+  ```python
+  noise = np.random.randn(1, act_n) * (1. / (i + 1))
+  action = np.argmax(Q[state, :] + noise)
+  ```
+  Do wartości w macierzy $Q$ dodawane są losowe wartości, które wraz z kolejnymi wywołaniami pętli maleją do zera. Dodajemy je ponieważ środowisko nie posiada kary za wpadnięcie do przerębla (stan $H$). Bez takiego szumu, w początkowych momentach nauki agenta, gdy wartości w macierzy $Q$ są równe zero, mogłoby dojść do zapętlenia.
+  Na przykład dla stanu początkowego mamy wartości $[0, 0, 0, 0]$, funkcja ```argmax()``` zawsze zwracałaby pierwszy indeks, czyli agent chodziłby zawsze w lewo. Po dodaniu szumu, agent wybierze losowo jeden z czterech ruchów.
+
+  Tak stworzony agent, przy 2000 epizodów, posiada skuteczność na poziomie &#126;50-60% (stosunek wygranych do przegranych epizodów).
 
   Powyższy kod dostępny jest na githubie koła: [ai-section](https://github.com/knit-pk/ai-section).
 description: Wprowadzenie do algorytmu Q-learning na przykładzie gry Zamarznięte Jezioro z biblioteki OpenAI Gym.
