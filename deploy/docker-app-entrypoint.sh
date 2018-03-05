@@ -8,7 +8,7 @@ fi
 
 if [ "$1" = 'php-fpm' ] || [ "$1" = 'bin/console' ]; then
 
-	if [ "$APP_ENV" != 'prod' ]; then
+	if [ "$APP_ENV" != 'prod' ] && [ "$DOT_ENV" != 'none' ]; then
 	    cp $DOT_ENV .env
 	    cat .env | grep APP_ENV
 
