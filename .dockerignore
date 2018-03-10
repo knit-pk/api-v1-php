@@ -11,6 +11,7 @@ Dockerfile*
 !var/.gitignore
 var/*
 .idea/
+.git/
 docker/
 config/jwt/
 vendor/

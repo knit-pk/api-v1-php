@@ -1,0 +1,2 @@
+parameters:
+    router.request_context.host: api.knit.pk.edu.pl

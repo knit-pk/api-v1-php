@@ -33,7 +33,7 @@ services:
         resource: '../src/*'
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
-        exclude: '../src/{Entity,Migrations,Repository,Swagger}'
+        exclude: '../src/{Entity,Migrations,Repository,Swagger,DataFixtures}'
 
     # actions are imported separately to make sure they
     # have the tag that allows to type-hint services

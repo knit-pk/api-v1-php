@@ -58,6 +58,7 @@ RUN composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-pr
 
 COPY . /usr/src/api
 
-RUN mkdir -p var/cache var/logs var/sessions \
-	&& composer dump-autoload --classmap-authoritative --no-dev \
-	&& chown -R www-data:www-data var
+RUN mkdir -p var/cache var/logs var/sessions public/media/upload
+RUN composer dump-autoload --classmap-authoritative --no-dev
+RUN bin/console assets:install public --env=docker
+RUN chown -R www-data:www-data var public
