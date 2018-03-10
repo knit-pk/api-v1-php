@@ -59,6 +59,7 @@ easy_admin:
             form:
                 fields:
                     - title
+                    - code
                     - category
                     - { property: 'image', type_options: { choice_label: 'originalName' } }
                     - description

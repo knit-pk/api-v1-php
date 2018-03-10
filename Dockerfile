@@ -60,5 +60,5 @@ COPY . /usr/src/api
 
 RUN mkdir -p var/cache var/logs var/sessions public/media/upload
 RUN composer dump-autoload --classmap-authoritative --no-dev
-RUN bin/console assets:install public --env=docker
+RUN bin/docker-console assets:install public -e docker
 RUN chown -R www-data:www-data var public
