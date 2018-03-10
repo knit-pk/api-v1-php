@@ -115,8 +115,6 @@ class Image
      * @ORM\Column(type="string")
      *
      * @Groups({"ImageRead", "ImageWrite"})
-     *
-     * @Assert\NotBlank
      */
     protected $originalName;
 

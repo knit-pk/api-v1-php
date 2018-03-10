@@ -1,0 +1,6 @@
+imports:
+    - { resource: '../api_platform.yaml' }
+    - { resource: '../easy_admin.yaml' }
+    - { resource: '../twig.yaml' }
+    - { resource: '../framework.yaml' }
+    - { resource: '../routing.yaml' }
