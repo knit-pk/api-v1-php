@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -36,7 +37,7 @@ class Kernel extends BaseKernel
         return $this->getVarDir().'/log';
     }
 
-    public function registerBundles(): iterable
+    public function registerBundles(): Generator
     {
         /** @var iterable $contents */
         $contents = require \dirname(__DIR__).'/config/bundles.php';

@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -64,12 +65,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Article implements ThoughtfulInterface
 {
     /**
-     * @var Uuid
+     * @var \Ramsey\Uuid\UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
      * @Groups({"ArticleRead"})
      */
@@ -79,8 +78,6 @@ class Article implements ThoughtfulInterface
      * @var string
      *
      * @ORM\Column(type="string", unique=true)
-     *
-     * @Gedmo\Slug(fields={"createdAt", "title"}, separator="-", updatable=true, unique=true, dateFormat="Y/m")
      *
      * @Groups({"ArticleRead"})
      */
@@ -223,8 +220,6 @@ class Article implements ThoughtfulInterface
      *
      * @ApiProperty(iri="http://schema.org/datePublished")
      *
-     * @Gedmo\Timestampable(on="change", field="published", value=true)
-     *
      * @Groups({"ArticleRead"})
      */
     protected $publishedAt;
@@ -266,6 +261,7 @@ class Article implements ThoughtfulInterface
 
     public function __construct()
     {
+        $this->id = Uuid::uuid4();
         $this->tags = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->ratings = new ArrayCollection();
@@ -273,14 +269,19 @@ class Article implements ThoughtfulInterface
         $this->published = false;
     }
 
-    public function getId(): ?Uuid
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
+    }
+
+    public function setCode(?string $code): void
+    {
+        $this->code = $code;
     }
 
     public function setContent(?string $content): void
@@ -413,9 +414,13 @@ class Article implements ThoughtfulInterface
         return $this->published;
     }
 
-    public function setPublished($published): void
+    public function setPublished(bool $published): void
     {
-        $this->published = (bool) $published;
+        $this->published = $published;
+
+        if ($this->published) {
+            $this->publishedAt = new DateTime();
+        }
     }
 
     public function isAuthor(?UserInterface $user): bool
@@ -427,7 +432,7 @@ class Article implements ThoughtfulInterface
 
     public function __toString(): string
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
     /**

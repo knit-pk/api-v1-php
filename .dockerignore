@@ -12,6 +12,7 @@ Dockerfile*
 var/*
 .git/
 .idea/
+.git/
 docker/
 config/jwt/
 vendor/

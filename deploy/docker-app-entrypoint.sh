@@ -8,7 +8,7 @@ fi
 
 if [ "$1" = 'php-fpm' ] || [ "$1" = 'bin/console' ]; then
 
-	if [ "$APP_ENV" != 'prod' ]; then
+	if [ "$APP_ENV" != 'prod' ] && [ "$DOT_ENV" != 'none' ]; then
 	    cp $DOT_ENV .env
 	    cat .env | grep APP_ENV
 
@@ -22,8 +22,9 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'bin/console' ]; then
 		else
             echo "Could not migrate data fixtures to database"
         fi
+
+        make generate-jwt-keys
 	else
-	    composer auto-scripts
 	    # Wait until database is ready
         if dockerize -wait ${DOCKERIZE_WAIT_FOR} -timeout 30s; then
 	        php bin/console doctrine:migrations:migrate
@@ -32,7 +33,6 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'bin/console' ]; then
         fi
 	fi
 
-	make generate-jwt-keys
 	make cache-warmup-docker
 fi
 

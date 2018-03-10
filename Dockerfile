@@ -1,16 +1,19 @@
 FROM composer:1.6 as composer
 FROM php:7.2-fpm-alpine3.7 as php
 
+ARG DOT_ENV=none
 ARG TIMEZONE="Europe/Warsaw"
+ARG DOCKERIZE_VERSION=v0.6.0
+ARG DOCKERIZE_WAIT_FOR=tcp://mysql:3306
 
-ENV TZ=${TIMEZONE}
-ENV DOT_ENV=.env.mysql
-ENV DOCKERIZE_VERSION=v0.6.0 \
-    DOCKERIZE_WAIT_FOR=tcp://mysql:3306
+ENV TZ ${TIMEZONE}
+ENV DOT_ENV ${DOT_ENV}
+ENV DOCKERIZE_VERSION ${DOCKERIZE_VERSION}
+ENV DOCKERIZE_WAIT_FOR ${DOCKERIZE_WAIT_FOR}
 
 # Install custom packages
 RUN apk update && apk upgrade && \
-    apk add --no-cache tzdata zip supervisor make openssl
+    apk add --no-cache tzdata zip make openssl
 
 # Install dockerize
 RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
@@ -55,6 +58,7 @@ RUN composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-pr
 
 COPY . /usr/src/api
 
-RUN mkdir -p var/cache var/logs var/sessions \
-	&& composer dump-autoload --classmap-authoritative --no-dev \
-	&& chown -R www-data:www-data var
+RUN mkdir -p var/cache var/logs var/sessions public/media/upload
+RUN composer dump-autoload --classmap-authoritative --no-dev
+RUN bin/docker-console assets:install public -e docker
+RUN chown -R www-data:www-data var public

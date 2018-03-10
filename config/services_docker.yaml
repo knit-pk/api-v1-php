@@ -1,0 +1,12 @@
+parameters:
+    title: title
+    description: description
+    version: version
+    session.storage.options:
+        cache_limiter: 0
+    env(APP_SECRET): secret
+
+services:
+    doctrine:
+        public: true
+        synthetic: true
