@@ -64,6 +64,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             $article->setCategory($category);
             $article->setContent($this->parseContent($fixture['content']));
             $article->setDescription($fixture['description']);
+            $article->setPublished(true === $fixture['published']);
 
             /** @var string[] $tags */
             $tags = $fixture['tags'];
@@ -124,7 +125,9 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             ->name('*.yaml');
 
         foreach ($finder->getIterator() as $yamlFile) {
-            yield Yaml::parse($yamlFile->getContents());
+            yield Yaml::parse($yamlFile->getContents()) + [
+                'published' => false,
+                ];
         }
     }
 

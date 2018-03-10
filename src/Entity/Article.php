@@ -220,8 +220,6 @@ class Article implements ThoughtfulInterface
      *
      * @ApiProperty(iri="http://schema.org/datePublished")
      *
-     * @Gedmo\Timestampable(on="change", field="published", value=true)
-     *
      * @Groups({"ArticleRead"})
      */
     protected $publishedAt;
@@ -276,12 +274,12 @@ class Article implements ThoughtfulInterface
         return $this->id;
     }
 
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
     }
 
-    public function setCode(string $code): void
+    public function setCode(?string $code): void
     {
         $this->code = $code;
     }
@@ -416,9 +414,13 @@ class Article implements ThoughtfulInterface
         return $this->published;
     }
 
-    public function setPublished($published): void
+    public function setPublished(bool $published): void
     {
-        $this->published = (bool) $published;
+        $this->published = $published;
+
+        if ($this->published) {
+            $this->publishedAt = new DateTime();
+        }
     }
 
     public function isAuthor(?UserInterface $user): bool
@@ -430,7 +432,7 @@ class Article implements ThoughtfulInterface
 
     public function __toString(): string
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
     /**
