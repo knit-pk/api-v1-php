@@ -1,3 +1,4 @@
 imports:
     - { resource: '../dev/routing.yaml' }
     - { resource: '../dev/web_profiler.yaml' }
+    - { resource: '../dev/nelmio_cors.yaml' }

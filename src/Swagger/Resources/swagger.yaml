@@ -40,16 +40,16 @@ paths:
       summary: Authenticate using credentials
       description: Authenticate using credentials
       parameters:
-        name: credentials
-        in: body
-        description: Valid User credentials
-        schema:
-          type: object
-          properties:
-            username:
-              type: string
-            password:
-              type: string
+        - name: credentials
+          in: body
+          description: Valid User credentials
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
       responses:
         200:
           description: Successfully generated token
