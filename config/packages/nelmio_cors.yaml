@@ -1,13 +1,13 @@
 nelmio_cors:
     defaults:
+        origin_regex: true
         allow_credentials: false
-        allow_origin: ['http://localhost:[0-9]+', 'https://knit-test-homepage.tk']
+        allow_origin: ['http://knit.pk.edu.pl']
         allow_headers: ['Content-type', 'Authorization']
         allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-        expose_headers: ['link']
-        max_age: 0
+        expose_headers: ['Link']
+        max_age: 3600
         hosts: []
-        origin_regex: true
         forced_allow_origin_value: ~
     paths:
         '^/': ~

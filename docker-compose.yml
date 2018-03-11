@@ -31,7 +31,17 @@ services:
             - redis
         build: .
         environment:
-            - DOT_ENV=.env.mysql
+#         - DOT_ENV=.env.mysql
+          - APP_ENV=prod
+          - APP_SECRET=a17636f12ff5ffc0c4f03a98d088e74adba75e55
+          - DATABASE_URL="mysql://user:password@mysql:3306/database?charset=utf8mb4&serverVersion=5.7"
+          - JWT_PRIVATE_KEY_PATH=config/jwt/private.pem
+          - JWT_PUBLIC_KEY_PATH=config/jwt/public.pem
+          - JWT_PASSPHRASE=56c247d4c281f5de0d8d9d894f2b605157fd379c
+          - APP_TRUSTED_HOSTS=['localhost','api','varnish']
+          - APP_TRUSTED_PROXIES=['10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']
+          - REDIS_URI=redis://:redis@redis:6379
+          - VARNISH_URL=http://varnish
         volumes:
             - .:/usr/src/api
             - /usr/src/api/var
