@@ -14,6 +14,14 @@ $handlers = [
         'path' => '%kernel.logs_dir%/%kernel.environment%.log',
         'level' => 'debug',
     ],
+    'console' => [
+        'type' => 'console',
+    ],
+    'redis'         => [
+        'id'    => 'monolog.handler.redis_handler',
+        'type'  => 'service',
+        'level' => 'info',
+    ],
 ];
 
 $container->addResource(new ClassExistenceResource(Application::class));
