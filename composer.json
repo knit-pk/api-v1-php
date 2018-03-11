@@ -62,8 +62,8 @@
   },
   "scripts": {
     "test": [
-      "phpstan analyze src -l 6 --ansi",
-      "phpstan analyze features tests -l 5 --ansi",
+      "phpstan analyze src -l 6 -c phpstan.neon --ansi",
+      "phpstan analyze features tests -l 5  -c phpstan.neon --ansi",
       "php-cs-fixer fix -v --dry-run --diff --stop-on-violation --ansi",
       "phpunit --coverage-clover clover.xml --colors=always"
     ],
