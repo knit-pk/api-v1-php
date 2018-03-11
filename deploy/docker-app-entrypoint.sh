@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 set -e
 
 # first arg is `-f` or `--some-option`
@@ -27,7 +27,7 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'bin/console' ]; then
 	else
 	    # Wait until database is ready
         if dockerize -wait ${DOCKERIZE_WAIT_FOR} -timeout 30s; then
-	        php bin/console doctrine:migrations:migrate
+	        php bin/console doctrine:migrations:migrate -n
 	    else
             echo "Could not migrate database"
         fi
