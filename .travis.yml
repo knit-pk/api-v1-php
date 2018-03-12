@@ -41,7 +41,7 @@ matrix:
         - chmod +x ./cc-test-reporter
         - ./cc-test-reporter before-build
       after_script:
-        - ./cc-test-reporter after-build --debug -t clover --exit-code $TRAVIS_TEST_RESULT
+        - ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
 
 before_install:
   - export PATH="$PATH:$HOME/.composer/vendor/bin"
