@@ -46,6 +46,23 @@ services:
             - .:/usr/src/api
             - /usr/src/api/var
 
+#    standalone:
+#        depends_on:
+#            - mysql
+#            - redis
+#        build:
+#            dockerfile: Dockerfile.standalone
+#            context: .
+#            args:
+#                - KNIT_API_TAG=0.8.0-dev
+#        environment:
+#            - DOT_ENV=.env.mysql
+#        volumes:
+#            - .:/usr/src/api
+#            - /usr/src/api/var
+#        ports:
+#            - "8100:80"
+
     ppm:
         depends_on:
             - mysql
