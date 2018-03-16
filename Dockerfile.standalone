@@ -1,14 +1,13 @@
 ARG KNIT_API_TAG
 FROM knitpk/api:${KNIT_API_TAG}
 
-RUN apk add --no-cache nginx
+ENV PORT 80
+
+RUN apk add --no-cache nginx openssh bash python
 
 COPY deploy/standalone/nginx.conf /etc/nginx/nginx.conf
 COPY deploy/standalone/default.conf /etc/nginx/conf.d/default.conf
 COPY deploy/standalone/docker-app-entrypoint.sh /usr/local/bin/docker-app-entrypoint
 RUN chmod +x /usr/local/bin/docker-app-entrypoint
 
-EXPOSE 80
-
-ENTRYPOINT ["docker-app-entrypoint"]
-CMD ["php-fpm"]
+EXPOSE ${PORT}
