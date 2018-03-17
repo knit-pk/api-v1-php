@@ -5,16 +5,22 @@ parameters:
     version: '0.8.0-dev'
     title: 'KNIT RESTful API'
     description: 'KNIT RESTful API build using ApiPlatform'
-    public_upload.prefix: 'media/upload'
-    router.request_context.host: localhost
-    router.request_context.scheme: http
-    router.request_context.base_url: /
+    resources.base_url: '%env(APP_RESOURCES_BASE_URL)%'
+    resources.default_prefix: '%env(APP_RESOURCES_DEFAULT_PREFIX)%'
+    router.request_context.host: '%env(APP_REQUEST_CONTEXT_HOST)%'
+    router.request_context.scheme: '%env(APP_REQUEST_CONTEXT_SCHEME)%'
+    router.request_context.base_url: '%env(APP_REQUEST_CONTEXT_BASE_URL)%'
     session.storage.options:
         cache_limiter: 0
 
     # Default environment variables values
     env(JWT_PRIVATE_KEY_PATH): config/jwt/private.pem
     env(JWT_PUBLIC_KEY_PATH): config/jwt/public.pem
+    env(APP_RESOURCES_BASE_URL): ''
+    env(APP_RESOURCES_DEFAULT_PREFIX): 'media/upload'
+    env(APP_REQUEST_CONTEXT_HOST): localhost
+    env(APP_REQUEST_CONTEXT_SCHEME): http
+    env(APP_REQUEST_CONTEXT_BASE_URL): /
 
 services:
     # default configuration for services in *this* file
@@ -93,3 +99,16 @@ services:
 
     'Vich\UploaderBundle\Storage\StorageInterface':
         alias: vich_uploader.storage.file_system
+
+    'App\UrlGenerator\UrlGeneratorInterface':
+        class: App\UrlGenerator\RequestContextUrlGenerator
+
+    'App\UrlGenerator\RequestStackUrlGenerator':
+        decorates: App\UrlGenerator\UrlGeneratorInterface
+        decoration_priority: -10
+        arguments: [ '@App\UrlGenerator\RequestStackUrlGenerator.inner' ]
+
+    'App\UrlGenerator\ConfigurationUrlGenerator':
+        decorates: App\UrlGenerator\UrlGeneratorInterface
+        decoration_priority: -20
+        arguments: [ '@App\UrlGenerator\ConfigurationUrlGenerator.inner', '%resources.base_url%']

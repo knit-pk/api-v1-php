@@ -4,6 +4,6 @@ vich_uploader:
 
     mappings:
         images:
-            uri_prefix: '/%public_upload.prefix%'
+            uri_prefix: '/%resources.default_prefix%'
             namer: vich_uploader.namer_uniqid
             upload_destination: images_filesystem_prefix
