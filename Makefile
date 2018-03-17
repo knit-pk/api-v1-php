@@ -2,9 +2,15 @@ ifndef APP_ENV
 	include .env
 endif
 
+CURR_USER := $(shell whoami)
+
 fix-symfony-cache:
-	@printf "## Fixing symfony cache ### \n"
-	@chown -R www-data:www-data var
+	@if [ "$(shell whoami)" = 'root' ]; then\
+		echo "## Fixing symfony cache ##";\
+		chmod 777 -R var;\
+	else\
+		echo "## Non-root user ##";\
+	fi
 .PHONY: fix-symfony-cache
 
 cache-warmup-docker: cache-warmup
