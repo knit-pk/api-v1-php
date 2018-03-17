@@ -14,6 +14,7 @@
     "guzzlehttp/guzzle": "^6.3",
     "lexik/jwt-authentication-bundle": "^2.4",
     "nelmio/cors-bundle": "^1.5",
+    "oneup/flysystem-bundle": "^3.0",
     "predis/predis": "^1.1",
     "ramsey/uuid-doctrine": "^1.4",
     "symfony/flex": "^1.0",

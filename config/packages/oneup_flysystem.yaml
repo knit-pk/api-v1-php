@@ -1,0 +1,10 @@
+oneup_flysystem:
+    adapters:
+        images_adapter:
+            local:
+                directory: '%kernel.project_dir%/public/%public_upload.prefix%'
+
+    filesystems:
+        images_filesystem:
+            adapter: images_adapter
+            mount: images_filesystem_prefix

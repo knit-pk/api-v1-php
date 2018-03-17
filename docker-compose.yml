@@ -35,23 +35,23 @@ services:
             - .:/usr/src/api
             - /usr/src/api/var
 
-    ppm:
-        depends_on:
-            - mysql
-            - redis
-        build:
-            dockerfile: Dockerfile.standalone
-            context: .
-            args:
-                - KNIT_API_TAG=0.8.0-dev
-        env_file: .env.mysql
-        environment:
-            - PORT=8899
-        volumes:
-            - .:/usr/src/api
-            - /usr/src/api/var
-        ports:
-            - "8100:8899"
+#    standalone:
+#        depends_on:
+#            - mysql
+#            - redis
+#        build:
+#            dockerfile: Dockerfile.standalone
+#            context: .
+#            args:
+#                - KNIT_API_TAG=0.8.0-dev
+#        env_file: .env.mysql
+#        environment:
+#            - PORT=8899
+#        volumes:
+#            - .:/usr/src/api
+#            - /usr/src/api/var
+#        ports:
+#            - "8100:8899"
 
 #    ppm:
 #        depends_on:
