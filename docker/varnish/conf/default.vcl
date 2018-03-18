@@ -12,7 +12,7 @@ acl ban {
     "172.18.0.1"; // debug/cli
     "localhost";
     "backend";
-    "ppm";
+    //"ppm";
 }
 
 sub vcl_backend_response {

@@ -4,17 +4,18 @@ supervisord.pid
 !.env.mysql
 clover.xml
 
-/logs/
-/config/jwt/
-/public/media/upload/*
+report/
+logs/
+config/jwt/
+public/media/upload/*
 
-!/public/media/upload/.gitkeep
+!public/media/upload/.gitkeep
 
 ###> symfony/framework-bundle ###
 .env
-/public/bundles/
-/var/
-/vendor/
+public/bundles/
+var/
+vendor/
 ###< symfony/framework-bundle ###
 
 ###> symfony/web-server-bundle ###

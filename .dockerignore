@@ -12,7 +12,8 @@ Dockerfile*
 var/*
 .git/
 .idea/
-.git/
+report/
+clover.xml
 docker/
 config/jwt/
 vendor/
