@@ -1,7 +1,7 @@
 supervisord.pid
 .env.*
-!.env.test
-!.env.mysql
+!.env.dev
+!.env.stage
 clover.xml
 
 report/

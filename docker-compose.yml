@@ -30,7 +30,7 @@ services:
             - mysql
             - redis
         build: .
-        env_file: .env.mysql
+        env_file: .env.dev
         volumes:
             - .:/usr/src/api
             - /usr/src/api/var
@@ -44,7 +44,7 @@ services:
 #            context: .
 #            args:
 #                - KNIT_API_TAG=0.8.0-dev
-#        env_file: .env.mysql
+#        env_file: .env.stage
 #        environment:
 #            - PORT=8899
 #        volumes:

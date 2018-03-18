@@ -2,7 +2,7 @@ oneup_flysystem:
     adapters:
         images_adapter:
             local:
-                directory: '%kernel.project_dir%/public/%public_upload.prefix%'
+                directory: '%kernel.project_dir%/public/%resources.default_prefix%'
 
     filesystems:
         images_filesystem:
