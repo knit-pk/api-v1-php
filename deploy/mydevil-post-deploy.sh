@@ -15,4 +15,4 @@ sed -i _backup "s~^const APP_PATH.*$~const APP_PATH = \"../${PWD##*/}/\";~g" ../
 
 php71 bin/console doctrine:schema:drop --force
 php71 bin/console doctrine:schema:create
-php71 bin/console doctrine:fixtures:load -n
+APP_REQUEST_CONTEXT_HOST=knit-test-api.tk APP_REQUEST_CONTEXT_SCHEME=https php71 bin/console doctrine:fixtures:load -n

@@ -14,6 +14,9 @@
     "api-platform/schema-generator": {
         "version": "v2.0.2"
     },
+    "aws/aws-sdk-php": {
+        "version": "3.52.28"
+    },
     "behat/behat": {
         "version": "v3.4.3"
     },
@@ -164,6 +167,12 @@
     "justinrainbow/json-schema": {
         "version": "5.2.6"
     },
+    "league/flysystem": {
+        "version": "1.0.43"
+    },
+    "league/flysystem-aws-s3-v3": {
+        "version": "1.0.18"
+    },
     "league/html-to-markdown": {
         "version": "4.6.0"
     },
@@ -178,6 +187,9 @@
     },
     "monolog/monolog": {
         "version": "1.23.0"
+    },
+    "mtdowling/jmespath.php": {
+        "version": "2.4.0"
     },
     "myclabs/deep-copy": {
         "version": "1.7.0"
@@ -217,6 +229,15 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.2.0"
+    },
+    "oneup/flysystem-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "0eb87bba411c227da027fe5f7c1dc7954b02f242"
+        }
     },
     "pagerfanta/pagerfanta": {
         "version": "v1.0.5"

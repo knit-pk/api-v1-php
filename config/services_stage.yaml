@@ -1,0 +1,17 @@
+imports:
+    - { resource: 'services_prod.yaml' }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    app.s3.resources.client:
+        class: Aws\S3\S3Client
+        arguments:
+            - version: 'latest'
+              region: '%env(S3_RESOURCES_REGION)%'
+              credentials:
+                  key: '%env(S3_RESOURCES_KEY)%'
+                  secret: '%env(S3_RESOURCES_SECRET)%'
