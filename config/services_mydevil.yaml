@@ -1,3 +1,0 @@
-parameters:
-    router.request_context.host: knit-test-api.tk
-    router.request_context.scheme: https
