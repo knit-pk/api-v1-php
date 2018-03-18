@@ -1,0 +1,7 @@
+oneup_flysystem:
+    adapters:
+        images_adapter:
+            awss3v3:
+                client: app.s3.resources.client
+                bucket: '%env(S3_RESOURCES_BUCKET)%'
+                prefix: '%resources.default_prefix%'
