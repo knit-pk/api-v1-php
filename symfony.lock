@@ -14,6 +14,9 @@
     "api-platform/schema-generator": {
         "version": "v2.0.2"
     },
+    "aws/aws-sdk-php": {
+        "version": "3.52.28"
+    },
     "behat/behat": {
         "version": "v3.4.3"
     },
@@ -167,6 +170,9 @@
     "league/flysystem": {
         "version": "1.0.43"
     },
+    "league/flysystem-aws-s3-v3": {
+        "version": "1.0.18"
+    },
     "league/html-to-markdown": {
         "version": "4.6.0"
     },
@@ -181,6 +187,9 @@
     },
     "monolog/monolog": {
         "version": "1.23.0"
+    },
+    "mtdowling/jmespath.php": {
+        "version": "2.4.0"
     },
     "myclabs/deep-copy": {
         "version": "1.7.0"
