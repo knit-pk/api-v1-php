@@ -1,7 +1,8 @@
 version: "3"
 
 volumes:
-    mysql_data:
+    mysql_data: {}
+    composer_cache: {}
 
 services:
     mysql:
@@ -34,6 +35,7 @@ services:
         volumes:
             - .:/usr/src/api
             - /usr/src/api/var
+            - composer_cache:/root/.composer
 
 #    standalone:
 #        depends_on:
@@ -50,6 +52,7 @@ services:
 #        volumes:
 #            - .:/usr/src/api
 #            - /usr/src/api/var
+#            - composer_cache:/root/.composer
 #        ports:
 #            - "8100:8899"
 
