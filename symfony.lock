@@ -254,6 +254,9 @@
     "php-cs-fixer/diff": {
         "version": "v1.2.0"
     },
+    "php-earth/swoole-engine": {
+        "version": "v0.0.5"
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },

@@ -1,0 +1,26 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    ### Redis client
+    redis.client:
+        class: Predis\Client
+        arguments:
+            - '%env(REDIS_URI)%'
+
+    ### Monolog set-up for elastic stack
+    monolog.formatter.logstash_formatter:
+        class: Monolog\Formatter\LogstashFormatter
+        arguments:
+            - 'api' # 'type' field in kibana
+
+    monolog.handler.redis_handler:
+        class: Monolog\Handler\RedisHandler
+        arguments:
+            - '@redis.client'
+            - 'monolog' # under this key, logs will be stored in redis
+            - 'info'
+        calls:
+            - [ setFormatter, ['@monolog.formatter.logstash_formatter']]

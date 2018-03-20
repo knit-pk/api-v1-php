@@ -3,7 +3,7 @@ FROM knitpk/api:${KNIT_API_TAG}
 
 ENV PORT 80
 
-RUN apk add --no-cache nginx openssh bash python
+RUN apk add --no-cache nginx openssh bash python linux-headers
 
 COPY deploy/standalone/nginx.conf /etc/nginx/nginx.conf
 COPY deploy/standalone/default.conf /etc/nginx/conf.d/default.conf
@@ -11,3 +11,13 @@ COPY deploy/standalone/docker-app-entrypoint.sh /usr/local/bin/docker-app-entryp
 RUN chmod +x /usr/local/bin/docker-app-entrypoint
 
 EXPOSE ${PORT}
+
+ARG SWOOLE_VERSION=2.1.1
+RUN docker-php-source extract && \
+    apk add --no-cache --virtual .phpize-deps-configure $PHPIZE_DEPS && \
+    pecl install swoole-$SWOOLE_VERSION && \
+    docker-php-ext-enable swoole && \
+    apk del .phpize-deps-configure && \
+    docker-php-source delete
+
+CMD ["vendor/bin/swoole"]

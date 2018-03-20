@@ -26,35 +26,35 @@ services:
             - "6379:6379"
 
     # PHP Application running on PHP-FPM (MySQL)
-    backend:
-        depends_on:
-            - mysql
-            - redis
-        build: .
-        env_file: .env.dev
-        volumes:
-            - .:/usr/src/api
-            - /usr/src/api/var
-            - composer_cache:/root/.composer
-
-#    standalone:
+#    backend:
 #        depends_on:
 #            - mysql
 #            - redis
-#        build:
-#            dockerfile: Dockerfile.standalone
-#            context: .
-#            args:
-#                - KNIT_API_TAG=0.8.0-dev
-#        env_file: .env.stage
-#        environment:
-#            - PORT=8899
+#        build: .
+#        env_file: .env.dev
 #        volumes:
 #            - .:/usr/src/api
 #            - /usr/src/api/var
 #            - composer_cache:/root/.composer
-#        ports:
-#            - "8100:8899"
+
+    standalone:
+        depends_on:
+            - mysql
+            - redis
+        build:
+            dockerfile: Dockerfile.standalone
+            context: .
+            args:
+                - KNIT_API_TAG=0.8.0-dev
+        env_file: .env.swoole
+        environment:
+            - PORT=8899
+        volumes:
+            - .:/usr/src/api
+            - /usr/src/api/var
+            - composer_cache:/root/.composer
+        ports:
+            - "8100:8899"
 
 #    ppm:
 #        depends_on:
@@ -68,29 +68,29 @@ services:
 #            - "8090:80"
 
     # Nginx
-    api:
-        depends_on:
-            - backend
-        build:
-            context: ./docker/api
-        ports:
-            - "8080:80"
-        volumes:
-            - ./public:/usr/src/api/public
-            - ./vendor:/usr/src/api/vendor
+#    api:
+#        depends_on:
+#            - backend
+#        build:
+#            context: ./docker/api
+#        ports:
+#            - "8080:80"
+#        volumes:
+#            - ./public:/usr/src/api/public
+#            - ./vendor:/usr/src/api/vendor
 
     ## Debug/DevOps
 
     # Varnish (Http Cache)
-    varnish:
-        depends_on:
-           - api
-        build:
-           context: ./docker/varnish
-        volumes:
-            - ./docker/varnish/conf:/etc/varnish:ro
-        ports:
-           - "80:80"
+#    varnish:
+#        depends_on:
+#           - api
+#        build:
+#           context: ./docker/varnish
+#        volumes:
+#            - ./docker/varnish/conf:/etc/varnish:ro
+#        ports:
+#           - "80:80"
 
 #    elasticsearch:
 #        build:

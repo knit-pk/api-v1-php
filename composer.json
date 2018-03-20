@@ -17,6 +17,7 @@
     "lexik/jwt-authentication-bundle": "^2.4",
     "nelmio/cors-bundle": "^1.5",
     "oneup/flysystem-bundle": "^3.0",
+    "php-earth/swoole-engine": "dev-master",
     "predis/predis": "^1.1",
     "ramsey/uuid-doctrine": "^1.4",
     "symfony/flex": "^1.0",
@@ -85,6 +86,13 @@
       "@auto-scripts"
     ]
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/k911/swoole-engine.git",
+      "no-api": true
+    }
+  ],
   "conflict": {
     "symfony/symfony": "*",
     "symfony/twig-bundle": "<3.3",
