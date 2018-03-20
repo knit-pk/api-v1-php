@@ -66,9 +66,7 @@ deploy:
   # Deploy to test environment
   - provider: script
     skip_cleanup: true
-    script: |
-     bash ./deploy/mydevil-deploy.sh && \
-     ssh k911-main@s11.mydevil.net "export APP_VERSION=$APP_VERSION && bash -s" < ./deploy/mydevil-post-deploy.sh
+    script: bash ./deploy/mydevil-deploy.sh && ssh k911-main@s11.mydevil.net "export APP_VERSION=$APP_VERSION && bash -s" < ./deploy/mydevil-post-deploy.sh
     on:
       branch: develop
       condition: "$DEPLOY = 1"
