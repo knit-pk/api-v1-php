@@ -24,7 +24,12 @@ matrix:
           packages:
             - mysql-server
       before_script:
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
         - mysql -e 'CREATE DATABASE knit_api_test;'
+      after_script:
+        - ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
       env:
         - DEPLOY=1
         - DATABASE_URL="mysql://travis@127.0.0.1:3306/knit_api_test?charset=utf8mb4&serverVersion=5.7"
@@ -35,13 +40,6 @@ matrix:
         - psql -c 'CREATE DATABASE knit_api_test;' -U postgres
       env:
         - DATABASE_URL="pgsql://postgres@127.0.0.1:5432/knit_api_test"
-    - php: '7.1'
-      before_script:
-        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-        - chmod +x ./cc-test-reporter
-        - ./cc-test-reporter before-build
-      after_script:
-        - ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
 
 before_install:
   - export PATH="$PATH:$HOME/.composer/vendor/bin"
@@ -72,13 +70,13 @@ deploy:
     script: bash ./deploy/mydevil-deploy.sh
     on:
       branch: develop
-      php: '7.1'
+      condition: "$DEPLOY = 1"
   - provider: script
     skip_cleanup: true
     script: ssh k911-main@s11.mydevil.net "export APP_VERSION=$APP_VERSION && bash -s" < ./deploy/mydevil-post-deploy.sh
     on:
       branch: develop
-      php: '7.1'
+      condition: "$DEPLOY = 1"
   - provider: script
     skip_cleanup: true
     script: bash ./deploy/github-tag.sh
