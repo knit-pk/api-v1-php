@@ -2,7 +2,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    version: '0.8.1-dev'
+    version: '0.9.0-dev'
     title: 'KNIT RESTful API'
     description: 'KNIT RESTful API build using ApiPlatform'
     resources.base_url: '%env(APP_RESOURCES_BASE_URL)%'
