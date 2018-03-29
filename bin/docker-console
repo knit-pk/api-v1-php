@@ -44,7 +44,6 @@ $kernel = new class ($env, $debug) extends BaseKernel {
         Symfony\Bundle\FrameworkBundle\FrameworkBundle::class,
         ApiPlatform\Core\Bridge\Symfony\Bundle\ApiPlatformBundle::class,
         Symfony\Bundle\TwigBundle\TwigBundle::class,
-        EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle::class,
     ];
 
     public function getCacheDir(): string
