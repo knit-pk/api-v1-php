@@ -4,7 +4,7 @@ import std;
 
 backend default {
     .host = "standalone";
-    .port = "80";
+    .port = "8899";
 }
 
 // Hosts allowed to send BAN requests
