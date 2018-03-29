@@ -7,7 +7,7 @@
 **/*.md
 **/.dockerignore
 Dockerfile*
-.env
+.env*
 !var/.gitignore
 var/*
 .git/

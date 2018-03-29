@@ -3,10 +3,10 @@ set -e
 
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
-	set -- php-fpm "$@"
+	set -- bin/server "$@"
 fi
 
-if [ "$1" = 'php-fpm' ] || [ "$1" = 'bin/console' ]; then
+if [ "$1" = 'bin/server' ] || [ "$1" = 'bin/console' ]; then
 	docker-app-bootstrap
 fi
 

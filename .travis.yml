@@ -18,13 +18,19 @@ matrix:
         - mysql
         - docker
       addons:
+        ssh_known_hosts: s11.mydevil.net
         apt:
           sources:
             - mysql-5.7-trusty
           packages:
             - mysql-server
       before_script:
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
         - mysql -e 'CREATE DATABASE knit_api_test;'
+      after_script:
+        - ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
       env:
         - DEPLOY=1
         - DATABASE_URL="mysql://travis@127.0.0.1:3306/knit_api_test?charset=utf8mb4&serverVersion=5.7"
@@ -35,13 +41,6 @@ matrix:
         - psql -c 'CREATE DATABASE knit_api_test;' -U postgres
       env:
         - DATABASE_URL="pgsql://postgres@127.0.0.1:5432/knit_api_test"
-    - php: '7.1'
-      before_script:
-        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-        - chmod +x ./cc-test-reporter
-        - ./cc-test-reporter before-build
-      after_script:
-        - ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
 
 before_install:
   - export PATH="$PATH:$HOME/.composer/vendor/bin"
@@ -55,9 +54,6 @@ script:
   - if [[ -v DATABASE_URL ]]; then bin/console doctrine:fixtures:load -n; fi
   - if [[ -v DATABASE_URL ]]; then composer test-features -n; fi
 
-addons:
-  ssh_known_hosts: s11.mydevil.net
-
 before_deploy:
   - "export APP_VERSION=$(cat ./config/services.yaml | grep version | sed -E \"s/\\s+version: '(.*)'/v\\1/\") && echo $APP_VERSION"
   - openssl aes-256-cbc -K $encrypted_abb59573aead_key -iv $encrypted_abb59573aead_iv -in ./deploy/mydevil.tar.enc -out /tmp/mydevil.tar -d
@@ -67,24 +63,21 @@ before_deploy:
   - ssh-add /tmp/mydevil_rsa
 
 deploy:
+  # Deploy to test environment
   - provider: script
     skip_cleanup: true
-    script: bash ./deploy/mydevil-deploy.sh
+    script: bash ./deploy/mydevil-deploy.sh && ssh k911-main@s11.mydevil.net "export APP_VERSION=$APP_VERSION && bash -s" < ./deploy/mydevil-post-deploy.sh
     on:
       branch: develop
-      php: '7.1'
-  - provider: script
-    skip_cleanup: true
-    script: ssh k911-main@s11.mydevil.net "export APP_VERSION=$APP_VERSION && bash -s" < ./deploy/mydevil-post-deploy.sh
-    on:
-      branch: develop
-      php: '7.1'
+      condition: "$DEPLOY = 1"
+  # Create a tag and push to GitHub
   - provider: script
     skip_cleanup: true
     script: bash ./deploy/github-tag.sh
     on:
       branch: master
       condition: "$DEPLOY = 1"
+  # Build Docker images and push to DockerHub
   - provider: script
     skip_cleanup: true
     script: bash ./deploy/docker-app-push.sh
