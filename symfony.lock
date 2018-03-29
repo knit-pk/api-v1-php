@@ -116,6 +116,9 @@
     "doctrine/orm": {
         "version": "v2.5.12"
     },
+    "eaglewu/swoole-ide-helper": {
+        "version": "dev-master"
+    },
     "easycorp/easyadmin-bundle": {
         "version": "1.17",
         "recipe": {
@@ -253,9 +256,6 @@
     },
     "php-cs-fixer/diff": {
         "version": "v1.2.0"
-    },
-    "php-earth/swoole-engine": {
-        "version": "v0.0.5"
     },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
@@ -467,6 +467,9 @@
     "symfony/intl": {
         "version": "v3.3.10"
     },
+    "symfony/lts": {
+        "version": "4-dev"
+    },
     "symfony/monolog-bridge": {
         "version": "v3.3.10"
     },
@@ -486,18 +489,6 @@
         "version": "v1.6.0"
     },
     "symfony/polyfill-mbstring": {
-        "version": "v1.6.0"
-    },
-    "symfony/polyfill-php56": {
-        "version": "v1.6.0"
-    },
-    "symfony/polyfill-php70": {
-        "version": "v1.6.0"
-    },
-    "symfony/polyfill-php72": {
-        "version": "v1.6.0"
-    },
-    "symfony/polyfill-util": {
         "version": "v1.6.0"
     },
     "symfony/process": {
