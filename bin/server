@@ -1,0 +1,51 @@
+#!/usr/bin/env php
+<?php
+
+use App\Server\Driver;
+use Swoole\Http\Request;
+use Swoole\Http\Response;
+use Swoole\Http\Server;
+use Symfony\Component\Debug\Debug;
+use Symfony\Component\Dotenv\Dotenv;
+
+set_time_limit(0);
+
+require __DIR__ . '/../vendor/autoload.php';
+
+if (!isset($_SERVER['APP_ENV'])) {
+    if (!class_exists(Dotenv::class)) {
+        throw new \RuntimeException('APP_ENV environment variable is not defined. You need to define environment variables for configuration or add "symfony/dotenv" as a Composer dependency to load variables from a .env file.');
+    }
+    (new Dotenv())->load(__DIR__ . '/../.env');
+}
+
+$host = '127.0.0.1';
+$port = 9501;
+
+$server = new Server($host, $port, SWOOLE_BASE);
+
+$env = $_SERVER['APP_ENV'] ?? 'dev';
+$debug = $_SERVER['APP_DEBUG'] ?? ('prod' !== $env);
+
+if ($debug) {
+    umask(0000);
+
+    if (class_exists(Debug::class)) {
+        Debug::enable();
+    }
+}
+
+$driver = new Driver();
+$driver->boot($env, $debug);
+
+$server->on('request', function (Request $request, Response $response) use ($driver) {
+    $driver->setSwooleRequest($request);
+    $driver->setSwooleResponse($response);
+
+    $driver->preHandle();
+    $driver->handle();
+    $driver->postHandle();
+});
+
+//echo \sprintf('Swoole HTTP Server started on http://%s:%d', $host, $port) . PHP_EOL;
+$server->start();
