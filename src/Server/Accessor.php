@@ -20,7 +20,7 @@ class Accessor
      * @param array    $args
      * @param string   $bindClass
      */
-    public static function bindAndCall(callable $fn, $newThis, array $args = [], $bindClass = null): void
+    public static function bindAndCall(callable $fn, object $newThis, array $args = [], $bindClass = null): void
     {
         $func = Closure::bind($fn, $newThis, $bindClass ?: \get_class($newThis));
         if ($args) {

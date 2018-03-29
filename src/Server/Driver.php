@@ -9,6 +9,8 @@ use Swoole\Http\Response as SwooleResponse;
 
 /**
  * Driver for running Symfony with Swoole.
+ *
+ * @see https://github.com/php-pm/php-pm-httpkernel/blob/master/Bootstraps/Symfony.php
  */
 class Driver
 {
@@ -116,17 +118,6 @@ class Driver
             $container->get('debug.stopwatch')->__construct();
         }
 
-        //Symfony\Bundle\TwigBundle\Loader\FilesystemLoader
-        //->Twig_Loader_Filesystem
-        if ($container->has('twig.loader')) {
-            $twigLoader = $container->get('twig.loader');
-            Accessor::bindAndCall(function () use ($twigLoader) {
-                foreach ($twigLoader->cache as $path) {
-                    register_file($path);
-                }
-            }, $twigLoader);
-        }
-
         //reset all profiler stuff currently supported
         if ($container->has('profiler')) {
             $profiler = $container->get('profiler');
@@ -134,6 +125,17 @@ class Driver
             // since Symfony does not reset Profiler::disable() calls after each request, we need to do it,
             // so the profiler bar is visible after the second request as well.
             $profiler->enable();
+
+            // Doctrine
+            // Doctrine\Bundle\DoctrineBundle\DataCollector\DoctrineDataCollector
+            if ($profiler->has('db')) {
+                Accessor::bindAndCall(function () {
+                    //$logger: \Doctrine\DBAL\Logging\DebugStack
+                    foreach ($this->loggers as $logger) {
+                        Accessor::hijackProperty($logger, 'queries', []);
+                    }
+                }, $profiler->get('db'), [], 'Symfony\Bridge\Doctrine\DataCollector\DoctrineDataCollector');
+            }
 
             // EventDataCollector
             if ($profiler->has('events')) {

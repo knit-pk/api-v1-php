@@ -3,7 +3,7 @@ vcl 4.0;
 import std;
 
 backend default {
-    .host = "api";
+    .host = "standalone";
     .port = "80";
 }
 
@@ -11,8 +11,8 @@ backend default {
 acl ban {
     "172.18.0.1"; // debug/cli
     "localhost";
-    "backend";
-    //"ppm";
+    "127.0.0.1";
+    "standalone";
 }
 
 sub vcl_backend_response {
