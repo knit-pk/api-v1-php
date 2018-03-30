@@ -14,8 +14,10 @@ $handlers = [
         'path' => '%kernel.logs_dir%/%kernel.environment%.log',
         'level' => 'debug',
     ],
-    'console' => [
-        'type' => 'console',
+    'stdout' => [
+        'type'     => 'stream',
+        'path'     => 'php://stdout',
+        'level'    => 'error',
     ],
     'redis'         => [
         'id'    => 'monolog.handler.redis_handler',

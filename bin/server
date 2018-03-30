@@ -2,9 +2,12 @@
 <?php
 
 use App\Server\Driver;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 use Swoole\Http\Server;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\Dotenv\Dotenv;
 
@@ -19,13 +22,15 @@ if (!isset($_SERVER['APP_ENV'])) {
     (new Dotenv())->load(__DIR__ . '/../.env');
 }
 
-$host = '127.0.0.1';
-$port = 9501;
+$input = new ArgvInput();
+$env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'dev');
+$debug = ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env)) && !$input->hasParameterOption(['--no-debug', '']);
+$host = $input->getParameterOption(['--host'], '127.0.0.1');
+$port = (int) $input->getParameterOption(['--port', '-p'], 9501);
+$output = $input->getParameterOption(['--output', '-o'], 'php://stdout');
 
+$logger = new Logger('swoole', [new StreamHandler($output)]);
 $server = new Server($host, $port, SWOOLE_BASE);
-
-$env = $_SERVER['APP_ENV'] ?? 'dev';
-$debug = $_SERVER['APP_DEBUG'] ?? ('prod' !== $env);
 
 if ($debug) {
     umask(0000);
@@ -47,5 +52,8 @@ $server->on('request', function (Request $request, Response $response) use ($dri
     $driver->postHandle();
 });
 
-//echo \sprintf('Swoole HTTP Server started on http://%s:%d', $host, $port) . PHP_EOL;
+$logger->info(\sprintf('Swoole HTTP Server started on http://%s:%d', $host, $port), [
+    'env'   => $env,
+    'debug' => $debug ? 'true' : 'false',
+]);
 $server->start();

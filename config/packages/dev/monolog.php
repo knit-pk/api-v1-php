@@ -4,13 +4,19 @@ use Symfony\Component\Config\Resource\ClassExistenceResource;
 use Symfony\Component\Console\Application;
 
 $handlers = [
-    'main'          => [
+    'main'   => [
         'type'     => 'stream',
         'path'     => '%kernel.logs_dir%/%kernel.environment%.log',
         'level'    => 'debug',
         'channels' => ['!event'],
     ],
-    'redis'         => [
+    'stdout' => [
+        'type'     => 'stream',
+        'path'     => 'php://stdout',
+        'level'    => 'debug',
+        'channels' => ['!event'],
+    ],
+    'redis'  => [
         'id'    => 'monolog.handler.redis_handler',
         'type'  => 'service',
         'level' => 'info',
