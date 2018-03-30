@@ -59,7 +59,7 @@ RUN composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-pr
 COPY . /usr/src/api
 
 RUN mkdir -p var/cache var/log var/sessions public/media/upload && \
-    composer dump-autoload --classmap-authoritative --no-dev && \
+    composer dump-autoload --apcu --no-dev && \
     bin/docker-console assets:install public && \
     chmod -R 777 var public
 
