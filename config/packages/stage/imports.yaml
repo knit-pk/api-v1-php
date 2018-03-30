@@ -1,5 +1,5 @@
 imports:
-    - { resource: '../prod/nelmio_cors.yaml' }
+    - { resource: '../prod/nelmio_cors.php' }
     - { resource: '../prod/doctrine.yaml' }
     - { resource: '../prod/framework.yaml' }
     - { resource: '../prod/monolog.php' }
