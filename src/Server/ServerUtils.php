@@ -10,7 +10,7 @@ use Closure;
  *
  * @see https://github.com/php-pm/php-pm/blob/master/src/Utils.php
  */
-class Accessor
+class ServerUtils
 {
     /**
      * Executes a function in the context of an object. This basically bypasses the private/protected check of PHP.
@@ -64,5 +64,28 @@ class Accessor
                 'm' => 1048576, //1024 * 1024
                 'k' => 1024,
             ][\mb_strtolower(\mb_substr($memoryLimit, -1))];
+    }
+
+    public static function getMemoryUsage(): int
+    {
+        return \memory_get_usage();
+    }
+
+    public static function getPeakMemoryUsage(): int
+    {
+        return \memory_get_peak_usage();
+    }
+
+    public static function formatBytes(int $bytes): string
+    {
+        if ($bytes < 0) {
+            return (string) $bytes;
+        }
+
+        $label = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+        for ($i = 0; $bytes >= 1024 && $i < (\count($label) - 1); $bytes /= 1024, $i++) {
+        }
+
+        return \round($bytes, 2).' '.$label[$i];
     }
 }

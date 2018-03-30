@@ -31,7 +31,7 @@ if ($trustedHosts = $_SERVER['APP_TRUSTED_HOSTS'] ?? false) {
 }
 
 if ($trustedProxies = $_SERVER['APP_TRUSTED_PROXIES'] ?? false) {
-    $trustedHosts = str_replace('\'', '', $trustedProxies);
+    $trustedProxies = str_replace('\'', '', $trustedProxies);
     $trustedProxies = explode(',', trim($trustedProxies, '[]'));
     Request::setTrustedProxies($trustedProxies, Request::HEADER_X_FORWARDED_ALL);
 }
