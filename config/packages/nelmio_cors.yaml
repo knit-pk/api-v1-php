@@ -3,7 +3,7 @@ nelmio_cors:
         origin_regex: true
         allow_credentials: false
         allow_origin: ['http://knit.pk.edu.pl']
-        allow_headers: ['Content-type', 'Authorization']
+        allow_headers: ['Accept', 'Content-Type', 'Authorization']
         allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
         expose_headers: ['Link']
         max_age: 3600
