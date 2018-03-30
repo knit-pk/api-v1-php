@@ -41,14 +41,6 @@ class Request
             $symfonyRequest->request->replace(\is_array($data) ? $data : []);
         }
 
-        if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false) {
-            $symfonyRequest::setTrustedProxies(\explode(',', $trustedProxies), SymfonyRequest::HEADER_X_FORWARDED_ALL ^ SymfonyRequest::HEADER_X_FORWARDED_HOST);
-        }
-
-        if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
-            $symfonyRequest::setTrustedHosts(\explode(',', $trustedHosts));
-        }
-
         return $symfonyRequest;
     }
 

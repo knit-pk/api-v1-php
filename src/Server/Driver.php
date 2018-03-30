@@ -6,6 +6,7 @@ use App\Kernel;
 use RuntimeException;
 use Swoole\Http\Request as SwooleRequest;
 use Swoole\Http\Response as SwooleResponse;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
  * Driver for running Symfony with Swoole.
@@ -45,6 +46,7 @@ class Driver
      * @param string $env   Application environment
      * @param bool   $debug Switches debug mode on/off
      *
+     * @throws \InvalidArgumentException
      * @throws \Symfony\Component\Dotenv\Exception\PathException
      * @throws \Symfony\Component\Dotenv\Exception\FormatException
      * @throws \RuntimeException
@@ -53,6 +55,18 @@ class Driver
     {
         if (!\class_exists(Kernel::class)) {
             throw new RuntimeException('Could not find App\\Kernel class. Make sure you have autoloading configured properly');
+        }
+
+        if ($trustedHosts = $_SERVER['APP_TRUSTED_HOSTS'] ?? false) {
+            $trustedHosts = \str_replace('\'', '', $trustedHosts);
+            $trustedHosts = \explode(',', \trim($trustedHosts, '[]'));
+            SymfonyRequest::setTrustedHosts($trustedHosts);
+        }
+
+        if ($trustedProxies = $_SERVER['APP_TRUSTED_PROXIES'] ?? false) {
+            $trustedProxies = \str_replace('\'', '', $trustedProxies);
+            $trustedProxies = \explode(',', \trim($trustedProxies, '[]'));
+            SymfonyRequest::setTrustedProxies($trustedProxies, SymfonyRequest::HEADER_X_FORWARDED_ALL);
         }
 
         $this->kernel = $app = new Kernel($env, $debug);
