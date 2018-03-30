@@ -22,12 +22,12 @@ if ($debug = $_SERVER['APP_DEBUG'] ?? false) {
     Debug::enable();
 }
 
-if ([] !== $trustedHosts = ServerUtils::decodeStringAsSet($_SERVER['APP_TRUSTED_HOSTS'])) {
-    Request::setTrustedHosts($trustedHosts);
+if ($trustedHosts = $_SERVER['APP_TRUSTED_HOSTS'] ?? false) {
+    Request::setTrustedHosts(ServerUtils::decodeStringAsSet($trustedHosts));
 }
 
-if ([] !== $trustedProxies = ServerUtils::decodeStringAsSet($_SERVER['APP_TRUSTED_PROXIES'])) {
-    Request::setTrustedProxies($trustedProxies, Request::HEADER_X_FORWARDED_ALL);
+if ($trustedProxies = $_SERVER['APP_TRUSTED_PROXIES'] ?? false) {
+    Request::setTrustedProxies(ServerUtils::decodeStringAsSet($trustedProxies), Request::HEADER_X_FORWARDED_ALL);
 }
 
 $kernel = new Kernel($_SERVER['APP_ENV'] ?? 'dev', $debug);
