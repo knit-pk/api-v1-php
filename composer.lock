@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "af9e986e9faad5232fe4e1820186dcc9",
+    "content-hash": "8e610ba173c7c00b9bd2a54a1ad67f18",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -161,16 +161,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.35",
+            "version": "3.52.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "3210be6caaf81dfbbafe5b6623408a3c55d313a0"
+                "reference": "f1d453c2c090ef7a8d4887c7d121bdd0cb7b7613"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3210be6caaf81dfbbafe5b6623408a3c55d313a0",
-                "reference": "3210be6caaf81dfbbafe5b6623408a3c55d313a0",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f1d453c2c090ef7a8d4887c7d121bdd0cb7b7613",
+                "reference": "f1d453c2c090ef7a8d4887c7d121bdd0cb7b7613",
                 "shasum": ""
             },
             "require": {
@@ -237,7 +237,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-28T22:07:39+00:00"
+            "time": "2018-03-29T22:20:51+00:00"
         },
         {
             "name": "behat/transliterator",
@@ -8354,12 +8354,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "4a272b63452f4d8ff0d48a759e59db9359a9b5b7"
+                "reference": "2fcfe963d8a1310c2d42e5dce4df0789152bf681"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/4a272b63452f4d8ff0d48a759e59db9359a9b5b7",
-                "reference": "4a272b63452f4d8ff0d48a759e59db9359a9b5b7",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2fcfe963d8a1310c2d42e5dce4df0789152bf681",
+                "reference": "2fcfe963d8a1310c2d42e5dce4df0789152bf681",
                 "shasum": ""
             },
             "conflict": {
@@ -8390,8 +8390,8 @@
                 "doctrine/mongodb-odm-bundle": ">=2,<3.0.1",
                 "doctrine/orm": ">=2,<2.4.8|>=2.5,<2.5.1",
                 "dompdf/dompdf": ">=0.6,<0.6.2",
-                "drupal/core": ">=8,<8.4.5",
-                "drupal/drupal": ">=8,<8.4.5",
+                "drupal/core": ">=7,<7.58|>=8,<8.4.6|>=8.5,<8.5.1",
+                "drupal/drupal": ">=7,<7.58|>=8,<8.4.6|>=8.5,<8.5.1",
                 "erusev/parsedown": "<1.7",
                 "ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.3|>=5.4,<5.4.11.3|>=2017.8,<2017.8.1.1|>=2017.12,<2017.12.2.1",
                 "firebase/php-jwt": "<2",
@@ -8505,7 +8505,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-03-22T21:16:54+00:00"
+            "time": "2018-03-30T07:14:38+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -9719,8 +9719,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.2",
-        "ext-swoole": "*"
+        "php": "^7.2"
     },
     "platform-dev": []
 }

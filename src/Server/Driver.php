@@ -3,9 +3,10 @@
 namespace App\Server;
 
 use App\Kernel;
-use RuntimeException;
+use Psr\Log\LoggerInterface;
 use Swoole\Http\Request as SwooleRequest;
 use Swoole\Http\Response as SwooleResponse;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
  * Driver for running Symfony with Swoole.
@@ -17,54 +18,69 @@ class Driver
     /**
      * @var \Symfony\Component\HttpKernel\Kernel
      */
-    public $kernel;
+    private $kernel;
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Psr\Log\LoggerInterface
      */
-    public $symfonyRequest;
+    private $logger;
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Response
+     * @var string
      */
-    public $symfonyResponse;
+    private $env;
 
     /**
-     * @var \Swoole\Http\Request
+     * @var bool
      */
-    private $swooleRequest;
+    private $debug;
 
     /**
-     * @var \Swoole\Http\Response
+     * Driver constructor.
+     *
+     * @param string                   $env
+     * @param bool                     $debug
+     * @param \Psr\Log\LoggerInterface $logger
+     *
+     * @throws \InvalidArgumentException
      */
-    private $swooleResponse;
+    public function __construct(string $env, bool $debug, LoggerInterface $logger)
+    {
+        $this->env = $env;
+        $this->debug = $debug;
+        $this->logger = $logger;
+
+        if ($trustedHostsSet = $_SERVER['APP_TRUSTED_HOSTS'] ?? false) {
+            $trustedHosts = $this->decodeStringSet($trustedHostsSet);
+            $this->logger->info('Setting trusted hosts', $trustedHosts);
+            SymfonyRequest::setTrustedHosts($trustedHosts);
+        }
+
+        if ($trustedProxiesSet = $_SERVER['APP_TRUSTED_PROXIES'] ?? false) {
+            $trustedProxies = $this->decodeStringSet($trustedProxiesSet);
+            $this->logger->info('Setting trusted proxies', $trustedProxies);
+            SymfonyRequest::setTrustedProxies($trustedProxies, SymfonyRequest::HEADER_X_FORWARDED_ALL);
+        }
+    }
 
     /**
      * Boot Symfony Application.
      *
-     * @param string $env   Application environment
-     * @param bool   $debug Switches debug mode on/off
-     *
-     * @throws \Symfony\Component\Dotenv\Exception\PathException
-     * @throws \Symfony\Component\Dotenv\Exception\FormatException
+     * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function boot($env, $debug): void
+    public function boot(): void
     {
-        if (!\class_exists(Kernel::class)) {
-            throw new RuntimeException('Could not find App\\Kernel class. Make sure you have autoloading configured properly');
-        }
+        $this->kernel = $app = new Kernel($this->env, $this->debug);
 
-        $this->kernel = $app = new Kernel($env, $debug);
-
-        Accessor::bindAndCall(function () use ($app) {
+        ServerUtils::bindAndCall(function () use ($app) {
             // init bundles
             $app->initializeBundles();
             // init container
             $app->initializeContainer();
         }, $app);
 
-        Accessor::bindAndCall(function () use ($app) {
+        ServerUtils::bindAndCall(function () use ($app) {
             foreach ($app->getBundles() as $bundle) {
                 $bundle->setContainer($app->container);
                 $bundle->boot();
@@ -74,48 +90,34 @@ class Driver
     }
 
     /**
-     * Set Swoole request.
-     *
-     * @param \Swoole\Http\Request $request
-     */
-    public function setSwooleRequest(SwooleRequest $request): void
-    {
-        $this->swooleRequest = $request;
-    }
-
-    /**
-     * Set Swoole response.
-     *
-     * @param \Swoole\Http\Response $response
-     */
-    public function setSwooleResponse(SwooleResponse $response): void
-    {
-        $this->swooleResponse = $response;
-    }
-
-    /**
      * Does some necessary preparation before each request.
      */
-    public function preHandle(): void
+    private function preHandle(): void
     {
         // Reset Kernel startTime, so Symfony can correctly calculate the execution time
-        Accessor::hijackProperty($this->kernel, 'startTime', \microtime(true));
+        ServerUtils::hijackProperty($this->kernel, 'startTime', \microtime(true));
     }
 
     /**
      * Happens after each request.
      *
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
+     * @throws \Doctrine\Common\Persistence\Mapping\MappingException
      */
-    public function postHandle(): void
+    private function postHandle(): void
     {
         $container = $this->kernel->getContainer();
 
         //resets stopwatch, so it can correctly calculate the execution time
         if ($container->has('debug.stopwatch')) {
             $container->get('debug.stopwatch')->__construct();
+        }
+
+        if ($container->has('doctrine.orm.entity_manager')) {
+            $container->get('doctrine.orm.entity_manager')->clear();
         }
 
         //reset all profiler stuff currently supported
@@ -129,17 +131,17 @@ class Driver
             // Doctrine
             // Doctrine\Bundle\DoctrineBundle\DataCollector\DoctrineDataCollector
             if ($profiler->has('db')) {
-                Accessor::bindAndCall(function () {
+                ServerUtils::bindAndCall(function () {
                     //$logger: \Doctrine\DBAL\Logging\DebugStack
                     foreach ($this->loggers as $logger) {
-                        Accessor::hijackProperty($logger, 'queries', []);
+                        ServerUtils::hijackProperty($logger, 'queries', []);
                     }
                 }, $profiler->get('db'), [], 'Symfony\Bridge\Doctrine\DataCollector\DoctrineDataCollector');
             }
 
             // EventDataCollector
             if ($profiler->has('events')) {
-                Accessor::hijackProperty($profiler->get('events'), 'data', [
+                ServerUtils::hijackProperty($profiler->get('events'), 'data', [
                     'called_listeners' => [],
                     'not_called_listeners' => [],
                 ]);
@@ -147,62 +149,109 @@ class Driver
 
             // TwigDataCollector
             if ($profiler->has('twig')) {
-                Accessor::bindAndCall(function () {
-                    Accessor::hijackProperty($this->profile, 'profiles', []);
+                ServerUtils::bindAndCall(function () {
+                    ServerUtils::hijackProperty($this->profile, 'profiles', []);
                 }, $profiler->get('twig'));
             }
 
             // Logger
             if ($container->has('logger')) {
                 $logger = $container->get('logger');
-                Accessor::bindAndCall(function () {
+                ServerUtils::bindAndCall(function () {
                     if (\method_exists($this, 'getDebugLogger') && $debugLogger = $this->getDebugLogger()) {
                         //DebugLogger
-                        Accessor::hijackProperty($debugLogger, 'records', []);
+                        ServerUtils::hijackProperty($debugLogger, 'records', []);
                     }
                 }, $logger);
             }
         }
+
+        \gc_collect_cycles();
     }
 
     /**
      * Transform Symfony request and response to Swoole compatible response.
      *
+     * @param \Swoole\Http\Request  $swooleRequest
+     * @param \Swoole\Http\Response $swooleResponse
+     *
      * @throws \Exception
-     * @throws \InvalidArgumentException
      */
-    public function handle(): void
+    public function handle(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void
     {
-        $rq = new Request();
-        $this->symfonyRequest = $rq->createSymfonyRequest($this->swooleRequest);
-        $this->symfonyResponse = $this->kernel->handle($this->symfonyRequest);
+        $this->preHandle();
+        $this->logStats('before handle');
+
+        $symfonyRequest = $this->createSymfonyRequest($swooleRequest);
+        $symfonyResponse = $this->kernel->handle($symfonyRequest);
+        $this->kernel->terminate($symfonyRequest, $symfonyResponse);
 
         // HTTP status code for response
-        $this->swooleResponse->status($this->symfonyResponse->getStatusCode());
-
-        // Cookies
-        foreach ($this->symfonyResponse->headers->getCookies() as $cookie) {
-            /* @var \Symfony\Component\HttpFoundation\Cookie $cookie */
-            $this->swooleResponse->cookie(
-                $cookie->getName(),
-                \urlencode($cookie->getValue()),
-                $cookie->getExpiresTime(),
-                $cookie->getPath(),
-                $cookie->getDomain(),
-                $cookie->isSecure(),
-                $cookie->isHttpOnly()
-            );
-        }
+        $swooleResponse->status($symfonyResponse->getStatusCode());
 
         // Headers
-        foreach ($this->symfonyResponse->headers->allPreserveCase() as $name => $values) {
+        foreach ($symfonyResponse->headers->allPreserveCase() as $name => $values) {
             /** @var array $values */
             foreach ($values as $value) {
-                $this->swooleResponse->header($name, $value);
+                $swooleResponse->header($name, $value);
             }
         }
 
-        $this->kernel->terminate($this->symfonyRequest, $this->symfonyResponse);
-        $this->swooleResponse->end($this->symfonyResponse->getContent());
+        $swooleResponse->end($symfonyResponse->getContent());
+
+        $this->logStats('after handle');
+        $this->postHandle();
+    }
+
+    /**
+     * @param string $stringSet
+     *
+     * @return string[]
+     */
+    private function decodeStringSet(string $stringSet): array
+    {
+        $stringSet = \str_replace(['\'', '[', ']'], '', $stringSet);
+
+        return \explode(',', $stringSet);
+    }
+
+    private function createSymfonyRequest(SwooleRequest $request): SymfonyRequest
+    {
+        $headers = [];
+
+        foreach ($request->header as $key => $value) {
+            if ('x-forwarded-proto' === $key && 'https' === $value) {
+                $request->server['HTTPS'] = 'on';
+            }
+
+            $headerKey = 'HTTP_'.\mb_strtoupper(\str_replace('-', '_', $key));
+            $headers[$headerKey] = $value;
+        }
+
+        // Make swoole's server's keys uppercased and merge them into the $_SERVER superglobal
+        $_SERVER = \array_change_key_case(\array_merge($request->server, $headers), CASE_UPPER);
+
+        // Other superglobals
+        $_GET = $request->get ?? [];
+        $_POST = $request->post ?? [];
+        $_COOKIE = $request->cookie ?? [];
+        $_FILES = $request->files ?? [];
+
+        $symfonyRequest = new SymfonyRequest($_GET, $_POST, [], $_COOKIE, $_FILES, $_SERVER, $request->rawContent());
+
+        if (0 === \mb_strpos($symfonyRequest->headers->get('Content-Type'), 'application/json')) {
+            $data = \json_decode($request->rawContent(), true);
+            $symfonyRequest->request->replace(\is_array($data) ? $data : []);
+        }
+
+        return $symfonyRequest;
+    }
+
+    public function logStats(string $when): void
+    {
+        $this->logger->info(\sprintf('Stats %s', $when), [
+            'memory_usage' => ServerUtils::formatBytes(ServerUtils::getMemoryUsage()),
+            'memory_peak_usage' => ServerUtils::formatBytes(ServerUtils::getPeakMemoryUsage()),
+        ]);
     }
 }
