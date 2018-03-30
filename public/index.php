@@ -1,6 +1,7 @@
 <?php
 
 use App\Kernel;
+use App\Server\ServerUtils;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,23 +17,16 @@ if (!isset($_SERVER['APP_ENV'])) {
 }
 
 if ($debug = $_SERVER['APP_DEBUG'] ?? false) {
-    // WARNING: You should setup permissions the proper way!
-    // REMOVE the following PHP line and read
-    // https://symfony.com/doc/current/book/installation.html#checking-symfony-application-configuration-and-setup
     umask(0000);
 
     Debug::enable();
 }
 
-if ($trustedHosts = $_SERVER['APP_TRUSTED_HOSTS'] ?? false) {
-    $trustedHosts = str_replace('\'', '', $trustedHosts);
-    $trustedHosts = explode(',', trim($trustedHosts, '[]'));
+if ([] !== $trustedHosts = ServerUtils::decodeStringAsSet($_SERVER['APP_TRUSTED_HOSTS'])) {
     Request::setTrustedHosts($trustedHosts);
 }
 
-if ($trustedProxies = $_SERVER['APP_TRUSTED_PROXIES'] ?? false) {
-    $trustedProxies = str_replace('\'', '', $trustedProxies);
-    $trustedProxies = explode(',', trim($trustedProxies, '[]'));
+if ([] !== $trustedProxies = ServerUtils::decodeStringAsSet($_SERVER['APP_TRUSTED_PROXIES'])) {
     Request::setTrustedProxies($trustedProxies, Request::HEADER_X_FORWARDED_ALL);
 }
 
