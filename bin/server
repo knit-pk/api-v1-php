@@ -2,6 +2,7 @@
 <?php
 
 use App\Server\Driver;
+use App\Server\ServerUtils;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Swoole\Http\Request;
@@ -40,20 +41,17 @@ if ($debug) {
     }
 }
 
-$driver = new Driver();
-$driver->boot($env, $debug);
+$driver = new Driver($env, $debug, $logger);
+$driver->boot();
 
 $server->on('request', function (Request $request, Response $response) use ($driver) {
-    $driver->setSwooleRequest($request);
-    $driver->setSwooleResponse($response);
-
-    $driver->preHandle();
-    $driver->handle();
-    $driver->postHandle();
+    $driver->handle($request, $response);
 });
 
 $logger->info(\sprintf('Swoole HTTP Server started on http://%s:%d', $host, $port), [
-    'env'   => $env,
-    'debug' => $debug ? 'true' : 'false',
+    'env'          => $env,
+    'debug'        => $debug ? 'true' : 'false',
+    'gc_enabled'   => gc_enabled() ? 'true' : 'false',
+    'memory_limit' => ServerUtils::formatBytes(ServerUtils::getMaxMemory()),
 ]);
 $server->start();
