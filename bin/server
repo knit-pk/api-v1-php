@@ -77,8 +77,8 @@ if ($requestLimit > 0) {
     });
 }
 
-$trustedHosts = ServerUtils::decodeServerVarAsSet('APP_TRUSTED_HOSTS');
-$trustedProxies = ServerUtils::decodeServerVarAsSet('APP_TRUSTED_PROXIES');
+$trustedHosts = ServerUtils::decodeStringAsSet($_SERVER['APP_TRUSTED_HOSTS']);
+$trustedProxies = ServerUtils::decodeStringAsSet($_SERVER['APP_TRUSTED_PROXIES']);
 
 $logger->info(\sprintf('Swoole HTTP Server started on http://%s:%d', $host, $port), [
     'env'               => $env,
