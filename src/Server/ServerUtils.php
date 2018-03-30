@@ -88,4 +88,15 @@ class ServerUtils
 
         return \round($bytes, 2).' '.$label[$i];
     }
+
+    public static function decodeStringAsSet(?string $stringSet): array
+    {
+        if (null === $stringSet) {
+            return [];
+        }
+
+        $stringSet = \str_replace(['\'', '[', ']'], '', $stringSet);
+
+        return \explode(',', $stringSet);
+    }
 }

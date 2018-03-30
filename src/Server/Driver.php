@@ -15,63 +15,48 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
  */
 class Driver
 {
-    /**
-     * @var \Symfony\Component\HttpKernel\Kernel
-     */
     private $kernel;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
     private $logger;
-
-    /**
-     * @var string
-     */
-    private $env;
-
-    /**
-     * @var bool
-     */
-    private $debug;
+    private $trustAllProxies = false;
 
     /**
      * Driver constructor.
      *
-     * @param string                   $env
-     * @param bool                     $debug
+     * @param \App\Kernel              $kernel
      * @param \Psr\Log\LoggerInterface $logger
-     *
-     * @throws \InvalidArgumentException
      */
-    public function __construct(string $env, bool $debug, LoggerInterface $logger)
+    public function __construct(Kernel $kernel, LoggerInterface $logger)
     {
-        $this->env = $env;
-        $this->debug = $debug;
         $this->logger = $logger;
-
-        if ($trustedHostsSet = $_SERVER['APP_TRUSTED_HOSTS'] ?? false) {
-            $trustedHosts = $this->decodeStringSet($trustedHostsSet);
-            $this->logger->info('Setting trusted hosts', $trustedHosts);
-            SymfonyRequest::setTrustedHosts($trustedHosts);
-        }
-
-        if ($trustedProxiesSet = $_SERVER['APP_TRUSTED_PROXIES'] ?? false) {
-            $trustedProxies = $this->decodeStringSet($trustedProxiesSet);
-            $this->logger->info('Setting trusted proxies', $trustedProxies);
-            SymfonyRequest::setTrustedProxies($trustedProxies, SymfonyRequest::HEADER_X_FORWARDED_ALL);
-        }
+        $this->kernel = $kernel;
     }
 
     /**
      * Boot Symfony Application.
      *
+     * @param array $trustedHosts
+     * @param array $trustedProxies
+     *
      * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      */
-    public function boot(): void
+    public function boot(array $trustedHosts = [], array $trustedProxies = []): void
     {
-        $this->kernel = $app = new Kernel($this->env, $this->debug);
+        $app = $this->kernel;
+
+        if ([] !== $trustedHosts) {
+            SymfonyRequest::setTrustedHosts($trustedHosts);
+        }
+
+        if ([] !== $trustedProxies) {
+            if (\in_array('*', $trustedProxies, true)) {
+                $this->trustAllProxies = true;
+                if ($this->kernel->isDebug()) {
+                    $this->logger->info('Trusting all proxies');
+                }
+            } else {
+                SymfonyRequest::setTrustedProxies($trustedProxies, SymfonyRequest::HEADER_X_FORWARDED_ALL);
+            }
+        }
 
         ServerUtils::bindAndCall(function () use ($app) {
             // init bundles
@@ -91,9 +76,13 @@ class Driver
 
     /**
      * Does some necessary preparation before each request.
+     *
+     * @throws \OutOfRangeException
      */
     private function preHandle(): void
     {
+        $this->logServerMetrics('before handling request');
+
         // Reset Kernel startTime, so Symfony can correctly calculate the execution time
         ServerUtils::hijackProperty($this->kernel, 'startTime', \microtime(true));
     }
@@ -101,6 +90,7 @@ class Driver
     /**
      * Happens after each request.
      *
+     * @throws \OutOfRangeException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
@@ -166,7 +156,7 @@ class Driver
             }
         }
 
-        \gc_collect_cycles();
+        $this->logServerMetrics('after sending response');
     }
 
     /**
@@ -180,10 +170,17 @@ class Driver
     public function handle(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void
     {
         $this->preHandle();
-        $this->logStats('before handle');
 
         $symfonyRequest = $this->createSymfonyRequest($swooleRequest);
+
+        if ($this->trustAllProxies) {
+            SymfonyRequest::setTrustedProxies(['127.0.0.1', $symfonyRequest->server->get('REMOTE_ADDR')], SymfonyRequest::HEADER_X_FORWARDED_ALL);
+        }
+
         $symfonyResponse = $this->kernel->handle($symfonyRequest);
+
+        $this->logServerMetrics('during handling request');
+
         $this->kernel->terminate($symfonyRequest, $symfonyResponse);
 
         // HTTP status code for response
@@ -199,20 +196,7 @@ class Driver
 
         $swooleResponse->end($symfonyResponse->getContent());
 
-        $this->logStats('after handle');
         $this->postHandle();
-    }
-
-    /**
-     * @param string $stringSet
-     *
-     * @return string[]
-     */
-    private function decodeStringSet(string $stringSet): array
-    {
-        $stringSet = \str_replace(['\'', '[', ']'], '', $stringSet);
-
-        return \explode(',', $stringSet);
     }
 
     private function createSymfonyRequest(SwooleRequest $request): SymfonyRequest
@@ -247,11 +231,13 @@ class Driver
         return $symfonyRequest;
     }
 
-    public function logStats(string $when): void
+    public function logServerMetrics(string $when): void
     {
-        $this->logger->info(\sprintf('Stats %s', $when), [
-            'memory_usage' => ServerUtils::formatBytes(ServerUtils::getMemoryUsage()),
-            'memory_peak_usage' => ServerUtils::formatBytes(ServerUtils::getPeakMemoryUsage()),
-        ]);
+        if ($this->kernel->isDebug()) {
+            $this->logger->info(\sprintf('Server metrics %s', $when), [
+                'memory_usage' => ServerUtils::formatBytes(ServerUtils::getMemoryUsage()),
+                'memory_peak_usage' => ServerUtils::formatBytes(ServerUtils::getPeakMemoryUsage()),
+            ]);
+        }
     }
 }
