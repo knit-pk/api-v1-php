@@ -19,6 +19,7 @@ class Driver
     private $kernel;
     private $logger;
     private $trustAllProxies = false;
+    private $profilingEnabled = false;
 
     /**
      * Driver constructor.
@@ -32,6 +33,11 @@ class Driver
         $this->kernel = $kernel;
     }
 
+    public function enableProfiling(): void
+    {
+        $this->profilingEnabled = true;
+    }
+
     /**
      * Boot Symfony Application.
      *
@@ -42,6 +48,10 @@ class Driver
      */
     public function boot(array $trustedHosts = [], array $trustedProxies = []): void
     {
+        if ($this->profilingEnabled && !\gc_enabled()) {
+            $this->logger->alert('Garbage Collector is disabled!');
+        }
+
         $app = $this->kernel;
 
         if ([] !== $trustedHosts) {
@@ -51,8 +61,8 @@ class Driver
         if ([] !== $trustedProxies) {
             if (\in_array('*', $trustedProxies, true)) {
                 $this->trustAllProxies = true;
-                if ($this->kernel->isDebug()) {
-                    $this->logger->info('Trusting all proxies');
+                if ($this->profilingEnabled) {
+                    $this->logger->debug('Trusting all proxies');
                 }
             } else {
                 SymfonyRequest::setTrustedProxies($trustedProxies, SymfonyRequest::HEADER_X_FORWARDED_ALL);
@@ -60,18 +70,7 @@ class Driver
         }
 
         ServerUtils::bindAndCall(function () use ($app) {
-            // init bundles
-            $app->initializeBundles();
-            // init container
-            $app->initializeContainer();
-        }, $app);
-
-        ServerUtils::bindAndCall(function () use ($app) {
-            foreach ($app->getBundles() as $bundle) {
-                $bundle->setContainer($app->container);
-                $bundle->boot();
-            }
-            $app->booted = true;
+            $app->boot();
         }, $app);
     }
 
@@ -221,7 +220,7 @@ class Driver
             $server['HTTP_X_FORWARDED_PROTO'] = $server['HTTP_CLOUDFRONT_FORWARDED_PROTO'];
         }
 
-        $symfonyRequest = new SymfonyRequest($request->get, $request->post, [], $request->cookie, $request->files, $server, $request->rawContent());
+        $symfonyRequest = new SymfonyRequest($request->get ?? [], $request->post ?? [], [], $request->cookie ?? [], $request->files ?? [], $server, $request->rawContent());
 
         if (0 === \mb_strpos($symfonyRequest->headers->get('CONTENT_TYPE'), 'application/x-www-form-urlencoded')
             && \in_array(\mb_strtoupper($symfonyRequest->server->get('REQUEST_METHOD', 'GET')), ['PUT', 'DELETE', 'PATCH'])
@@ -235,7 +234,7 @@ class Driver
 
     public function logServerMetrics(string $when): void
     {
-        if ($this->kernel->isDebug()) {
+        if ($this->profilingEnabled) {
             $this->logger->info(\sprintf('Server metrics %s', $when), [
                 'memory_usage' => ServerUtils::formatBytes(ServerUtils::getMemoryUsage()),
                 'memory_peak_usage' => ServerUtils::formatBytes(ServerUtils::getPeakMemoryUsage()),
