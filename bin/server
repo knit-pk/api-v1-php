@@ -32,6 +32,7 @@ $host = $input->getParameterOption(['--host'], '127.0.0.1');
 $port = (int) $input->getParameterOption(['--port', '-p'], 9501);
 $output = $input->getParameterOption(['--output', '-o'], 'php://stdout');
 $requestLimit = (int) $input->getParameterOption(['--request-limit'], -1);
+$profile = $debug || $input->hasParameterOption(['--enable-profiling']);
 
 $logger = new Logger('swoole', [new StreamHandler($output)]);
 
@@ -47,6 +48,10 @@ $server = new Server($host, $port, SWOOLE_BASE);
 $kernel = new Kernel($env, $debug);
 $driver = new Driver($kernel, $logger);
 
+if ($profile) {
+    $driver->enableProfiling();
+}
+
 $server->on('request', function (Request $request, Response $response) use ($driver) {
     $driver->handle($request, $response);
 });
@@ -60,8 +65,8 @@ if ($requestLimit > 0) {
         $requestCounter->increment();
         $current = $requestCounter->get();
 
-        if(1 === $current) {
-            $logger->info('First request has been hit', [
+        if (1 === $current) {
+            $logger->info('First response has been sent', [
                 'memory_usage'      => ServerUtils::formatBytes(ServerUtils::getMemoryUsage()),
                 'memory_peak_usage' => ServerUtils::formatBytes(ServerUtils::getPeakMemoryUsage()),
             ]);
@@ -83,7 +88,7 @@ $trustedProxies = ServerUtils::decodeStringAsSet($_SERVER['APP_TRUSTED_PROXIES']
 $logger->info(\sprintf('Swoole HTTP Server started on http://%s:%d', $host, $port), [
     'env'               => $env,
     'debug'             => $debug ? 'true' : 'false',
-    'gc_enabled'        => gc_enabled() ? 'true' : 'false',
+    'profiling'         => $profile ? 'true' : 'false',
     'memory_limit'      => ServerUtils::formatBytes(ServerUtils::getMaxMemory()),
     'memory_usage'      => ServerUtils::formatBytes(ServerUtils::getMemoryUsage()),
     'memory_peak_usage' => ServerUtils::formatBytes(ServerUtils::getPeakMemoryUsage()),

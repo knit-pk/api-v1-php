@@ -6,6 +6,7 @@ use App\Kernel;
 use Psr\Log\LoggerInterface;
 use Swoole\Http\Request as SwooleRequest;
 use Swoole\Http\Response as SwooleResponse;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
@@ -18,6 +19,7 @@ class Driver
     private $kernel;
     private $logger;
     private $trustAllProxies = false;
+    private $profilingEnabled = false;
 
     /**
      * Driver constructor.
@@ -31,6 +33,11 @@ class Driver
         $this->kernel = $kernel;
     }
 
+    public function enableProfiling(): void
+    {
+        $this->profilingEnabled = true;
+    }
+
     /**
      * Boot Symfony Application.
      *
@@ -41,6 +48,10 @@ class Driver
      */
     public function boot(array $trustedHosts = [], array $trustedProxies = []): void
     {
+        if ($this->profilingEnabled && !\gc_enabled()) {
+            $this->logger->alert('Garbage Collector is disabled!');
+        }
+
         $app = $this->kernel;
 
         if ([] !== $trustedHosts) {
@@ -50,8 +61,8 @@ class Driver
         if ([] !== $trustedProxies) {
             if (\in_array('*', $trustedProxies, true)) {
                 $this->trustAllProxies = true;
-                if ($this->kernel->isDebug()) {
-                    $this->logger->info('Trusting all proxies');
+                if ($this->profilingEnabled) {
+                    $this->logger->debug('Trusting all proxies');
                 }
             } else {
                 SymfonyRequest::setTrustedProxies($trustedProxies, SymfonyRequest::HEADER_X_FORWARDED_ALL);
@@ -59,18 +70,7 @@ class Driver
         }
 
         ServerUtils::bindAndCall(function () use ($app) {
-            // init bundles
-            $app->initializeBundles();
-            // init container
-            $app->initializeContainer();
-        }, $app);
-
-        ServerUtils::bindAndCall(function () use ($app) {
-            foreach ($app->getBundles() as $bundle) {
-                $bundle->setContainer($app->container);
-                $bundle->boot();
-            }
-            $app->booted = true;
+            $app->boot();
         }, $app);
     }
 
@@ -199,33 +199,34 @@ class Driver
         $this->postHandle();
     }
 
+    /**
+     * @param \Swoole\Http\Request $request
+     *
+     * @throws \LogicException
+     *
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
     private function createSymfonyRequest(SwooleRequest $request): SymfonyRequest
     {
-        $headers = [];
+        $server = \array_change_key_case($request->server, CASE_UPPER);
 
+        // Add formatted headers to server
         foreach ($request->header as $key => $value) {
-            if ('x-forwarded-proto' === $key && 'https' === $value) {
-                $request->server['HTTPS'] = 'on';
-            }
-
-            $headerKey = 'HTTP_'.\mb_strtoupper(\str_replace('-', '_', $key));
-            $headers[$headerKey] = $value;
+            $server['HTTP_'.\mb_strtoupper(\str_replace('-', '_', $key))] = $value;
         }
 
-        // Make swoole's server's keys uppercased and merge them into the $_SERVER superglobal
-        $_SERVER = \array_change_key_case(\array_merge($request->server, $headers), CASE_UPPER);
+        // Map CloudFront's forwarded proto header
+        if (isset($server['HTTP_CLOUDFRONT_FORWARDED_PROTO'])) {
+            $server['HTTP_X_FORWARDED_PROTO'] = $server['HTTP_CLOUDFRONT_FORWARDED_PROTO'];
+        }
 
-        // Other superglobals
-        $_GET = $request->get ?? [];
-        $_POST = $request->post ?? [];
-        $_COOKIE = $request->cookie ?? [];
-        $_FILES = $request->files ?? [];
+        $symfonyRequest = new SymfonyRequest($request->get ?? [], $request->post ?? [], [], $request->cookie ?? [], $request->files ?? [], $server, $request->rawContent());
 
-        $symfonyRequest = new SymfonyRequest($_GET, $_POST, [], $_COOKIE, $_FILES, $_SERVER, $request->rawContent());
-
-        if (0 === \mb_strpos($symfonyRequest->headers->get('Content-Type'), 'application/json')) {
-            $data = \json_decode($request->rawContent(), true);
-            $symfonyRequest->request->replace(\is_array($data) ? $data : []);
+        if (0 === \mb_strpos($symfonyRequest->headers->get('CONTENT_TYPE'), 'application/x-www-form-urlencoded')
+            && \in_array(\mb_strtoupper($symfonyRequest->server->get('REQUEST_METHOD', 'GET')), ['PUT', 'DELETE', 'PATCH'])
+        ) {
+            \parse_str($symfonyRequest->getContent(), $data);
+            $symfonyRequest->request = new ParameterBag($data);
         }
 
         return $symfonyRequest;
@@ -233,7 +234,7 @@ class Driver
 
     public function logServerMetrics(string $when): void
     {
-        if ($this->kernel->isDebug()) {
+        if ($this->profilingEnabled) {
             $this->logger->info(\sprintf('Server metrics %s', $when), [
                 'memory_usage' => ServerUtils::formatBytes(ServerUtils::getMemoryUsage()),
                 'memory_peak_usage' => ServerUtils::formatBytes(ServerUtils::getPeakMemoryUsage()),
