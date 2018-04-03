@@ -81,6 +81,8 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
      * @ORM\ManyToOne(targetEntity="Article", inversedBy="comments")
      * @ORM\JoinColumn(name="article_id", referencedColumnName="id", onDelete="CASCADE")
      *
+     * @ApiProperty(iri="http://schema.org/parentItem")
+     *
      * @Assert\NotBlank
      *
      * @Groups({"CommentRead", "CommentWrite"})

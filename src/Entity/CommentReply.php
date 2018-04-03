@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @see http://schema.org/Comment Documentation on Schema.org
  *
- * @ApiResource(iri="http://schema.org/Comment",
+ * @ApiResource(iri="http://schema.org/Answer",
  *     attributes={
  *         "filters": {"app.comment_reply.search_filter", "app.comment_reply.order_filter", "app.comment_reply.date_filter", "app.comment_reply.group_filter"},
  *         "normalization_context": {"groups": {"ReplyRead"}},
@@ -94,9 +94,11 @@ class CommentReply implements ThoughtInterface
      * @ORM\ManyToOne(targetEntity="Comment", inversedBy="replies")
      * @ORM\JoinColumn(name="comment_id", referencedColumnName="id")
      *
+     * @ApiProperty(iri="http://schema.org/parentItem")
+     *
      * @Assert\NotBlank
      *
-     * @Groups({"ReplyWrite"})
+     * @Groups({"ReplyWrite", "CommentReplyAdminRead"})
      */
     protected $comment;
 
