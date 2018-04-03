@@ -10,7 +10,6 @@ use App\Entity\CommentReply;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Sluggable\Util\Urlizer;
 use Generator;
 use Symfony\Component\Finder\Finder;
@@ -19,13 +18,6 @@ use Symfony\Component\Yaml\Yaml;
 class ArticleFixtures extends Fixture implements DependentFixtureInterface
 {
     private const ARTICLE_FIXTURES = __DIR__.'/../Resources/articles';
-
-    private $connection;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->connection = $entityManager->getConnection();
-    }
 
     /**
      * Load data fixtures with the passed EntityManager.
@@ -38,12 +30,9 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
      * @throws \RuntimeException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function load(ObjectManager $manager): void
     {
-        $this->createTriggers();
-
         // Predefined articles
         foreach ($this->getArticleFixtures() as $fixture) {
             $article = new Article();
@@ -152,26 +141,6 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
 
             return $fullMatch;
         }, $content);
-    }
-
-    /**
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    private function createTriggers(): void
-    {
-        $driverName = $this->connection->getDriver()->getName();
-        $sqlName = 'create_comment_triggers';
-        $sqlFile = \sprintf('%s/../Resources/sql/%s/%s.sql', __DIR__, $driverName, $sqlName);
-
-        if (!\is_file($sqlFile)) {
-            dump(\sprintf('Notice: SQL File %s could not be found for driver %s', $sqlName, $driverName));
-
-            return;
-        }
-
-        $this->connection->exec(\file_get_contents($sqlFile));
     }
 
     public function getDependencies(): array
