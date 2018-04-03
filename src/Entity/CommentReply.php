@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @see http://schema.org/Comment Documentation on Schema.org
  *
- * @ApiResource(iri="http://schema.org/Comment",
+ * @ApiResource(iri="http://schema.org/Answer",
  *     attributes={
  *         "filters": {"app.comment_reply.search_filter", "app.comment_reply.order_filter", "app.comment_reply.date_filter", "app.comment_reply.group_filter"},
  *         "normalization_context": {"groups": {"ReplyRead"}},
@@ -94,9 +94,11 @@ class CommentReply implements ThoughtInterface
      * @ORM\ManyToOne(targetEntity="Comment", inversedBy="replies")
      * @ORM\JoinColumn(name="comment_id", referencedColumnName="id")
      *
+     * @ApiProperty(iri="http://schema.org/parentItem")
+     *
      * @Assert\NotBlank
      *
-     * @Groups({"ReplyWrite"})
+     * @Groups({"ReplyWrite", "CommentReplyAdminRead"})
      */
     protected $comment;
 
@@ -105,7 +107,7 @@ class CommentReply implements ThoughtInterface
      *
      * @ORM\Column(type="text")
      *
-     * @ApiProperty(iri="http://schema.org/text")
+     * @ApiProperty(iri="http://schema.org/name")
      *
      * @Assert\NotBlank
      *
@@ -139,7 +141,7 @@ class CommentReply implements ThoughtInterface
      */
     protected $createdAt;
 
-    public function getId(): ?Uuid
+    public function getId(): Uuid
     {
         return $this->id;
     }
@@ -158,42 +160,32 @@ class CommentReply implements ThoughtInterface
         $this->author = $author;
     }
 
-    public function setText(?string $text): void
+    public function setText(string $text): void
     {
         $this->text = $text;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
-
-    public function setCreatedAt(?DateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    public function getAuthor(): ?UserInterface
+    public function getAuthor(): UserInterface
     {
         return $this->author;
     }
 
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function getComment(): ?Comment
+    public function getComment(): Comment
     {
         return $this->comment;
     }
@@ -234,6 +226,6 @@ class CommentReply implements ThoughtInterface
      */
     public function toString(): string
     {
-        return (string) $this->getText();
+        return $this->getText();
     }
 }

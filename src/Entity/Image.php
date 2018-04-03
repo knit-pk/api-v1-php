@@ -64,6 +64,7 @@ class Image
     public const SUPPORTED_MIME_TYPES = [
         'image/jpeg',
         'image/png',
+        'image/webp',
     ];
 
     /**
@@ -86,13 +87,14 @@ class Image
      * @ORM\Column(type="string")
      *
      * @Assert\Url
+     * @Assert\NotBlank
      *
      * @Groups({"ImageRead", "ImageWrite", "ImageReadLess", "UserReadLess"})
      */
     protected $url;
 
     /**
-     * @var int|null file size in bytes
+     * @var string|null file size in bytes
      *
      * @ORM\Column(name="file_size", type="bigint", nullable=true)
      *
@@ -196,14 +198,14 @@ class Image
         $this->file = $image;
     }
 
-    public function setSize(?int $size): void
+    public function setSize(?string $size): void
     {
         $this->size = $size;
     }
 
-    public function getSize(): ?int
+    public function getSize(): ?string
     {
-        return (int) $this->size;
+        return $this->size;
     }
 
     public function getFile(): ?File
@@ -246,7 +248,7 @@ class Image
         return $this->author;
     }
 
-    public function setAuthor(User $author): void
+    public function setAuthor(?User $author): void
     {
         $this->author = $author;
     }

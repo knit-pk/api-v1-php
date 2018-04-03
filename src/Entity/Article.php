@@ -329,14 +329,26 @@ class Article implements ThoughtfulInterface
         return $this->tags;
     }
 
+    public function incrementCommentsCount(): void
+    {
+        ++$this->commentsCount;
+    }
+
+    public function decrementCommentsCount(): void
+    {
+        --$this->commentsCount;
+    }
+
     public function addComment(Comment $comment): void
     {
         $this->comments[] = $comment;
+        $this->incrementCommentsCount();
     }
 
     public function removeComment(Comment $comment): void
     {
         $this->comments->removeElement($comment);
+        $this->decrementCommentsCount();
     }
 
     public function getComments(): Collection

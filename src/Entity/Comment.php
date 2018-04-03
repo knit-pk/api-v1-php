@@ -81,6 +81,8 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
      * @ORM\ManyToOne(targetEntity="Article", inversedBy="comments")
      * @ORM\JoinColumn(name="article_id", referencedColumnName="id", onDelete="CASCADE")
      *
+     * @ApiProperty(iri="http://schema.org/parentItem")
+     *
      * @Assert\NotBlank
      *
      * @Groups({"CommentRead", "CommentWrite"})
@@ -116,7 +118,7 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
      *
      * @ORM\Column(type="text")
      *
-     * @ApiProperty(iri="http://schema.org/text")
+     * @ApiProperty(iri="http://schema.org/name")
      *
      * @Assert\NotBlank
      *
@@ -155,17 +157,17 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
         $this->replies = new ArrayCollection();
     }
 
-    public function getId(): ?Uuid
+    public function getId(): Uuid
     {
         return $this->id;
     }
 
-    public function setArticle(?Article $article): void
+    public function setArticle(Article $article): void
     {
         $this->article = $article;
     }
 
-    public function getArticle(): ?Article
+    public function getArticle(): Article
     {
         return $this->article;
     }
@@ -184,19 +186,9 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
         $this->author = $author;
     }
 
-    public function setText(?string $text): void
+    public function setText(string $text): void
     {
         $this->text = $text;
-    }
-
-    public function setUpdatedAt(?DateTime $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
-
-    public function setCreatedAt(?DateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
     }
 
     public function getAuthor(): ?UserInterface
@@ -204,7 +196,7 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
         return $this->author;
     }
 
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -222,11 +214,13 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
     public function addReply(CommentReply $reply): void
     {
         $this->replies[] = $reply;
+        $this->article->incrementCommentsCount();
     }
 
     public function removeReply(CommentReply $reply): void
     {
         $this->replies->removeElement($reply);
+        $this->article->decrementCommentsCount();
     }
 
     public function getReplies(): Collection
@@ -261,13 +255,11 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
     }
 
     /**
-     * Expresses thought provided by its author in readable form.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function toString(): string
     {
-        return (string) $this->getText();
+        return $this->getText();
     }
 
     /**

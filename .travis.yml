@@ -10,6 +10,7 @@ env:
   global:
     - APP_ENV=test
     - APP_DEBUG=1
+    - COMPOSER_METHOD=install
 
 matrix:
   include:
@@ -29,7 +30,7 @@ matrix:
         - chmod +x ./cc-test-reporter
         - ./cc-test-reporter before-build
         - mysql -e 'CREATE DATABASE knit_api_test;'
-      after_script:
+      after_success:
         - ./cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
       env:
         - DEPLOY=1
@@ -41,12 +42,15 @@ matrix:
         - psql -c 'CREATE DATABASE knit_api_test;' -U postgres
       env:
         - DATABASE_URL="pgsql://postgres@127.0.0.1:5432/knit_api_test"
+    - php: '7.2'
+      env:
+        - COMPOSER_METHOD=update
 
 before_install:
   - export PATH="$PATH:$HOME/.composer/vendor/bin"
 
 install:
-  - composer update --prefer-dist --no-progress --no-suggest --no-scripts --ansi;
+  - composer $COMPOSER_METHOD --prefer-dist --no-progress --no-suggest --no-scripts --ansi
 
 script:
   - composer test
