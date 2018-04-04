@@ -77,6 +77,8 @@ class Driver
     /**
      * Does some necessary preparation before each request.
      *
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \OutOfRangeException
      */
     private function preHandle(): void
@@ -84,7 +86,17 @@ class Driver
         $this->logServerMetrics('before handling request');
 
         // Reset Kernel startTime, so Symfony can correctly calculate the execution time
-        ServerUtils::hijackProperty($this->kernel, 'startTime', \microtime(true));
+        $this->kernel->resetStartTime();
+
+        $container = $this->kernel->getContainer();
+
+        if ($container->has('doctrine.orm.entity_manager')) {
+            $connection = $container->get('doctrine.orm.entity_manager')->getConnection();
+            if (!$connection->ping()) {
+                $connection->close();
+                $connection->connect();
+            }
+        }
     }
 
     /**
