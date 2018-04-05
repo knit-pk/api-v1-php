@@ -8,7 +8,6 @@ use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Article;
 use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -19,7 +18,7 @@ class ArticleEventSubscriber implements EventSubscriberInterface
         $article = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if (!$article instanceof Article || (Request::METHOD_POST !== $method && Request::METHOD_PUT !== $method)) {
+        if (!$article instanceof Article || !\in_array($method, ['POST', 'PUT'], true)) {
             return;
         }
 
