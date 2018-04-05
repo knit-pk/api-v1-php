@@ -37,6 +37,13 @@ class Kernel extends BaseKernel
         return $this->getVarDir().'/log';
     }
 
+    public function resetStartTime(): void
+    {
+        if ($this->debug) {
+            $this->startTime = \microtime(true);
+        }
+    }
+
     public function registerBundles(): Generator
     {
         /** @var iterable $contents */
