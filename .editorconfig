@@ -12,6 +12,9 @@ trim_trailing_whitespace = true
 indent_style = tab
 
 [*.{yaml,yml}]
+indent_size = 4
+
+[.travis.yml]
 indent_size = 2
 
 [*.md]
