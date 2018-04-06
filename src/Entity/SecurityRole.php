@@ -102,7 +102,7 @@ class SecurityRole extends Role
         return $this->role;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -115,13 +115,13 @@ class SecurityRole extends Role
     /**
      * @param User $user
      */
-    public function addUser(User $user)
+    public function addUser(User $user): void
     {
         $user->addSecurityRole($this);
         $this->users[] = $user;
     }
 
-    public function removeUser(User $user)
+    public function removeUser(User $user): void
     {
         $this->users->removeElement($user);
     }
