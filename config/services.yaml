@@ -2,7 +2,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    version: '0.10.0-dev'
+    version: '0.10.1-dev'
     title: 'KNIT RESTful API'
     description: 'KNIT RESTful API build using ApiPlatform'
     resources.base_url: '%env(APP_RESOURCES_BASE_URL)%'
@@ -84,6 +84,12 @@ services:
     'App\Serializer\AdminContextBuilder':
         decorates: 'api_platform.serializer.context_builder'
         arguments: [ '@App\Serializer\AdminContextBuilder.inner' ]
+        autoconfigure: false
+
+    'App\Metadata\Property\Factory\AdminPropertyMetadataFactory':
+        decorates: 'api_platform.metadata.property.metadata_factory'
+        decoration_priority: -20
+        arguments: [ '@App\Metadata\Property\Factory\AdminPropertyMetadataFactory.inner' ]
         autoconfigure: false
 
     'App\Metadata\Resource\Factory\AdminResourceMetadataFactory':

@@ -1,21 +1,20 @@
-version: "3"
-
+version: '3.6'
 volumes:
     mysql_data: {}
     composer_cache: {}
 
 services:
     mysql:
-        image: mysql:5.7
+        image: 'mysql:5.7'
         ports:
-           - "3306:3306"
+            - '3306:3306'
         environment:
-           - MYSQL_RANDOM_ROOT_PASSWORD=yes
-           - MYSQL_DATABASE=database
-           - MYSQL_USER=user
-           - MYSQL_PASSWORD=password
+            - MYSQL_RANDOM_ROOT_PASSWORD=yes
+            - MYSQL_DATABASE=database
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=password
         volumes:
-           - mysql_data:/var/lib/mysql
+            - 'mysql_data:/var/lib/mysql'
 
     redis:
         build:
@@ -23,9 +22,8 @@ services:
         environment:
             - REDIS_PASSWORD=redis
         ports:
-            - "6379:6379"
+            - '6379:6379'
 
-    # PHP Application
     standalone:
         depends_on:
             - mysql
@@ -34,70 +32,29 @@ services:
             dockerfile: Dockerfile.standalone
             context: .
             args:
-                - KNIT_API_TAG=0.9.3-dev
+                - KNIT_API_TAG=0.10.1-dev
                 - KNIT_API_ADMIN_TAG=0.3.1-dev
-                - KNIT_API_URL=http://localhost
+                - 'KNIT_API_URL=http://localhost'
         env_file: .env.dev
         environment:
             - PORT=8899
         volumes:
-            - .:/usr/src/api
+            - '.:/usr/src/api'
             - /usr/src/api/var
             - /usr/src/api/public/admin
-            - composer_cache:/root/.composer
+            - 'composer_cache:/root/.composer'
         ports:
-            - "8100:8899"
+            - '8100:8899'
 
-#    ppm:
-#        depends_on:
-#            - mysql
-#            - redis
-#        image: phppm/nginx
-#        command: --debug=1 -vv --app-env=dev --static-directory=public/
-#        volumes:
-#            - .:/var/www
-#        ports:
-#            - "8090:80"
-
-    ## Debug/DevOps
-
-    # Varnish (Http Cache)
     varnish:
         depends_on:
-           - standalone
+            - standalone
         build:
-           context: ./docker/varnish
+            context: ./docker/varnish
         volumes:
-            - ./docker/varnish/conf:/etc/varnish:ro
+            - './docker/varnish/conf:/etc/varnish:ro'
         ports:
-           - "80:80"
-
-#    elasticsearch:
-#        build:
-#            context: docker/elasticsearch
-#        ports:
-#            - "9200:9200"
-#
-#    logstash:
-#        build:
-#            context: docker/logstash
-#        environment:
-#            - xpack.monitoring.enabled=false
-#        ports:
-#            - "9600:9600"
-#        depends_on:
-#            - redis
-#            - elasticsearch
-#
-#    kibana:
-#        build:
-#            context: docker/kibana
-#        environment:
-#            - xpack.monitoring.enabled=false
-#        depends_on:
-#            - elasticsearch
-#        ports:
-#            - "5601:5601"
+            - '80:80'
 
     pma:
         build:
@@ -109,4 +66,4 @@ services:
             - PMA_USER=user
             - PMA_PASSWORD=password
         ports:
-            - "8000:80"
+            - '8000:80'
