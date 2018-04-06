@@ -6,10 +6,8 @@ namespace App\Metadata\Resource\Factory;
 
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use ApiPlatform\Core\Metadata\Resource\ResourceMetadata;
-use App\Security\User\UserInterface;
+use App\Security\AuthorizationChecker\AuthorizationCheckerInterface;
 use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInterface
 {
@@ -31,7 +29,7 @@ final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInter
     {
         $resourceMetadata = $this->decorated->create($resourceClass);
 
-        if (!$this->isAdminAccessGranted()) {
+        if (!$this->authorizationChecker->isAdminAccessGranted()) {
             return $resourceMetadata;
         }
 
@@ -61,20 +59,5 @@ final class AdminResourceMetadataFactory implements ResourceMetadataFactoryInter
         }
 
         return $resourceMetadata;
-    }
-
-    /**
-     * Safely check if authenticated as admin.
-     * Remarks: Handled error is thrown when warming up cache.
-     *
-     * @return bool
-     */
-    private function isAdminAccessGranted(): bool
-    {
-        try {
-            return $this->authorizationChecker->isGranted(UserInterface::ROLE_ADMIN);
-        } catch (AuthenticationCredentialsNotFoundException $e) {
-            return false;
-        }
     }
 }

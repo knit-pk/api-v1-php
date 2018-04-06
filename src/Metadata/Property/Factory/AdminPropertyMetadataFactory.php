@@ -6,11 +6,9 @@ namespace App\Metadata\Property\Factory;
 
 use ApiPlatform\Core\Metadata\Property\Factory\PropertyMetadataFactoryInterface;
 use ApiPlatform\Core\Metadata\Property\PropertyMetadata;
-use App\Security\User\UserInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
+use App\Security\AuthorizationChecker\AuthorizationCheckerInterface;
 
-class AdminPropertyMetadataFactory implements PropertyMetadataFactoryInterface
+final class AdminPropertyMetadataFactory implements PropertyMetadataFactoryInterface
 {
     private $decorated;
 
@@ -27,23 +25,8 @@ class AdminPropertyMetadataFactory implements PropertyMetadataFactoryInterface
      */
     public function create(string $resourceClass, string $property, array $options = []): PropertyMetadata
     {
-        $options['admin_granted'] = $this->isAdminAccessGranted();
+        $options['admin_access'] = $this->authorizationChecker->isAdminAccessGranted();
 
         return $this->decorated->create($resourceClass, $property, $options);
-    }
-
-    /**
-     * Safely check if authenticated as admin.
-     * Remarks: Handled error is thrown when warming up cache.
-     *
-     * @return bool
-     */
-    private function isAdminAccessGranted(): bool
-    {
-        try {
-            return $this->authorizationChecker->isGranted(UserInterface::ROLE_ADMIN);
-        } catch (AuthenticationCredentialsNotFoundException $e) {
-            return false;
-        }
     }
 }
