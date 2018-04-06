@@ -7,11 +7,10 @@ namespace App\Tests\Metadata\Resource\Factory;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use ApiPlatform\Core\Metadata\Resource\ResourceMetadata;
 use App\Metadata\Resource\Factory\AdminResourceMetadataFactory;
+use App\Security\AuthorizationChecker\AuthorizationCheckerInterface;
 use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 class AdminResourceMetadataFactoryTest extends TestCase
 {
@@ -44,19 +43,17 @@ class AdminResourceMetadataFactoryTest extends TestCase
     public function noContextProphecyProvider(): array
     {
         return [
-            ['willReturn', true],
-            ['willReturn', false],
-            ['willThrow', new AuthenticationCredentialsNotFoundException()],
+            [true],
+            [false],
         ];
     }
 
     /**
      * @dataProvider noContextProphecyProvider
      *
-     * @param string $method
-     * @param mixed  $result
+     * @param bool $result
      */
-    public function testNoContext(string $method, $result): void
+    public function testNoContext(bool $result): void
     {
         $resourceClass = 'Test';
         $itemOperations = [];
@@ -66,7 +63,7 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $resourceMetadata = new ResourceMetadata(null, null, null, $itemOperations, $collectionOperations, $attributes);
 
         $this->resourceMetadataFactoryProphecy->create($resourceClass)->willReturn($resourceMetadata)->shouldBeCalled();
-        $this->authorizationCheckerProphecy->isGranted('ROLE_ADMIN')->$method($result)->shouldBeCalled();
+        $this->authorizationCheckerProphecy->isAdminAccessGranted()->willReturn($result)->shouldBeCalled();
         $this->adminSerializerGroupFactoryProphecy->createAdminGroup(Argument::any())->shouldNotBeCalled();
 
         $newResourceMetadata = $this->adminResourceMetadataFactory->create($resourceClass);
@@ -97,7 +94,7 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $resourceMetadata = new ResourceMetadata(null, null, null, $itemOperations, $collectionOperations, $attributes);
 
         $this->resourceMetadataFactoryProphecy->create($resourceClass)->willReturn($resourceMetadata)->shouldBeCalled();
-        $this->authorizationCheckerProphecy->isGranted('ROLE_ADMIN')->willReturn(true)->shouldBeCalled();
+        $this->authorizationCheckerProphecy->isAdminAccessGranted()->willReturn(true)->shouldBeCalled();
 
         $group = 'TestAdminRead';
         $attributes['normalization_context']['groups'][] = $group;
@@ -154,7 +151,7 @@ class AdminResourceMetadataFactoryTest extends TestCase
         $resourceMetadata = new ResourceMetadata(null, null, null, $itemOperations, $collectionOperations, $attributes);
 
         $this->resourceMetadataFactoryProphecy->create($resourceClass)->willReturn($resourceMetadata)->shouldBeCalled();
-        $this->authorizationCheckerProphecy->isGranted('ROLE_ADMIN')->willReturn(true)->shouldBeCalled();
+        $this->authorizationCheckerProphecy->isAdminAccessGranted()->willReturn(true)->shouldBeCalled();
 
         $group = 'TestAdminRead';
         $attributes['normalization_context']['groups'][] = $group;

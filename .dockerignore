@@ -6,11 +6,13 @@
 **/Thumbs.db
 **/*.md
 **/.dockerignore
+docker-compose.override.yml
 cc-test-reporter
 Dockerfile*
 .env*
 !var/.gitignore
 var/*
+.directory
 .dpl/
 .git/
 .idea/

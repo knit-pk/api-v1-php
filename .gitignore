@@ -3,6 +3,7 @@ supervisord.pid
 !.env.dev
 !.env.stage
 clover.xml
+docker-compose.override.yml
 
 report/
 logs/
