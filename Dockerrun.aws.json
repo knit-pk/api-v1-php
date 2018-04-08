@@ -1,0 +1,10 @@
+{
+    "AWSEBDockerrunVersion": "1",
+    "Image": {
+        "Name": "knitpk/api:standalone",
+        "Update": "true"
+    },
+    "Ports": [{
+        "ContainerPort": "80"
+    }]
+}
