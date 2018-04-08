@@ -32,7 +32,7 @@ services:
             dockerfile: Dockerfile.standalone
             context: .
             args:
-                - KNIT_API_TAG=0.10.2-dev
+                - KNIT_API_TAG=0.10.3-dev
                 - KNIT_API_ADMIN_TAG=0.3.1-dev
                 - 'KNIT_API_URL=http://localhost'
         env_file: .env.dev
