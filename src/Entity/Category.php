@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -47,12 +48,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Category
 {
     /**
-     * @var Uuid
+     * @var \Ramsey\Uuid\UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
      * @Groups({"CategoryRead"})
      */
@@ -83,10 +82,15 @@ class Category
      */
     protected $name;
 
+    public function __construct()
+    {
+        $this->id = Uuid::uuid4();
+    }
+
     /**
-     * @return null|Uuid
+     * @return UuidInterface
      */
-    public function getId(): ?Uuid
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
@@ -100,9 +104,9 @@ class Category
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
