@@ -12,6 +12,11 @@ categories:
     metadata:
       title: Announcement
       description: Dummy category announcement
+  - name: News
+    description: Dummy category
+    metadata:
+      title: News
+      description: Dummy category news
   - name: Sztuczna Inteligencja
     description: Temat Sztuczna Inteligencja
     metadata:
