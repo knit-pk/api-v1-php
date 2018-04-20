@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\DataFixtures\ORM;
 
 use App\Entity\Category;
+use App\Entity\Metadata;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Generator;
@@ -27,6 +28,8 @@ class CategoryFixtures extends Fixture
         foreach ($this->getCategoryFixtures() as $fixture) {
             $category = new Category();
             $category->setName($fixture['name']);
+            $category->setDescription($fixture['description']);
+            $category->setMetadata(new Metadata($fixture['metadata']['title'], $fixture['metadata']['description']));
 
             if ($fixture['public']) {
                 $code = \str_replace(' ', '-', \mb_strtolower($fixture['name']));
@@ -55,6 +58,8 @@ class CategoryFixtures extends Fixture
         foreach ($categories as $category) {
             yield [
                 'name' => $category['name'],
+                'description' => $category['description'],
+                'metadata' => $category['metadata'],
                 'public' => $category['public'] ?? $defaults['public'],
             ];
         }

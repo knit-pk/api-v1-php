@@ -16,8 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource(attributes={
  *     "filters": {"app.category.search_filter"},
- *     "normalization_context": {"groups": {"CategoryRead"}},
- *     "denormalization_context": {"groups": {"CategoryWrite"}},
+ *     "normalization_context": {"groups": {"CategoryRead", "MetadataRead"}},
+ *     "denormalization_context": {"groups": {"CategoryWrite", "MetadataWrite"}},
  * },
  * collectionOperations={
  *     "get": {
@@ -69,7 +69,7 @@ class Category
     protected $code;
 
     /**
-     * @var null|string the name of the category
+     * @var string the name of the category
      *
      * @ORM\Column(type="string", nullable=false)
      *
@@ -82,41 +82,62 @@ class Category
      */
     protected $name;
 
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank
+     *
+     * @Groups({"CategoryRead", "CategoryWrite"})
+     */
+    protected $description;
+
+    /**
+     * @var Metadata
+     *
+     * @ORM\Embedded(class=Metadata::class)
+     *
+     * @Groups({"CategoryRead", "CategoryWrite"})
+     */
+    protected $metadata;
+
     public function __construct()
     {
         $this->id = Uuid::uuid4();
     }
 
-    /**
-     * @return UuidInterface
-     */
     public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
+    public function getMetadata(): Metadata
+    {
+        return $this->metadata;
+    }
+
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function setMetadata(Metadata $metadata): void
+    {
+        $this->metadata = $metadata;
     }
 
     public function __toString(): string

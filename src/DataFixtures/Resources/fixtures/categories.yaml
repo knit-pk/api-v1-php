@@ -2,6 +2,28 @@ _defaults:
   public: true
 
 categories:
-  - name: News
   - name: Article
+    description: Dummy category
+    metadata:
+      title: Article
+      description: Dummy category article
   - name: Announcement
+    description: Dummy category
+    metadata:
+      title: Announcement
+      description: Dummy category announcement
+  - name: Sztuczna Inteligencja
+    description: Temat Sztuczna Inteligencja
+    metadata:
+      title: AI
+      description: Artificial Intelligence
+  - name: Java
+    description: Temat Java
+    metadata:
+      title: Java
+      description: Oracle
+  - name: Ogłoszenie
+    description: Temat Ogłoszenia
+    metadata:
+      title: Ogłoszenia
+      description: Ogłoszenia, Announcements
