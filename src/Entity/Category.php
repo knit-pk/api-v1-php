@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(attributes={
- *     "filters": {"app.category.search_filter"},
+ *     "filters": {"app.category.search_filter", "app.category.group_filter"},
  *     "normalization_context": {"groups": {"CategoryRead", "MetadataRead"}},
  *     "denormalization_context": {"groups": {"CategoryWrite", "MetadataWrite"}},
  * },
@@ -100,6 +100,20 @@ class Category
      */
     protected $metadata;
 
+    /**
+     * @ApiProperty(iri="http://schema.org/image")
+     *
+     * @var Image
+     *
+     * @ORM\ManyToOne(targetEntity="Image")
+     * @ORM\JoinColumn(name="category_image_id", referencedColumnName="id", onDelete="RESTRICT")
+     *
+     * @Assert\NotBlank
+     *
+     * @Groups({"CategoryRead", "CategoryWrite"})
+     */
+    protected $image;
+
     public function __construct()
     {
         $this->id = Uuid::uuid4();
@@ -138,6 +152,16 @@ class Category
     public function setMetadata(Metadata $metadata): void
     {
         $this->metadata = $metadata;
+    }
+
+    public function getImage(): Image
+    {
+        return $this->image;
+    }
+
+    public function setImage(Image $image): void
+    {
+        $this->image = $image;
     }
 
     public function __toString(): string

@@ -1,34 +1,29 @@
 _defaults:
   public: true
+  image: image-default-category-image.jpg
+  description: Dummy category
+  metadata:
+    title: Dummy metadata title
+    description: Dummy metadata description
 
 categories:
   - name: Article
-    description: Dummy category
-    metadata:
-      title: Article
-      description: Dummy category article
   - name: Announcement
-    description: Dummy category
-    metadata:
-      title: Announcement
-      description: Dummy category announcement
   - name: News
-    description: Dummy category
-    metadata:
-      title: News
-      description: Dummy category news
-  - name: Sztuczna Inteligencja
-    description: Temat Sztuczna Inteligencja
-    metadata:
-      title: AI
-      description: Artificial Intelligence
-  - name: Java
-    description: Temat Java
-    metadata:
-      title: Java
-      description: Oracle
   - name: Ogłoszenie
     description: Temat Ogłoszenia
     metadata:
       title: Ogłoszenia
       description: Ogłoszenia, Announcements
+  - name: Sztuczna Inteligencja
+    description: Temat Sztuczna Inteligencja
+    metadata:
+      title: AI
+      description: Artificial Intelligence
+    image: image-ai-category-image.jpg
+  - name: Java
+    description: Temat Java
+    metadata:
+      title: Java
+      description: Spring, Oracle, OOP
+    image: image-java-category-image.jpg
