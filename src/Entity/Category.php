@@ -114,9 +114,21 @@ class Category
      */
     protected $image;
 
+    /**
+     * @var int Aggregate field that contains total number of articles in category
+     *
+     * @ORM\Column(type="integer", options={"unsigned": true})
+     *
+     * @Assert\GreaterThanOrEqual(value=0)
+     *
+     * @Groups({"CategoryRead", "CategoryAdminUpdate"})
+     */
+    protected $articlesCount;
+
     public function __construct()
     {
         $this->id = Uuid::uuid4();
+        $this->articlesCount = 0;
     }
 
     public function getId(): UuidInterface
@@ -162,6 +174,31 @@ class Category
     public function setImage(Image $image): void
     {
         $this->image = $image;
+    }
+
+    public function incrementArticlesCount(): void
+    {
+        ++$this->articlesCount;
+    }
+
+    public function decrementArticlesCount(): void
+    {
+        --$this->articlesCount;
+    }
+
+    public function getArticlesCount(): int
+    {
+        return $this->articlesCount;
+    }
+
+    public function setArticlesCount(int $articlesCount): void
+    {
+        $this->articlesCount = $articlesCount;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
     }
 
     public function __toString(): string
