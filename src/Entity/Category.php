@@ -85,6 +85,10 @@ class Category
     /**
      * @var string
      *
+     * @ORM\Column(type="text", nullable=false)
+     *
+     * @ApiProperty(iri="http://schema.org/about")
+     *
      * @Assert\NotBlank
      * @Assert\Length(max="300")
      *

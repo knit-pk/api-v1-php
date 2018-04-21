@@ -176,9 +176,9 @@ class Article implements ThoughtfulInterface
     protected $commentsCount;
 
     /**
-     * @var string|null the subject matter of the content
+     * @var string the subject matter of the content
      *
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=false)
      *
      * @ApiProperty(iri="http://schema.org/about")
      *
@@ -385,12 +385,12 @@ class Article implements ThoughtfulInterface
         return $this->commentsCount;
     }
 
-    public function setDescription(?string $description): void
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-    public function getDescription(): ?string
+    public function getDescription(): string
     {
         return $this->description;
     }
