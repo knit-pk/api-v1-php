@@ -36,6 +36,11 @@ services:
         arguments: [ { name: 'partial' } ]
         tags: [ 'api_platform.filter' ]
 
+    app.category.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        arguments: [ 'group', false, ['ImageReadLess'] ]
+        tags: [ 'api_platform.filter' ]
+
     app.project.group_filter:
         parent: 'api_platform.serializer.group_filter'
         arguments: [ 'group', false, ['UserReadLess'] ]

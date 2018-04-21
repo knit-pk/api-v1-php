@@ -40,6 +40,11 @@ services:
         decorates: 'app.category.search_filter'
         arguments: [ '@app.swagger.category.search_filter.inner' ]
 
+    app.swagger.category.group_filter:
+        class: App\Swagger\Filter\SwaggerGroupFilter
+        decorates: 'app.category.group_filter'
+        arguments: [ '@app.swagger.category.group_filter.inner' ]
+
     app.swagger.project.group_filter:
         class: App\Swagger\Filter\SwaggerGroupFilter
         decorates: 'app.project.group_filter'

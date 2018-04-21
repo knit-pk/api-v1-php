@@ -84,7 +84,7 @@ class Article implements ThoughtfulInterface
     protected $code;
 
     /**
-     * @var string|null the title of the article
+     * @var string the title of the article
      *
      * @ORM\Column(type="string", nullable=false)
      *
@@ -98,7 +98,7 @@ class Article implements ThoughtfulInterface
     protected $title;
 
     /**
-     * @var string|null the actual body of the article
+     * @var string the actual body of the article
      *
      * @ORM\Column(type="text")
      *
@@ -169,14 +169,16 @@ class Article implements ThoughtfulInterface
      *
      * @ApiProperty(iri="http://schema.org/commentCount")
      *
-     * @Groups({"ArticleRead"})
+     * @Assert\GreaterThanOrEqual(0)
+     *
+     * @Groups({"ArticleRead", "ArticleAdminWrite"})
      */
     protected $commentsCount;
 
     /**
-     * @var string|null the subject matter of the content
+     * @var string the subject matter of the content
      *
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=false)
      *
      * @ApiProperty(iri="http://schema.org/about")
      *
@@ -202,12 +204,14 @@ class Article implements ThoughtfulInterface
     protected $author;
 
     /**
-     * @var Image|null an image of the item
+     * @var Image an image of the Article
      *
      * @ORM\ManyToOne(targetEntity="Image")
      * @ORM\JoinColumn(name="image_id", referencedColumnName="id", onDelete="RESTRICT")
      *
      * @ApiProperty(iri="http://schema.org/image")
+     *
+     * @Assert\NotBlank
      *
      * @Groups({"ArticleRead", "ArticleWrite"})
      */
@@ -229,7 +233,7 @@ class Article implements ThoughtfulInterface
      *
      * @ORM\Column(type="boolean")
      *
-     * @Groups({"ArticleRead", "ArticleAdminUpdate"})
+     * @Groups({"ArticleRead", "ArticleAdminWrite"})
      */
     protected $published;
 
@@ -274,43 +278,48 @@ class Article implements ThoughtfulInterface
         return $this->id;
     }
 
-    public function getCode(): ?string
+    public function getCode(): string
     {
         return $this->code;
     }
 
-    public function setCode(?string $code): void
+    public function setCode(string $code): void
     {
         $this->code = $code;
     }
 
-    public function setContent(?string $content): void
+    public function setContent(string $content): void
     {
         $this->content = $content;
     }
 
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    public function getImage(): ?Image
+    public function getImage(): Image
     {
         return $this->image;
     }
 
-    public function setImage(?Image $image): void
+    public function setImage(Image $image): void
     {
         $this->image = $image;
     }
 
-    public function getCategory(): ?Category
+    public function getCategory(): Category
     {
         return $this->category;
     }
 
     public function setCategory(Category $category): void
     {
+        if ($this->category instanceof Category) {
+            $this->category->decrementArticlesCount();
+        }
+
+        $category->incrementArticlesCount();
         $this->category = $category;
     }
 
@@ -376,22 +385,22 @@ class Article implements ThoughtfulInterface
         return $this->commentsCount;
     }
 
-    public function setDescription(?string $description): void
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-    public function getDescription(): ?string
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function setAuthor(?User $author): void
+    public function setAuthor(User $author): void
     {
         $this->author = $author;
     }
 
-    public function getAuthor(): ?User
+    public function getAuthor(): User
     {
         return $this->author;
     }
@@ -411,12 +420,12 @@ class Article implements ThoughtfulInterface
         return $this->createdAt;
     }
 
-    public function setTitle(?string $title): void
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -444,7 +453,7 @@ class Article implements ThoughtfulInterface
 
     public function __toString(): string
     {
-        return (string) $this->getCode();
+        return $this->getCode();
     }
 
     /**
