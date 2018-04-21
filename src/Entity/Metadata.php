@@ -19,6 +19,7 @@ class Metadata
      * @ORM\Column(type="string")
      *
      * @Assert\NotBlank
+     * @Assert\Length(max="80")
      *
      * @Groups({"MetadataRead", "MetadataWrite"})
      */
@@ -30,6 +31,7 @@ class Metadata
      * @ORM\Column(type="string")
      *
      * @Assert\NotBlank
+     * @Assert\Length(max="120")
      *
      * @Groups({"MetadataRead", "MetadataWrite"})
      */

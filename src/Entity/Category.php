@@ -76,7 +76,7 @@ class Category
      * @ApiProperty(iri="http://schema.org/name")
      *
      * @Assert\NotBlank
-     * @Assert\Length(min="3", max="100")
+     * @Assert\Length(min="3", max="60")
      *
      * @Groups({"CategoryRead", "CategoryWrite"})
      */
@@ -86,6 +86,7 @@ class Category
      * @var string
      *
      * @Assert\NotBlank
+     * @Assert\Length(max="300")
      *
      * @Groups({"CategoryRead", "CategoryWrite"})
      */
