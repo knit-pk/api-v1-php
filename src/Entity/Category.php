@@ -121,7 +121,7 @@ class Category
      *
      * @Assert\GreaterThanOrEqual(value=0)
      *
-     * @Groups({"CategoryRead", "CategoryAdminUpdate"})
+     * @Groups({"CategoryRead", "CategoryAdminWrite"})
      */
     protected $articlesCount;
 

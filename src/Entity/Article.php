@@ -171,7 +171,7 @@ class Article implements ThoughtfulInterface
      *
      * @Assert\GreaterThanOrEqual(0)
      *
-     * @Groups({"ArticleRead", "ArticleAdminUpdate"})
+     * @Groups({"ArticleRead", "ArticleAdminWrite"})
      */
     protected $commentsCount;
 
@@ -233,7 +233,7 @@ class Article implements ThoughtfulInterface
      *
      * @ORM\Column(type="boolean")
      *
-     * @Groups({"ArticleRead", "ArticleAdminUpdate"})
+     * @Groups({"ArticleRead", "ArticleAdminWrite"})
      */
     protected $published;
 
