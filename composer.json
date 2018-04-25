@@ -3,7 +3,7 @@
   "description": "KNIT API PHP",
   "version": "0.10.4-dev",
   "type": "project",
-  "license": "proprietary",
+  "license": "MIT",
   "require": {
     "php": "^7.2",
     "api-platform/api-pack": "^1.1",
