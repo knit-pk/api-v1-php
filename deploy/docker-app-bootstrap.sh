@@ -23,7 +23,7 @@ if [ "$APP_ENV" = 'prod' ] || [ "$APP_ENV" = 'stage' ]; then
         fi
     fi
 else
-    composer install --prefer-dist --no-progress --no-suggest --no-interaction
+    composer install --prefer-dist --no-progress --no-suggest --no-interaction --ansi
     make fix-symfony-cache
 
     # Wait until database is ready
