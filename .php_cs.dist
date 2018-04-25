@@ -1,7 +1,7 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-        ->in(['src','tests','features']);
+    ->in(['src', 'tests', 'features', 'config']);
 
 return PhpCsFixer\Config::create()
     ->setRules([
@@ -25,5 +25,4 @@ return PhpCsFixer\Config::create()
         'strict_comparison' => true,
     ])
     ->setRiskyAllowed(true)
-    ->setFinder($finder)
-;
+    ->setFinder($finder);
