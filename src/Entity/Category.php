@@ -102,6 +102,20 @@ class Category
      * @ORM\Embedded(class=Metadata::class)
      *
      * @Groups({"CategoryRead", "CategoryWrite"})
+     *
+     * @ApiProperty(attributes={
+     *     "swagger_context": {
+     *         "type": "object",
+     *         "properties": {
+     *             "title": {
+     *                 "type": "string",
+     *             },
+     *             "description": {
+     *                 "type": "string",
+     *             },
+     *         },
+     *     },
+     * })
      */
     protected $metadata;
 
