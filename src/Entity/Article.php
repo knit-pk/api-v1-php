@@ -435,6 +435,11 @@ class Article implements ThoughtfulInterface
         return $this->published;
     }
 
+    public function setCommentsCount(int $commentsCount): void
+    {
+        $this->commentsCount = $commentsCount;
+    }
+
     public function setPublished(bool $published): void
     {
         $this->published = $published;
