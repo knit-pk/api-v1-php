@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dde48b61944c3094cd2b78f2f36ac3d4",
+    "content-hash": "c009673e288f81cf9fb35d9b071b92a7",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -1362,16 +1362,16 @@
         },
         {
             "name": "gesdinet/jwt-refresh-token-bundle",
-            "version": "v0.3.3",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gesdinet/JWTRefreshTokenBundle.git",
-                "reference": "8bb51f710d9dd38374c87f63469cfe4083161310"
+                "reference": "95292f16e25b06a8d5a5e70c0dc38b2214df8849"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gesdinet/JWTRefreshTokenBundle/zipball/8bb51f710d9dd38374c87f63469cfe4083161310",
-                "reference": "8bb51f710d9dd38374c87f63469cfe4083161310",
+                "url": "https://api.github.com/repos/gesdinet/JWTRefreshTokenBundle/zipball/95292f16e25b06a8d5a5e70c0dc38b2214df8849",
+                "reference": "95292f16e25b06a8d5a5e70c0dc38b2214df8849",
                 "shasum": ""
             },
             "require": {
@@ -1410,7 +1410,7 @@
             "keywords": [
                 "jwt refresh token bundle symfony json web"
             ],
-            "time": "2018-03-31T11:11:21+00:00"
+            "time": "2018-04-26T07:17:06+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
