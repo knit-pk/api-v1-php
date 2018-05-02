@@ -39,7 +39,7 @@ RUN chmod +x /usr/local/bin/docker-app-entrypoint && \
 
 WORKDIR /usr/src/api
 ENTRYPOINT ["docker-app-entrypoint"]
-CMD ["bin/server"]
+CMD ["bin/console", "swoole:server:run"]
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative --ansi
