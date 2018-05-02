@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Server;
+namespace App\Bundle\SwooleBundle\Server;
 
 use Closure;
 

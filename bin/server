@@ -2,9 +2,9 @@
 <?php
 
 use App\Kernel;
-use App\Server\Counter;
-use App\Server\Driver;
-use App\Server\ServerUtils;
+use App\Bundle\SwooleBundle\Server\Counter;
+use App\Bundle\SwooleBundle\Server\Driver;
+use App\Bundle\SwooleBundle\Server\ServerUtils;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Swoole\Http\Request;
