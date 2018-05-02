@@ -1,7 +1,7 @@
 {
   "name": "knit-pk/api-v1-php",
   "description": "KNIT API PHP",
-  "version": "0.10.5-dev",
+  "version": "0.10.6-dev",
   "type": "project",
   "license": "MIT",
   "require": {
@@ -11,7 +11,7 @@
     "doctrine/doctrine-migrations-bundle": "^1.3",
     "friendsofsymfony/user-bundle": "^2.1",
     "gedmo/doctrine-extensions": "^2.4",
-    "gesdinet/jwt-refresh-token-bundle": "^0.3",
+    "gesdinet/jwt-refresh-token-bundle": "^0.4",
     "guzzlehttp/guzzle": "^6.3",
     "league/flysystem-aws-s3-v3": "^1.0",
     "lexik/jwt-authentication-bundle": "^2.4",
