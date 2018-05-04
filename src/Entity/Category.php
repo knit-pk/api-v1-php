@@ -9,14 +9,15 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(attributes={
- *     "filters": {"app.category.search_filter"},
- *     "normalization_context": {"groups": {"CategoryRead"}},
- *     "denormalization_context": {"groups": {"CategoryWrite"}},
+ *     "filters": {"app.category.search_filter", "app.category.group_filter"},
+ *     "normalization_context": {"groups": {"CategoryRead", "MetadataRead"}},
+ *     "denormalization_context": {"groups": {"CategoryWrite", "MetadataWrite"}},
  * },
  * collectionOperations={
  *     "get": {
@@ -47,12 +48,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Category
 {
     /**
-     * @var Uuid
+     * @var \Ramsey\Uuid\UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
      * @Groups({"CategoryRead"})
      */
@@ -70,53 +69,159 @@ class Category
     protected $code;
 
     /**
-     * @var null|string the name of the category
+     * @var string the name of the category
      *
      * @ORM\Column(type="string", nullable=false)
      *
      * @ApiProperty(iri="http://schema.org/name")
      *
      * @Assert\NotBlank
-     * @Assert\Length(min="3", max="100")
+     * @Assert\Length(min="3", max="60")
      *
      * @Groups({"CategoryRead", "CategoryWrite"})
      */
     protected $name;
 
     /**
-     * @return null|Uuid
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=false)
+     *
+     * @ApiProperty(iri="http://schema.org/about")
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max="300")
+     *
+     * @Groups({"CategoryRead", "CategoryWrite"})
      */
-    public function getId(): ?Uuid
+    protected $description;
+
+    /**
+     * @var Metadata
+     *
+     * @ORM\Embedded(class=Metadata::class)
+     *
+     * @Groups({"CategoryRead", "CategoryWrite"})
+     *
+     * @ApiProperty(attributes={
+     *     "swagger_context": {
+     *         "type": "object",
+     *         "properties": {
+     *             "title": {
+     *                 "type": "string",
+     *             },
+     *             "description": {
+     *                 "type": "string",
+     *             },
+     *         },
+     *     },
+     * })
+     */
+    protected $metadata;
+
+    /**
+     * @ApiProperty(iri="http://schema.org/image")
+     *
+     * @var Image
+     *
+     * @ORM\ManyToOne(targetEntity="Image")
+     * @ORM\JoinColumn(name="category_image_id", referencedColumnName="id", onDelete="RESTRICT")
+     *
+     * @Assert\NotBlank
+     *
+     * @Groups({"CategoryRead", "CategoryWrite"})
+     */
+    protected $image;
+
+    /**
+     * @var int Aggregate field that contains total number of articles in category
+     *
+     * @ORM\Column(type="integer", options={"unsigned": true})
+     *
+     * @Assert\GreaterThanOrEqual(value=0)
+     *
+     * @Groups({"CategoryRead", "CategoryAdminWrite"})
+     */
+    protected $articlesCount;
+
+    public function __construct()
+    {
+        $this->id = Uuid::uuid4();
+        $this->articlesCount = 0;
+    }
+
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * @return null|string
-     */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
+    public function getMetadata(): Metadata
+    {
+        return $this->metadata;
+    }
+
     public function setName(string $name): void
     {
         $this->name = $name;
     }
 
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function setMetadata(Metadata $metadata): void
+    {
+        $this->metadata = $metadata;
+    }
+
+    public function getImage(): Image
+    {
+        return $this->image;
+    }
+
+    public function setImage(Image $image): void
+    {
+        $this->image = $image;
+    }
+
+    public function incrementArticlesCount(): void
+    {
+        ++$this->articlesCount;
+    }
+
+    public function decrementArticlesCount(): void
+    {
+        --$this->articlesCount;
+    }
+
+    public function getArticlesCount(): int
+    {
+        return $this->articlesCount;
+    }
+
+    public function setArticlesCount(int $articlesCount): void
+    {
+        $this->articlesCount = $articlesCount;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
     public function __toString(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 }
