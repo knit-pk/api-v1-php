@@ -78,7 +78,7 @@ content: |
       if done:
         break
   ```
-  Na początku ustawiana jest macierz $Q$ na same zera. Rozmiar tej macierzy to $ilosc \_ stanów \times ilosc \_ ruchow$, czyli $16 \times 4$. Wybór ruchu dokonywany jest na podstawie wartości w macierzy $Q$. Wybierany jest ruch, który odpowiada wartości maksymalnej.
+  Na początku ustawiana jest macierz $Q$ na same zera. Rozmiar tej macierzy to $ilosc \_ stanow \times ilosc \_ ruchow$, czyli $16 \times 4$. Wybór ruchu dokonywany jest na podstawie wartości w macierzy $Q$. Wybierany jest ruch, który odpowiada wartości maksymalnej.
   ```python
   noise = np.random.randn(1, act_n) * (1. / (i + 1))
   action = np.argmax(Q[state, :] + noise)
