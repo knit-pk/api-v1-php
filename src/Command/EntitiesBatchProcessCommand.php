@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class EntityBatchProcess extends Command
+class EntitiesBatchProcessCommand extends Command
 {
     private const APP_ENTITY_NAMESPACE = 'App\\Entity';
     private const APP_COMMAND_ENTITY_NAMESPACE = 'App\\Command\\Entity';
@@ -41,7 +41,7 @@ class EntityBatchProcess extends Command
      */
     protected function configure(): void
     {
-        $this->setName('app:entity:batch:process')
+        $this->setName('app:entities:batch:process')
             ->addArgument('entity', InputArgument::REQUIRED, 'class of updated entity')
             ->addArgument('action', InputArgument::REQUIRED, 'action handler for selected entity');
     }
