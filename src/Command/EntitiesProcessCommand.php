@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class EntitiesBatchProcessCommand extends Command
+final class EntitiesProcessCommand extends Command
 {
     private const APP_ENTITY_NAMESPACE = 'App\\Entity';
     private const APP_COMMAND_ENTITY_NAMESPACE = 'App\\Command\\Entity';
@@ -41,7 +41,7 @@ class EntitiesBatchProcessCommand extends Command
      */
     protected function configure(): void
     {
-        $this->setName('app:entities:batch:process')
+        $this->setName('app:entities:process')
             ->addArgument('entity', InputArgument::REQUIRED, 'class of updated entity')
             ->addArgument('action', InputArgument::REQUIRED, 'action handler for selected entity');
     }
@@ -57,10 +57,10 @@ class EntitiesBatchProcessCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $entityClass = \str_ireplace([self::APP_ENTITY_NAMESPACE, self::DOT_PHP], '', $input->getArgument('entity'));
-        $handlerClass = \str_ireplace([self::APP_COMMAND_ENTITY_NAMESPACE, self::DOT_PHP], '', $input->getArgument('action'));
+        $handlerClass = \str_ireplace([self::APP_COMMAND_ENTITY_NAMESPACE, $entityClass, self::DOT_PHP], '', $input->getArgument('action'));
 
         $parsedEntityClass = $this->parseClass($entityClass, self::APP_ENTITY_NAMESPACE);
-        $handlerNamespace = \str_replace(self::APP_ENTITY_NAMESPACE, self::APP_COMMAND_ENTITY_NAMESPACE, $parsedEntityClass);
+        $handlerNamespace = \str_ireplace(self::APP_ENTITY_NAMESPACE, self::APP_COMMAND_ENTITY_NAMESPACE, $parsedEntityClass);
         $parsedHandlerClass = $this->parseClass($handlerClass, $handlerNamespace);
 
         if (!\class_exists($parsedEntityClass)) {
@@ -91,6 +91,7 @@ class EntitiesBatchProcessCommand extends Command
         $this->batchProcessor->process($handler, $entries);
 
         $progressBar->finish();
+        $io->newLine(2);
     }
 
     private function getEntries(IterableResult $result): Generator
