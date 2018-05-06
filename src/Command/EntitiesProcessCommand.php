@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\EntityBatchProcessor\EntityBatchProcessor;
-use App\EntityBatchProcessor\Handler\AbstractConsoleCommandBatchProcessorHandler;
-use App\EntityBatchProcessor\Handler\EntityBatchProcessorHandlerInterface;
+use App\EntityProcessor\EntityBatchProcessor;
+use App\EntityProcessor\Handler\AbstractConsoleCommandEntityProcessorHandler;
+use App\EntityProcessor\Handler\EntityProcessorHandlerInterface;
+use App\EntityProcessor\Handler\Factory\EntityProcessorHandlerFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Generator;
@@ -24,14 +25,16 @@ final class EntitiesProcessCommand extends Command
     private const DOT_PHP = '.php';
 
     private $em;
-    private $batchProcessor;
+    private $processor;
+    private $handlerFactory;
 
-    public function __construct(EntityManagerInterface $em, EntityBatchProcessor $batchProcessor)
+    public function __construct(EntityManagerInterface $em, EntityBatchProcessor $processor, EntityProcessorHandlerFactoryInterface $handlerFactory)
     {
         parent::__construct();
 
         $this->em = $em;
-        $this->batchProcessor = $batchProcessor;
+        $this->processor = $processor;
+        $this->handlerFactory = $handlerFactory;
     }
 
     /**
@@ -67,10 +70,6 @@ final class EntitiesProcessCommand extends Command
             throw new InvalidArgumentException(\sprintf('Entity %s does not exist', $parsedEntityClass));
         }
 
-        if (!\class_exists($parsedHandlerClass)) {
-            throw new InvalidArgumentException(\sprintf('Handler %s does not exist', $parsedHandlerClass));
-        }
-
         $output->writeln(\sprintf('<info>Running action %s on entity %s</info>', $parsedHandlerClass, $parsedEntityClass));
 
         $countQuery = $this->em->createQuery(\sprintf('SELECT COUNT(e) as count FROM %s e', $parsedEntityClass));
@@ -80,15 +79,12 @@ final class EntitiesProcessCommand extends Command
         $entries = $this->getEntries($entityCollectionQuery->iterate());
         $progressBar = $io->createProgressBar($count);
 
-        /** @var EntityBatchProcessorHandlerInterface $handler */
-        $handler = new $parsedHandlerClass();
+        $handler = $this->handlerFactory->make($parsedHandlerClass, [
+            'progressBar' => $progressBar,
+            'output' => $output
+        ]);
 
-        if ($handler instanceof AbstractConsoleCommandBatchProcessorHandler) {
-            $handler->setOutput($output);
-            $handler->setProgressBar($progressBar);
-        }
-
-        $this->batchProcessor->process($handler, $entries);
+        $this->processor->process($handler, $entries);
 
         $progressBar->finish();
         $io->newLine(2);

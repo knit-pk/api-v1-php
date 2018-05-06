@@ -117,3 +117,11 @@ services:
         decorates: App\UrlGenerator\UrlGeneratorInterface
         decoration_priority: -20
         arguments: [ '@App\UrlGenerator\ConfigurationUrlGenerator.inner', '%resources.base_url%']
+
+    'App\EntityProcessor\Handler\Factory\EntityProcessorHandlerFactoryInterface':
+        class: App\EntityProcessor\Handler\Factory\ClassNameEntityProcessorHandlerFactory
+
+    'App\EntityProcessor\Handler\Factory\ConsoleCommandEntityProcessorHandlerFactory':
+        decorates: App\EntityProcessor\Handler\Factory\EntityProcessorHandlerFactoryInterface
+        decoration_priority: -10
+        arguments: [ '@App\EntityProcessor\Handler\Factory\ConsoleCommandEntityProcessorHandlerFactory.inner' ]

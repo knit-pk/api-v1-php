@@ -6,10 +6,10 @@ namespace App\Command\Entity\Article;
 
 use App\Entity\Article;
 use App\Entity\Comment;
-use App\EntityBatchProcessor\Handler\AbstractConsoleCommandBatchProcessorHandler;
+use App\EntityProcessor\Handler\AbstractConsoleCommandEntityProcessorHandler;
 use InvalidArgumentException;
 
-final class UpdateCommentsCount extends AbstractConsoleCommandBatchProcessorHandler
+final class UpdateCommentsCount extends AbstractConsoleCommandEntityProcessorHandler
 {
     /**
      * {@inheritdoc}

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Command\Entity\Article;
 
 use App\Entity\Article;
-use App\EntityBatchProcessor\Handler\AbstractConsoleCommandBatchProcessorHandler;
+use App\EntityProcessor\Handler\AbstractConsoleCommandEntityProcessorHandler;
 use Doctrine\Common\Collections\ArrayCollection;
 use InvalidArgumentException;
 
-final class SynchronizeCategories extends AbstractConsoleCommandBatchProcessorHandler
+final class SynchronizeCategories extends AbstractConsoleCommandEntityProcessorHandler
 {
     private $categories;
 

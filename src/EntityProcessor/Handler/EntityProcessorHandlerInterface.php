@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\EntityBatchProcessor\Handler;
+namespace App\EntityProcessor\Handler;
 
 use Throwable;
 
-interface EntityBatchProcessorHandlerInterface
+interface EntityProcessorHandlerInterface
 {
     /**
      * Handles entity with specified behaviour.

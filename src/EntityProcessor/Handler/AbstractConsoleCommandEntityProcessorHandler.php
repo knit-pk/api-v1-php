@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\EntityBatchProcessor\Handler;
+namespace App\EntityProcessor\Handler;
 
 use RuntimeException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
-abstract class AbstractConsoleCommandBatchProcessorHandler implements EntityBatchProcessorHandlerInterface
+abstract class AbstractConsoleCommandEntityProcessorHandler implements EntityProcessorHandlerInterface
 {
     /**
      * @var OutputInterface|null

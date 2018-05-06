@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\EntityBatchProcessor;
+namespace App\EntityProcessor;
 
-use App\EntityBatchProcessor\Handler\EntityBatchProcessorHandlerInterface;
+use App\EntityProcessor\Handler\EntityProcessorHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Throwable;
 
@@ -19,10 +19,10 @@ final class EntityBatchProcessor
     }
 
     /**
-     * @param EntityBatchProcessorHandlerInterface $handler
-     * @param iterable|object[]                    $entries
+     * @param EntityProcessorHandlerInterface $handler
+     * @param iterable|object[]               $entries
      */
-    public function process(EntityBatchProcessorHandlerInterface $handler, iterable $entries): void
+    public function process(EntityProcessorHandlerInterface $handler, iterable $entries): void
     {
         $counter = 0;
         foreach ($entries as $entry) {
