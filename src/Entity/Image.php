@@ -116,6 +116,8 @@ class Image
      *
      * @ORM\Column(type="string")
      *
+     * @ApiProperty(iri="http://schema.org/name")
+     *
      * @Groups({"ImageRead", "ImageWrite"})
      */
     protected $originalName;

@@ -30,6 +30,7 @@ if (\class_exists(Application::class)) {
         'process_psr_3_messages' => false,
         'channels' => ['!event', '!doctrine', '!console'],
     ];
+    unset($handlers['stdout']);
 }
 
 $container->loadFromExtension('monolog', [
