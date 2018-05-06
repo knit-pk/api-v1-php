@@ -42,8 +42,8 @@ final class EntitiesProcessCommand extends Command
     protected function configure(): void
     {
         $this->setName('app:entities:process')
-            ->addArgument('entity', InputArgument::REQUIRED, 'class of updated entity')
-            ->addArgument('action', InputArgument::REQUIRED, 'action handler for selected entity');
+            ->addArgument('entity', InputArgument::REQUIRED, 'full or short class name of updated entity')
+            ->addArgument('action', InputArgument::REQUIRED, 'full or short class name of action handler for selected entity');
     }
 
     /**
@@ -59,21 +59,17 @@ final class EntitiesProcessCommand extends Command
         $entityClassName = $input->getArgument('entity');
         $handlerClassName = $input->getArgument('action');
 
+        // Guess entity class name if not provided full class name as argument
         if (!\class_exists($entityClassName)) {
-            $entityClassName = $this->addToNamespace(
-                $this->parseClassShortName($entityClassName),
-                self::APP_ENTITY_NAMESPACE
-            );
+            $entityClassShortName = $this->parseClassShortName($entityClassName);
+            $entityClassName = $this->constructClassName(self::APP_ENTITY_NAMESPACE, $entityClassShortName);
         }
 
+        // Guess handler class name if not provided full class name as argument
         if (!\class_exists($handlerClassName)) {
-            $handlerClassName = $this->addToNamespace(
-                $this->parseClassShortName($handlerClassName),
-                $this->addToNamespace(
-                    $this->parseClassShortName($entityClassName),
-                    self::APP_COMMAND_ENTITY_NAMESPACE
-                )
-            );
+            $entityClassShortName = $entityClassShortName ?? $this->parseClassShortName($entityClassName);
+            $handlerClassShortName = $this->parseClassShortName($handlerClassName);
+            $handlerClassName = $this->constructClassName(self::APP_COMMAND_ENTITY_NAMESPACE, $entityClassShortName, $handlerClassShortName);
         }
 
         if (!\class_exists($entityClassName)) {
@@ -100,9 +96,13 @@ final class EntitiesProcessCommand extends Command
         $io->newLine(2);
     }
 
-    private function addToNamespace(string $addition, string $namespace): string
+    private function constructClassName(string $namespace, string ...$paths): string
     {
-        return \sprintf('%s\\%s', \trim($namespace, ' \\'), \trim($addition, ' \\'));
+        foreach ($paths as $path) {
+            $namespace = \sprintf('%s\\%s', \trim($namespace, ' \\'), \trim($path, ' \\'));
+        }
+
+        return $namespace;
     }
 
     private function parseClassShortName(string $className): string

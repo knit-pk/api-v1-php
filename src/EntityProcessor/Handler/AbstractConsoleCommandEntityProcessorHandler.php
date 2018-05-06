@@ -45,10 +45,10 @@ abstract class AbstractConsoleCommandEntityProcessorHandler implements EntityPro
      */
     public function error(object $entity, Throwable $error): void
     {
-        if (null !== $this->output) {
-            $this->output->writeln(\sprintf('<error>Error: %s</error>', $error->getMessage()));
-        } else {
+        if (null === $this->output) {
             throw new RuntimeException('Could not print error to console, because no configured output', 0, $error);
         }
+
+        $this->output->writeln(\sprintf('<error>Error: %s</error>', $error->getMessage()));
     }
 }

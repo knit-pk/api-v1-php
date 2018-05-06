@@ -10,12 +10,15 @@ use Throwable;
 
 final class EntityBatchProcessor
 {
-    private const FLUSH_AFTER = 20;
-    private $em;
+    private const DEFAULT_FLUSH_AFTER = 20;
 
-    public function __construct(EntityManagerInterface $em)
+    private $em;
+    private $flushAfter;
+
+    public function __construct(EntityManagerInterface $em, int $flushAfter = self::DEFAULT_FLUSH_AFTER)
     {
         $this->em = $em;
+        $this->flushAfter = $flushAfter;
     }
 
     /**
@@ -35,7 +38,7 @@ final class EntityBatchProcessor
             $handler->success($entry);
 
             ++$counter;
-            if (0 === $counter % self::FLUSH_AFTER) {
+            if (0 === $counter % $this->flushAfter) {
                 $this->em->flush();
                 $this->em->clear();
             }
