@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\EntityProcessor\EntityBatchProcessor;
-use App\EntityProcessor\Handler\AbstractConsoleCommandEntityProcessorHandler;
-use App\EntityProcessor\Handler\EntityProcessorHandlerInterface;
 use App\EntityProcessor\Handler\Factory\EntityProcessorHandlerFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
@@ -22,7 +20,6 @@ final class EntitiesProcessCommand extends Command
 {
     private const APP_ENTITY_NAMESPACE = 'App\\Entity';
     private const APP_COMMAND_ENTITY_NAMESPACE = 'App\\Command\\Entity';
-    private const DOT_PHP = '.php';
 
     private $em;
     private $processor;
@@ -59,29 +56,42 @@ final class EntitiesProcessCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $io = new SymfonyStyle($input, $output);
-        $entityClass = \str_ireplace([self::APP_ENTITY_NAMESPACE, self::DOT_PHP], '', $input->getArgument('entity'));
-        $handlerClass = \str_ireplace([self::APP_COMMAND_ENTITY_NAMESPACE, $entityClass, self::DOT_PHP], '', $input->getArgument('action'));
+        $entityClassName = $input->getArgument('entity');
+        $handlerClassName = $input->getArgument('action');
 
-        $parsedEntityClass = $this->parseClass($entityClass, self::APP_ENTITY_NAMESPACE);
-        $handlerNamespace = \str_ireplace(self::APP_ENTITY_NAMESPACE, self::APP_COMMAND_ENTITY_NAMESPACE, $parsedEntityClass);
-        $parsedHandlerClass = $this->parseClass($handlerClass, $handlerNamespace);
-
-        if (!\class_exists($parsedEntityClass)) {
-            throw new InvalidArgumentException(\sprintf('Entity %s does not exist', $parsedEntityClass));
+        if (!\class_exists($entityClassName)) {
+            $entityClassName = $this->addToNamespace(
+                $this->parseClassShortName($entityClassName),
+                self::APP_ENTITY_NAMESPACE
+            );
         }
 
-        $output->writeln(\sprintf('<info>Running action %s on entity %s</info>', $parsedHandlerClass, $parsedEntityClass));
+        if (!\class_exists($handlerClassName)) {
+            $handlerClassName = $this->addToNamespace(
+                $this->parseClassShortName($handlerClassName),
+                $this->addToNamespace(
+                    $this->parseClassShortName($entityClassName),
+                    self::APP_COMMAND_ENTITY_NAMESPACE
+                )
+            );
+        }
 
-        $countQuery = $this->em->createQuery(\sprintf('SELECT COUNT(e) as count FROM %s e', $parsedEntityClass));
-        $entityCollectionQuery = $this->em->createQuery(\sprintf('SELECT e FROM %s e', $parsedEntityClass));
+        if (!\class_exists($entityClassName)) {
+            throw new InvalidArgumentException(\sprintf('Entity %s does not exist', $entityClassName));
+        }
+
+        $output->writeln(\sprintf('<info>Running action %s on entity %s</info>', $handlerClassName, $entityClassName));
+
+        $countQuery = $this->em->createQuery(\sprintf('SELECT COUNT(e) as count FROM %s e', $entityClassName));
+        $entityCollectionQuery = $this->em->createQuery(\sprintf('SELECT e FROM %s e', $entityClassName));
 
         $count = $countQuery->getResult()[0]['count'];
         $entries = $this->getEntries($entityCollectionQuery->iterate());
         $progressBar = $io->createProgressBar($count);
 
-        $handler = $this->handlerFactory->make($parsedHandlerClass, [
+        $handler = $this->handlerFactory->make($handlerClassName, [
             'progressBar' => $progressBar,
-            'output' => $output
+            'output' => $output,
         ]);
 
         $this->processor->process($handler, $entries);
@@ -90,15 +100,22 @@ final class EntitiesProcessCommand extends Command
         $io->newLine(2);
     }
 
+    private function addToNamespace(string $addition, string $namespace): string
+    {
+        return \sprintf('%s\\%s', \trim($namespace, ' \\'), \trim($addition, ' \\'));
+    }
+
+    private function parseClassShortName(string $className): string
+    {
+        $path = \explode('\\', \trim($className, ' \\'));
+
+        return \ucfirst(\array_pop($path));
+    }
+
     private function getEntries(IterableResult $result): Generator
     {
         foreach ($result as [0 => $entry]) {
             yield $entry;
         }
-    }
-
-    private function parseClass(string $class, string $namespace): string
-    {
-        return \sprintf('%s\\%s', $namespace, \ucfirst(\trim($class, ' \\')));
     }
 }
