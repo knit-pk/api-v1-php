@@ -38,13 +38,16 @@ final class EntityBatchProcessor
             $handler->success($entry);
 
             ++$counter;
-            if (0 === $counter % $this->flushAfter) {
+            if ($counter === $this->flushAfter) {
                 $this->em->flush();
                 $this->em->clear();
+                $counter = 0;
             }
         }
 
-        $this->em->flush();
-        $this->em->clear();
+        if ($counter) {
+            $this->em->flush();
+            $this->em->clear();
+        }
     }
 }
