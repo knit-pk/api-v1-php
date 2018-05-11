@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Command\Entity\Article\SynchronizeCategories;
 use App\Command\Entity\Article\UpdateCommentsCount;
+use App\Command\Entity\Category\UpdateArticlesCount;
 use App\Entity\Article;
+use App\Entity\Category;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -46,8 +47,8 @@ final class EntitiesSynchronizeCommand extends Command
         ]), $output);
 
         $batchProcessing->run(new ArrayInput([
-            'entity' => Article::class,
-            'action' => SynchronizeCategories::class,
+            'entity' => Category::class,
+            'action' => UpdateArticlesCount::class,
         ]), $output);
     }
 }
