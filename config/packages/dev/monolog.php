@@ -14,7 +14,7 @@ $handlers = [
         'type' => 'stream',
         'path' => 'php://stdout',
         'level' => 'debug',
-        'channels' => ['!event'],
+        'channels' => ['!event', '!console'],
     ],
     'redis' => [
         'id' => 'monolog.handler.redis_handler',
@@ -30,7 +30,6 @@ if (\class_exists(Application::class)) {
         'process_psr_3_messages' => false,
         'channels' => ['!event', '!doctrine', '!console'],
     ];
-    unset($handlers['stdout']);
 }
 
 $container->loadFromExtension('monolog', [

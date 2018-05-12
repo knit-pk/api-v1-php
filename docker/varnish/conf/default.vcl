@@ -3,8 +3,8 @@ vcl 4.0;
 import std;
 
 backend default {
-    .host = "standalone";
-    .port = "8899";
+    .host = "nginx";
+    .port = "9988";
 }
 
 // Hosts allowed to send BAN requests
@@ -13,6 +13,7 @@ acl ban {
     "localhost";
     "127.0.0.1";
     "standalone";
+    "api";
 }
 
 sub vcl_backend_response {
@@ -79,19 +80,8 @@ sub vcl_recv {
         return (pass);
     }
 
-    // Remove all cookies except the session ID.
-    if (req.http.Cookie) {
-        set req.http.Cookie = ";" + req.http.Cookie;
-        set req.http.Cookie = regsuball(req.http.Cookie, "; +", ";");
-        set req.http.Cookie = regsuball(req.http.Cookie, ";(PHPSESSID)=", "; \1=");
-        set req.http.Cookie = regsuball(req.http.Cookie, ";[^ ][^;]*", "");
-        set req.http.Cookie = regsuball(req.http.Cookie, "^[; ]+|[; ]+$", "");
-
-        if (req.http.Cookie == "") {
-            // If there are no more cookies, remove the header to get page cached.
-            unset req.http.Cookie;
-        }
-    }
+    // Remove all cookies to get page cached.
+    unset req.http.Cookie;
 
     return(hash);
 }

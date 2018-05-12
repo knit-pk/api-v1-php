@@ -8,7 +8,7 @@ RUN REACT_APP_API_URL=$KNIT_API_URL yarn build
 
 FROM knitpk/api:${KNIT_API_TAG}
 
-ENV PORT 80
+ENV NGINX_PORT 80
 
 RUN apk add --no-cache nginx
 
@@ -17,5 +17,3 @@ COPY deploy/standalone/default.conf /etc/nginx/conf.d/default.conf
 COPY deploy/standalone/docker-app-entrypoint.sh /usr/local/bin/docker-app-entrypoint
 RUN chmod +x /usr/local/bin/docker-app-entrypoint
 COPY --from=api-admin /usr/src/app/build /usr/src/api/public/admin
-
-EXPOSE ${PORT}

@@ -28,8 +28,8 @@ if (!isset($_SERVER['APP_ENV'])) {
 $input = new ArgvInput();
 $env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'dev');
 $debug = ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env)) && !$input->hasParameterOption(['--no-debug', '']);
-$host = $input->getParameterOption(['--host'], '127.0.0.1');
-$port = (int) $input->getParameterOption(['--port', '-p'], 9501);
+$host = $input->getParameterOption(['--host'], $_SERVER['HOST'] ?? '127.0.0.1');
+$port = (int) $input->getParameterOption(['--port', '-p'], $_SERVER['PORT'] ?? 9501);
 $output = $input->getParameterOption(['--output', '-o'], 'php://stdout');
 $requestLimit = (int) $input->getParameterOption(['--request-limit'], -1);
 $profile = $debug || $input->hasParameterOption(['--enable-profiling']);
