@@ -40,7 +40,7 @@ services:
         # but if a service is unused, it's removed anyway
         exclude: '../src/{Entity,Migrations,Repository,Swagger}'
 
-    # Register entity processor handles visible to container
+    # Register entity processor handlers
     App\Command\Entity\:
         resource: '../src/Command/Entity/*'
         public: true

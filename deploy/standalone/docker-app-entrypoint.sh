@@ -7,8 +7,8 @@ if [ "${1#-}" != "$1" ]; then
 fi
 
 if [ "$1" = 'bin/server' ] || [ "$1" = 'bin/console' ]; then
-    echo "NGINX_PORT=$PORT"
-    sed -i "s#NGINX_PORT#$PORT#g" /etc/nginx/conf.d/default.conf
+    echo "NGINX_PORT=$NGINX_PORT"
+    sed -i "s#NGINX_PORT#$NGINX_PORT#g" /etc/nginx/conf.d/default.conf
     nginx
 	docker-app-bootstrap
 fi
