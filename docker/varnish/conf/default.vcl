@@ -12,7 +12,6 @@ acl ban {
     "172.18.0.1"; // debug/cli
     "localhost";
     "127.0.0.1";
-    "standalone";
     "api";
 }
 
