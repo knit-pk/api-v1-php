@@ -1,0 +1,4 @@
+swoole:
+    server:
+        host: localhost # should be '%env(HOST)%'
+        port: 9502 # should be '%env(int:PORT)%'

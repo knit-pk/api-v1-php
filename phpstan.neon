@@ -4,6 +4,6 @@ includes:
 parameters:
     excludes_analyse:
         - src/Migrations
-        - src/Server/Driver
+        - src/Bundle/SwooleBundle/Driver
     ignoreErrors:
         # Put false positives here
