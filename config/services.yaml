@@ -13,6 +13,7 @@ parameters:
         cache_limiter: 0
 
     # Default environment variables values
+    env(HOST): 'localhost'
     env(JWT_PRIVATE_KEY_PATH): config/jwt/private.pem
     env(JWT_PUBLIC_KEY_PATH): config/jwt/public.pem
     env(APP_RESOURCES_BASE_URL): ''
