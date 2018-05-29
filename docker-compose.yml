@@ -38,7 +38,7 @@ services:
             - /usr/src/api/public/admin
             - 'composer_cache:/root/.composer'
         ports:
-            - '8200:9502'
+            - '8200:9501'
 
     nginx:
         build:
@@ -47,7 +47,7 @@ services:
             - api
         environment:
             - PORT=9988
-            - 'API_URL=http://api:9502'
+            - 'API_URL=http://api:9501'
         ports:
             - '8100:9988'
         volumes:

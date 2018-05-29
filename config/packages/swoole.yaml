@@ -1,4 +1,4 @@
 swoole:
     server:
-        port: 9502
+        port: 9501
         host: '%env(HOST)%'
