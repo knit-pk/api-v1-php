@@ -1,7 +1,7 @@
 <?php
 
 return [
-    App\Bundle\SwooleBundle\SwooleBundle::class => ['dev' => true, 'stage' => true, 'prod' => true, 'test' => true],
+    App\Bundle\SwooleBundle\SwooleBundle::class => ['dev' => true, 'stage' => true, 'prod' => true],
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true],
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
