@@ -1,6 +1,6 @@
 <?php
 
-use App\Server\ServerUtils;
+use App\Bundle\SwooleBundle\Server\ServerUtils;
 
 if (isset($_ENV['CORS_ALLOW_ORIGIN'])) {
     $container->loadFromExtension('nelmio_cors', [

@@ -14,7 +14,7 @@ $handlers = [
         'type' => 'stream',
         'path' => 'php://stdout',
         'level' => 'debug',
-        'channels' => ['!event'],
+        'channels' => ['!event', '!console'],
     ],
     'redis' => [
         'id' => 'monolog.handler.redis_handler',

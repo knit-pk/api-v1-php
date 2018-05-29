@@ -11,6 +11,7 @@ env:
     - APP_ENV=test
     - APP_DEBUG=1
     - COMPOSER_METHOD=install
+    - SWOOLE_VERSION=2.2.0
 
 matrix:
   include:
@@ -53,6 +54,9 @@ matrix:
         - COMPOSER_METHOD=update
 
 before_install:
+  - >-
+    echo "\n" | echo "\n" | echo "\n" | echo "\n" | echo "\n" | echo "\n" | echo "\n" |
+    pecl install -f swoole-$SWOOLE_VERSION
   - 'export PATH="$PATH:$HOME/.composer/vendor/bin"'
 
 install:

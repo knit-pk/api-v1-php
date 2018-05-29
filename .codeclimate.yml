@@ -1,0 +1,38 @@
+version: '2'
+plugins:
+    duplication:
+        enabled: true
+        config:
+            languages:
+                - php
+    phpcodesniffer:
+        enabled: true
+        checks:
+            Generic Files LineLength TooLong:
+                enabled: false
+    phpmd:
+        enabled: true
+        checks:
+            Naming/LongVariable:
+                enabled: false
+            Naming/ShortVariable:
+                enabled: false
+            CleanCode/StaticAccess:
+                enabled: false
+            Controversial/Superglobals:
+                enabled: false
+    sonar-php:
+        enabled: true
+        checks:
+            'php:S1117':
+                enabled: false
+            'php:S1192':
+                enabled: false
+exclude_patterns:
+    - config/
+    - dist/
+    - features/
+    - '**/tests/'
+    - src/DataFixtures/
+    - docker/
+    - src/Migrations/

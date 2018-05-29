@@ -4,7 +4,7 @@ FROM php:$PHP_BASE_TAG
 ARG TIMEZONE="Europe/Warsaw"
 ARG DOCKERIZE_VERSION=v0.6.1
 ARG APCU_VERSION=5.1.11
-ARG SWOOLE_VERSION=2.1.3
+ARG SWOOLE_VERSION=2.2.0
 
 # Install custom packages
 RUN apk add --no-cache tzdata zip make openssl linux-headers
@@ -14,17 +14,15 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-# Install xdebug via pecl
+# Install php extensions
 RUN docker-php-source extract && \
-    apk add --no-cache --virtual .phpize-deps-configure $PHPIZE_DEPS && \
+    apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && \
     pecl install apcu-$APCU_VERSION && \
     pecl install swoole-$SWOOLE_VERSION && \
     docker-php-ext-enable apcu swoole && \
-    apk del .phpize-deps-configure && \
+    docker-php-ext-install pdo_mysql opcache && \
+    apk del .phpize-deps && \
     docker-php-source delete
-
-# Install php extensions available by docker-php-ext-install command
-RUN docker-php-ext-install pdo_mysql opcache
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime && echo $TIMEZONE > /etc/timezone && \
@@ -41,11 +39,10 @@ RUN chmod +x /usr/local/bin/docker-app-entrypoint && \
 
 WORKDIR /usr/src/api
 ENTRYPOINT ["docker-app-entrypoint"]
-CMD ["bin/server"]
+CMD ["bin/console", "swoole:server:run"]
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
-RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative --ansi \
-    && composer clear-cache --ansi
+RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative --ansi
 
 # Prevent the reinstallation of vendors at every changes in the source code
 COPY composer.json composer.lock ./
@@ -60,6 +57,8 @@ RUN mkdir -p var/cache var/log var/sessions public/media/upload && \
     chmod -R 777 var public
 
 ENV TZ ${TIMEZONE} \
+    PORT 9501 \
+    HOST '127.0.0.1' \
     DOCKERIZE_WAIT_FOR '' \
     JWT_PRIVATE_KEY_PATH 'config/jwt/private.pem' \
     JWT_PUBLIC_KEY_PATH 'config/jwt/public.pem'
