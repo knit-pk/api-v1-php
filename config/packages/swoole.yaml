@@ -1,0 +1,4 @@
+swoole:
+    server:
+        port: 9501
+        host: '%env(HOST)%'

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Server;
+namespace App\Bundle\SwooleBundle\Server;
 
 /**
  * Helper class to avoid creating closures in static context.
@@ -10,7 +10,7 @@ namespace App\Server;
  * @see https://bugs.php.net/bug.php?id=64761
  * @see https://github.com/php-pm/php-pm/blob/master/src/ClosureHelper.php
  */
-class ClosureHelper
+final class ClosureHelper
 {
     /**
      * Return a closure that assigns a property value.

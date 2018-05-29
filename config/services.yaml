@@ -13,6 +13,7 @@ parameters:
         cache_limiter: 0
 
     # Default environment variables values
+    env(HOST): 'localhost'
     env(JWT_PRIVATE_KEY_PATH): config/jwt/private.pem
     env(JWT_PUBLIC_KEY_PATH): config/jwt/public.pem
     env(APP_RESOURCES_BASE_URL): ''
@@ -38,7 +39,7 @@ services:
         resource: '../src/*'
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
-        exclude: '../src/{Entity,Migrations,Repository,Swagger}'
+        exclude: '../src/{Entity,Migrations,Repository,Swagger,Bundle}'
 
     # Register entity processor handlers
     App\Command\Entity\:
