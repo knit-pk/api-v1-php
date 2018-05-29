@@ -4,7 +4,7 @@ FROM php:$PHP_BASE_TAG
 ARG TIMEZONE="Europe/Warsaw"
 ARG DOCKERIZE_VERSION=v0.6.1
 ARG APCU_VERSION=5.1.11
-ARG SWOOLE_VERSION=2.1.3
+ARG SWOOLE_VERSION=2.2.0
 
 # Install custom packages
 RUN apk add --no-cache tzdata zip make openssl linux-headers
