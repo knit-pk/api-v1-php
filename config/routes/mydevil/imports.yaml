@@ -1,3 +1,0 @@
-imports:
-    - { resource: '../dev/twig.yaml' }
-    - { resource: '../dev/web_profiler.yaml' }
