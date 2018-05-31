@@ -5,7 +5,7 @@ ifndef JWT_PRIVATE_KEY_PATH
     JWT_PRIVATE_KEY_PATH=config/jwt/private.pem
 endif
 ifndef JWT_PUBLIC_KEY_PATH
-    JWT_PRIVATE_KEY_PATH=config/jwt/public.pem
+    JWT_PUBLIC_KEY_PATH=config/jwt/public.pem
 endif
 
 CURR_USER := $(shell whoami)
