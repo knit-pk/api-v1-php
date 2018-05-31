@@ -1,3 +1,0 @@
-nelmio_cors:
-    defaults:
-        allow_origin: ['http://localhost:[0-9]+', 'https://knit-test-homepage.tk', 'https://knit-stage-homepage.herokuapp.com']

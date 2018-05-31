@@ -1,4 +1,8 @@
+parameters:
+    env(HOST): localhost
+    env(PORT): 9501
+
 swoole:
     server:
-        port: 9501
+        port: '%env(int:PORT)%'
         host: '%env(HOST)%'
