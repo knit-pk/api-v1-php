@@ -28,7 +28,7 @@ class ImageUploadActionTest extends TestCase
     public function testRunSuccessAction(): void
     {
         $originalName = 'avatar.png';
-        $uploadedFile = new UploadedFile(__DIR__.'/../../../src/DataFixtures/Resources/images/avatar.png', $originalName, null, null, null, true);
+        $uploadedFile = new UploadedFile(__DIR__.'/../../../src/DataFixtures/Resources/images/avatar.png', $originalName, null, null, true);
         $request = new Request([], [], [], [], ['image' => $uploadedFile]);
 
         /** @var UserInterface $userMock */
