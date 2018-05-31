@@ -53,7 +53,7 @@ class ImageFixtures extends Fixture
             if ($imageFile instanceof SplFileInfo) {
                 $this->filesystem->copy($imageFile->getRealPath(), $tempFile, true);
 
-                $file = new UploadedFile($tempFile, $fixture['name'], null, null, null, true);
+                $file = new UploadedFile($tempFile, $fixture['name'], null, null, true);
                 $image = Image::fromFile($file);
             } else {
                 $image = new Image();

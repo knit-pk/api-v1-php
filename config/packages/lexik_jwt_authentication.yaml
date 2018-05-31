@@ -1,3 +1,7 @@
+parameters:
+    env(JWT_PRIVATE_KEY_PATH): config/jwt/private.pem
+    env(JWT_PUBLIC_KEY_PATH): config/jwt/public.pem
+
 lexik_jwt_authentication:
     private_key_path: '%kernel.project_dir%/%env(JWT_PRIVATE_KEY_PATH)%'
     public_key_path: '%kernel.project_dir%/%env(JWT_PUBLIC_KEY_PATH)%'
