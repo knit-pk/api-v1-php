@@ -96,7 +96,7 @@ class Team
      * @ORM\ManyToMany(targetEntity="User")
      * @ORM\JoinTable(name="teams_users", joinColumns={
      *     @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="CASCADE")
-     *     }, inverseJoinColumns={
+     * }, inverseJoinColumns={
      *     @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE"),
      * })
      *

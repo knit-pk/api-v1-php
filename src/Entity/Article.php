@@ -131,7 +131,7 @@ class Article implements ThoughtfulInterface
      * @ORM\JoinTable(name="articles_tags",
      *     joinColumns={
      *         @ORM\JoinColumn(name="article_id", referencedColumnName="id", onDelete="CASCADE")
-     *         }, inverseJoinColumns={
+     *     }, inverseJoinColumns={
      *         @ORM\JoinColumn(name="tag_id", referencedColumnName="id", onDelete="CASCADE")
      *     },
      * )

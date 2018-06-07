@@ -181,7 +181,7 @@ class User implements UserInterface, FOSUserInterface
      * @ORM\JoinTable(name="users_security_roles",
      *     joinColumns={
      *         @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     *         }, inverseJoinColumns={
+     *     }, inverseJoinColumns={
      *         @ORM\JoinColumn(name="security_role_id", referencedColumnName="id", onDelete="CASCADE")
      *     }
      * )
