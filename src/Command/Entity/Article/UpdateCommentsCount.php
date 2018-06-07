@@ -26,7 +26,7 @@ final class UpdateCommentsCount extends AbstractConsoleCommandEntityProcessorHan
 
         /** @var Comment $comment */
         foreach ($entity->getComments() as $comment) {
-            $commentsCount += $comment->getReplies()->count();
+            $commentsCount += 1 + $comment->getReplies()->count();
         }
 
         $entity->setCommentsCount($commentsCount);
