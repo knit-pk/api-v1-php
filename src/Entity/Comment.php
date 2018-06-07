@@ -217,14 +217,18 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
 
     public function addReply(CommentReply $reply): void
     {
-        $this->replies[] = $reply;
-        $this->article->incrementCommentsCount();
+        if (!$this->replies->contains($reply)) {
+            $this->replies[] = $reply;
+            $this->article->incrementCommentsCount();
+        }
     }
 
     public function removeReply(CommentReply $reply): void
     {
-        $this->replies->removeElement($reply);
-        $this->article->decrementCommentsCount();
+        if ($this->replies->contains($reply)) {
+            $this->replies->removeElement($reply);
+            $this->article->decrementCommentsCount();
+        }
     }
 
     public function getReplies(): Collection

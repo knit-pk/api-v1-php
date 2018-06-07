@@ -350,14 +350,18 @@ class Article implements ThoughtfulInterface
 
     public function addComment(Comment $comment): void
     {
-        $this->comments[] = $comment;
-        $this->incrementCommentsCount();
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $this->commentsCount += 1 + $comment->getReplies()->count();
+        }
     }
 
     public function removeComment(Comment $comment): void
     {
-        $this->comments->removeElement($comment);
-        $this->decrementCommentsCount();
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            $this->commentsCount -= 1 + $comment->getReplies()->count();
+        }
     }
 
     public function getComments(): Collection

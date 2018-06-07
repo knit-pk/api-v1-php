@@ -24,10 +24,6 @@ class CommentReplyEventSubscriber implements EventSubscriberInterface
         if ('DELETE' === $method) {
             $commentReply->getComment()->removeReply($commentReply);
         }
-
-        if ('POST' === $method) {
-            $commentReply->getComment()->addReply($commentReply);
-        }
     }
 
     /**
