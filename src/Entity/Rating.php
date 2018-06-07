@@ -151,12 +151,12 @@ class Rating implements ThoughtInterface
         return $this->id;
     }
 
-    public function setArticle(?Article $article): void
+    public function setArticle(Article $article): void
     {
         $this->article = $article;
     }
 
-    public function getArticle(): ?Article
+    public function getArticle(): Article
     {
         return $this->article;
     }
@@ -218,7 +218,7 @@ class Rating implements ThoughtInterface
             throw new RuntimeException('Subject must be an instance of Article');
         }
 
-        $this->article = $subject;
+        $this->setArticle($subject);
     }
 
     /**

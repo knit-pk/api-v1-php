@@ -164,7 +164,11 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
 
     public function setArticle(Article $article): void
     {
+        if ($this->article instanceof Article) {
+            $this->article->removeComment($this);
+        }
         $this->article = $article;
+        $article->addComment($this);
     }
 
     public function getArticle(): Article
@@ -251,7 +255,7 @@ class Comment implements ThoughtInterface, ThoughtfulInterface
             throw new RuntimeException('Subject must be an instance of Article');
         }
 
-        $this->article = $subject;
+        $this->setArticle($subject);
     }
 
     /**

@@ -192,7 +192,11 @@ class CommentReply implements ThoughtInterface
 
     public function setComment(Comment $comment): void
     {
+        if ($this->comment instanceof Comment) {
+            $this->comment->removeReply($this);
+        }
         $this->comment = $comment;
+        $comment->addReply($this);
     }
 
     public function isAuthor(?UserInterface $user): bool
@@ -218,7 +222,7 @@ class CommentReply implements ThoughtInterface
             throw new RuntimeException('Subject must be an Comment instance');
         }
 
-        $this->comment = $subject;
+        $this->setComment($subject);
     }
 
     /**
