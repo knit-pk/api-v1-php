@@ -50,6 +50,9 @@
     "composer/semver": {
         "version": "1.4.2"
     },
+    "composer/xdebug-handler": {
+        "version": "1.1.0"
+    },
     "container-interop/container-interop": {
         "version": "1.2.0"
     },
@@ -289,9 +292,6 @@
             "version": "4.7",
             "ref": "a5708058bd6f16863618096090e825c549a231e1"
         }
-    },
-    "phpunit/phpunit-mock-objects": {
-        "version": "4.0.4"
     },
     "predis/predis": {
         "version": "v1.1.1"

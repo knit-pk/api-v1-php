@@ -26,7 +26,7 @@
     "symfony/monolog-bundle": "^3.2",
     "symfony/yaml": "^4.0",
     "vich/uploader-bundle": "^1.8",
-    "webonyx/graphql-php": "^0.11.6"
+    "webonyx/graphql-php": "^0.12"
   },
   "require-dev": {
     "api-platform/schema-generator": "^2.0",
