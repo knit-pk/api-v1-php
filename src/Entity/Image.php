@@ -7,9 +7,9 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Security\User\UserInterface;
+use Assert\Assertion;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use DomainException;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\File;
@@ -271,15 +271,11 @@ class Image
      * @param \Symfony\Component\HttpFoundation\File\File $file
      * @param \App\Entity\User|null                       $author
      *
-     * @throws \DomainException
-     *
      * @return \App\Entity\Image
      */
     public static function fromFile(File $file, ?User $author = null): self
     {
-        if (!\in_array($file->getMimeType(), self::SUPPORTED_MIME_TYPES, true)) {
-            throw new DomainException(\sprintf('Give file mime type is not supported. Supported ones: %s', \implode(', ', self::SUPPORTED_MIME_TYPES)));
-        }
+        Assertion::inArray($file->getMimeType(), self::SUPPORTED_MIME_TYPES, 'Given file mime type "%s" is not among supported: %s');
 
         $image = new self();
         $image->file = $file;

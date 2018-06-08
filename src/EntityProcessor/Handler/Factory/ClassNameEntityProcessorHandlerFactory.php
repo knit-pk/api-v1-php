@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\EntityProcessor\Handler\Factory;
 
 use App\EntityProcessor\Handler\EntityProcessorHandlerInterface;
+use Assert\Assertion;
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -23,6 +24,7 @@ final class ClassNameEntityProcessorHandlerFactory implements EntityProcessorHan
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws InvalidArgumentException
+     * @throws \Assert\AssertionFailedException
      */
     public function make(string $handler, array $options = []): EntityProcessorHandlerInterface
     {
@@ -36,15 +38,13 @@ final class ClassNameEntityProcessorHandlerFactory implements EntityProcessorHan
     /**
      * @param string $handler
      *
-     * @throws \InvalidArgumentException
+     * @throws \Assert\AssertionFailedException
      *
      * @return object
      */
-    private function makeByConstruct(string $handler)
+    private function makeByConstruct(string $handler): object
     {
-        if (!\class_exists($handler)) {
-            throw new InvalidArgumentException(\sprintf('Handler class %s does not exist', $handler));
-        }
+        Assertion::classExists($handler, 'Handler class "%s" does not exist');
 
         return new $handler();
     }

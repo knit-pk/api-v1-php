@@ -17,6 +17,9 @@
     "aws/aws-sdk-php": {
         "version": "3.52.28"
     },
+    "beberlei/assert": {
+        "version": "v2.9.5"
+    },
     "behat/behat": {
         "version": "v3.4.3"
     },
