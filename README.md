@@ -1,5 +1,16 @@
-# KNIT Restful API
+<p align="center">
+  <img width="300" height="300" src="https://secure.gravatar.com/avatar/02af0b4745bcd6c6997955997639cb65.jpg?s=300&r=g&d=mm">
+</p>
+
+# KNIT API (RESTful + GraphQL)
 ![travis](https://api.travis-ci.org/knit-pk/api-v1-php.svg?branch=develop)
+[![Maintainability](https://api.codeclimate.com/v1/badges/685724aefa95446cbbc8/maintainability)](https://codeclimate.com/github/knit-pk/api-v1-php/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/685724aefa95446cbbc8/test_coverage)](https://codeclimate.com/github/knit-pk/api-v1-php/test_coverage)
+[![Slack Status](https://knitwebdevpk.herokuapp.com/badge.svg)](https://knitwebdevpk.herokuapp.com)
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+
+
 
 Development configuration of KNIT API written in PHP, deployed using docker.
 
@@ -48,30 +59,32 @@ Requirements to work with project: `git`, `docker`, `docker-compose`
 - Feed database with default data.
 
     ```bash
-    $ docker-compose exec backend make fixtures-reload
+    $ docker-compose exec api make fixtures-reload
     ```
 
 - Clean and rebuild application cache.
 
     ```bash
-    $ docker-compose exec backend make cache-warmup-docker
+    $ docker-compose exec api make cache-warmup-docker
     ```
 
 - Running feature tests
 
     ```bash
-    $ docker-compose exec backend composer test-features
+    $ docker-compose exec api composer test-features
     ```
 
 ## Informations
 Docker images:
-- PHP (php:7.2-fpm-alpine3.7)
+- PHP (php:7.2-cli-alpine3.7)
 - Nginx (nginx:4-alpine)
+- Redis (redis:4-alpine)
 - Varnish - Http Cache (alpine:3.7)
 - MySQL (mysql:5.7)
 
 PHP Stack:
-- Symfony (v4.0.*)
+- Symfony (v4.1.*)
+- Swoole Extension (v2.*)
 - Api Platform (v2.2.*)
 
 ## Postman Collection
