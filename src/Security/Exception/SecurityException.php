@@ -7,7 +7,7 @@ namespace App\Security\Exception;
 use RuntimeException;
 use Throwable;
 
-class SecurityException extends RuntimeException
+final class SecurityException extends RuntimeException
 {
     public function __construct(string $message, int $code = 403, Throwable $previous = null)
     {

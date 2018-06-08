@@ -246,7 +246,7 @@ class User implements UserInterface, FOSUserInterface
     /**
      * {@inheritdoc}
      */
-    public function serialize()
+    public function serialize(): string
     {
         return \serialize([
             $this->id,

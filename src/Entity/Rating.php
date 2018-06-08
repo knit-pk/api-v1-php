@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Security\User\UserInterface;
 use App\Thought\ThoughtfulInterface;
 use App\Thought\ThoughtInterface;
+use Assert\Assertion;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -130,18 +131,9 @@ class Rating implements ThoughtInterface
      */
     protected $createdAt;
 
-    /**
-     * Rating constructor.
-     *
-     * @param string $value
-     *
-     * @throws \RuntimeException
-     */
     public function __construct(string $value = self::RATING_LIKE)
     {
-        if (!\in_array($value, static::SUPPORTED_RATINGS, true)) {
-            throw new RuntimeException(\sprintf('Review value is invalid. Supported values: %s.', \implode(', ', static::SUPPORTED_RATINGS)));
-        }
+        Assertion::inArray($value, static::SUPPORTED_RATINGS, 'Review value "%s" is not among valid values: %s');
 
         $this->value = $value;
     }
