@@ -31,6 +31,7 @@ class CategoryFixtures extends Fixture implements DependentFixtureInterface
             $category = new Category();
             $category->setName($fixture['name']);
             $category->setDescription($fixture['description']);
+            $category->setOverlayColor($fixture['overlayColor']);
             $category->setMetadata(new Metadata($fixture['metadata']['title'], $fixture['metadata']['description']));
 
             /** @var Image $image */
@@ -66,6 +67,7 @@ class CategoryFixtures extends Fixture implements DependentFixtureInterface
                 'name' => $category['name'],
                 'description' => $category['description'] ?? $defaults['description'],
                 'metadata' => $category['metadata'] ?? $defaults['metadata'],
+                'overlayColor' => $category['overlayColor'] ?? $defaults['overlayColor'],
                 'image' => $category['image'] ?? $defaults['image'],
                 'public' => $category['public'] ?? $defaults['public'],
             ];

@@ -2,6 +2,7 @@ _defaults:
   public: true
   image: image-default-category-image.jpg
   description: Dummy category
+  overlayColor: '#FFAB00'
   metadata:
     title: Dummy metadata title
     description: Dummy metadata description

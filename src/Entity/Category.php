@@ -103,6 +103,8 @@ class Category
      *
      * @Groups({"CategoryRead", "CategoryWrite"})
      *
+     * @Assert\NotBlank
+     *
      * @ApiProperty(attributes={
      *     "swagger_context": {
      *         "type": "object",
@@ -143,6 +145,22 @@ class Category
      * @Groups({"CategoryRead", "CategoryAdminWrite"})
      */
     protected $articlesCount;
+
+    /**
+     * @ApiProperty(iri="http://schema.org/color")
+     *
+     * @var string|null Overlay color field in HTML hex format
+     *
+     * @ORM\Column(type="string", length=6, nullable=true)
+     *
+     * @Assert\Regex(
+     *     pattern="/^#?[0-9a-fA-F]{6}$/",
+     *     message="Overlay color must be a valid HTML hex color"
+     * )
+     *
+     * @Groups({"CategoryRead", "CategoryWrite"})
+     */
+    protected $overlayColor;
 
     public function __construct()
     {
@@ -218,6 +236,20 @@ class Category
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function getOverlayColor(): ?string
+    {
+        return null !== $this->overlayColor ? \sprintf('#%s', $this->overlayColor) : null;
+    }
+
+    public function setOverlayColor(?string $overlayColor): void
+    {
+        if (null !== $overlayColor) {
+            $overlayColor = \mb_strtoupper(\str_replace('#', '', $overlayColor));
+        }
+
+        $this->overlayColor = $overlayColor;
     }
 
     public function __toString(): string
