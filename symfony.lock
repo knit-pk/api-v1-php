@@ -167,6 +167,9 @@
     "justinrainbow/json-schema": {
         "version": "5.2.6"
     },
+    "lcobucci/jwt": {
+        "version": "3.2.2"
+    },
     "league/flysystem": {
         "version": "1.0.43"
     },
@@ -193,9 +196,6 @@
     },
     "myclabs/deep-copy": {
         "version": "1.7.0"
-    },
-    "namshi/jose": {
-        "version": "7.2.3"
     },
     "nelmio/cors-bundle": {
         "version": "1.5.3"
