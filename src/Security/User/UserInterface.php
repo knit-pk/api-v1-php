@@ -17,9 +17,9 @@ interface UserInterface
     /**
      * Get an universally unique identifier of user.
      *
-     * @return \Ramsey\Uuid\UuidInterface|null
+     * @return \Ramsey\Uuid\UuidInterface
      */
-    public function getId(): ?UuidInterface;
+    public function getId(): UuidInterface;
 
     /**
      * Determine whether user giver user instance is the same as self.

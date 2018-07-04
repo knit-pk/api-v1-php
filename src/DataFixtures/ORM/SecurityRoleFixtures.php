@@ -21,7 +21,6 @@ class SecurityRoleFixtures extends Fixture
      * @param ObjectManager $manager
      *
      * @throws \Symfony\Component\Yaml\Exception\ParseException
-     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     public function load(ObjectManager $manager): void
     {

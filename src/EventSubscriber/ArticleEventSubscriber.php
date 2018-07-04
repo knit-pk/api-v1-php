@@ -22,7 +22,7 @@ class ArticleEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $article->setCode(\sprintf('%s/%s/%s', $article->getCategory()->getCode(), \mb_strtolower(Urlizer::transliterate($article->getTitle(), '-')), \mb_substr((string) $article->getId(), 0, 6)));
+        $article->setCode(\sprintf('%s/%s/%s', $article->getCategory()->getCode(), \mb_strtolower(Urlizer::transliterate($article->getTitle(), '-')), \mb_substr($article->getId()->toString(), 0, 6)));
     }
 
     /**

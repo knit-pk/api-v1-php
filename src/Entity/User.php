@@ -62,12 +62,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface, FOSUserInterface
 {
     /**
-     * @var Uuid
+     * @var UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
      * @Groups({"UserRead", "UserReadLess"})
      */
@@ -238,6 +236,7 @@ class User implements UserInterface, FOSUserInterface
      */
     public function __construct()
     {
+        $this->id = Uuid::uuid4();
         $this->enabled = false;
         $this->superAdmin = false;
         $this->securityRoles = new ArrayCollection();
@@ -277,7 +276,7 @@ class User implements UserInterface, FOSUserInterface
         ] = \unserialize($serialized, ['allowed_classes' => true]);
     }
 
-    public function getId(): ?UuidInterface
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

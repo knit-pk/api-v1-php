@@ -10,6 +10,8 @@ logs/
 config/jwt/
 public/media/upload/*
 
+phpstan.neon
+
 !public/media/upload/.gitkeep
 
 ###> symfony/framework-bundle ###
