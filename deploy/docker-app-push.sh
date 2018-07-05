@@ -5,6 +5,9 @@ DOCKER_TAG=$(echo ${TRAVIS_TAG} | sed -E 's~^v(.*)~\1~')
 # Docker Hub
 echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 
+docker pull knitpk/api:latest
+docker pull knitpk/api:standalone
+
 docker build . \
     --cache-from knitpk/api:latest \
     --tag knitpk/api:${DOCKER_TAG} \
