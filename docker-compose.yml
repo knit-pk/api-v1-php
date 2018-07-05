@@ -25,13 +25,19 @@ services:
             - '6379:6379'
 
     api:
-        build: .
-        env_file: .env.dev
-        environment:
-            - HOST=api
+        image: knitpk/api:latest
         depends_on:
             - mysql
             - redis
+        build:
+            context: .
+            cache_from:
+                - knitpk/api:latest
+            args:
+                - 'COMPOSER_INSTALL_FLAGS=--dev'
+        env_file: .env.dev
+        environment:
+            - HOST=api
         volumes:
             - '.:/usr/src/api'
             - /usr/src/api/var
@@ -56,6 +62,7 @@ services:
             - '/usr/src/api/public/admin'
 
 #    standalone:
+#        image: knitpk/api:standalone
 #        depends_on:
 #            - mysql
 #            - redis
