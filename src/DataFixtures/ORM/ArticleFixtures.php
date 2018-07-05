@@ -44,7 +44,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             $article->setTitle($fixture['title']);
             /** @var \App\Entity\Category $category */
             $category = $this->getReference($fixture['category']);
-            $article->setCode(\sprintf('%s/%s/%s', $category->getCode(), \mb_strtolower(Urlizer::transliterate($article->getTitle(), '-')), \mb_substr((string) $article->getId(), 0, 6)));
+            $article->setCode(\sprintf('%s/%s/%s', $category->getCode(), \mb_strtolower(Urlizer::transliterate($article->getTitle(), '-')), \mb_substr($article->getId()->toString(), 0, 6)));
 
             /** @var \App\Entity\User $author */
             $author = $this->getReference($fixture['author']);

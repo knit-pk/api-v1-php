@@ -42,7 +42,7 @@ class JWTCreatedListenerTest extends TestCase
 
         $payload = $event->getData();
         $this->assertArrayHasKey('id', $payload);
-        $this->assertSame((string) $userId, $payload['id']);
+        $this->assertSame($userId->toString(), $payload['id']);
     }
 
     /**

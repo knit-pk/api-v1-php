@@ -1,0 +1,6 @@
+includes:
+parameters:
+    excludes_analyse:
+    ignoreErrors:
+        # Put false positives here
+        - '#Result of method [\w\\]+::\w+\(\) \(void\) is used#'

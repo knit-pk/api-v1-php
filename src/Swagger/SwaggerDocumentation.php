@@ -134,29 +134,21 @@ final class SwaggerDocumentation implements NormalizerInterface
         return $filteredDefinitions;
     }
 
-    /**
-     * @param \ArrayObject $paths
-     * @param array        $openPaths
-     * @param array        $security
-     *
-     * @throws \RuntimeException
-     */
     private function appendSecurity(ArrayObject $paths, array $openPaths, array $security): void
     {
-        /** @var ArrayObject[] $methods */
         foreach ($paths as $path => $methods) {
-            foreach ($methods as $methodName => $method) {
-                if (
-                    !\array_key_exists($path, $openPaths) ||
-                    !\in_array($methodName, $openPaths[$path], true)
-                ) {
-                    if (!$method instanceof ArrayObject) {
-                        throw new RuntimeException(\sprintf('[Swagger Documentation] Item `swagger.paths[%s][%s]` expected to be represented by an ArrayObject.', $path, $methodName));
+            if (false !== $path) {
+                foreach ($methods as $methodName => $method) {
+                    if (!\in_array($methodName, $openPaths[$path] ?? [], true)) {
+                        $this->appendSecurityForMethod($method, $security);
                     }
-
-                    $method->offsetSet('security', $security);
                 }
             }
         }
+    }
+
+    private function appendSecurityForMethod(ArrayObject $method, array $security): void
+    {
+        $method->offsetSet('security', $security);
     }
 }

@@ -23,8 +23,7 @@ final class ClassNameEntityProcessorHandlerFactory implements EntityProcessorHan
      *
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws \Assert\AssertionFailedException
+     * @throws \Assert\InvalidArgumentException
      */
     public function make(string $handler, array $options = []): EntityProcessorHandlerInterface
     {
@@ -38,7 +37,7 @@ final class ClassNameEntityProcessorHandlerFactory implements EntityProcessorHan
     /**
      * @param string $handler
      *
-     * @throws \Assert\AssertionFailedException
+     * @throws \Assert\InvalidArgumentException
      *
      * @return object
      */

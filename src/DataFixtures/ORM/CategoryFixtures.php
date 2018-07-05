@@ -21,9 +21,6 @@ class CategoryFixtures extends Fixture implements DependentFixtureInterface
      * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager
-     *
-     * @throws \Symfony\Component\Yaml\Exception\ParseException
-     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     public function load(ObjectManager $manager): void
     {

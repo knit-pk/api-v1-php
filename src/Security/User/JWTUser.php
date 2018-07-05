@@ -67,7 +67,7 @@ final class JWTUser implements UserInterface, JWTUserInterface
     /**
      * {@inheritdoc}
      */
-    public function getId(): ?UuidInterface
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

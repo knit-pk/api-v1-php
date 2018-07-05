@@ -42,7 +42,6 @@ class ImageFixtures extends Fixture
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      * @throws \Symfony\Component\Filesystem\Exception\FileNotFoundException
      * @throws \Symfony\Component\HttpFoundation\File\Exception\FileException
-     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     public function load(ObjectManager $manager): void
     {
