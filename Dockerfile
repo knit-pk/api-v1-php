@@ -1,20 +1,23 @@
 ARG PHP_BASE_TAG=7.2-cli-alpine3.7
 FROM php:$PHP_BASE_TAG
 
-ARG TIMEZONE="Europe/Warsaw"
-ARG DOCKERIZE_VERSION=v0.6.1
-ARG APCU_VERSION=5.1.11
-ARG SWOOLE_VERSION=2.2.0
-
 # Install custom packages
 RUN apk add --no-cache tzdata zip make openssl linux-headers
 
-# Install dockerize
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+# Set timezone
+ARG TIMEZONE="Europe/Warsaw"
+RUN ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime && echo $TIMEZONE > /etc/timezone && \
+    "date" && \
+    apk del tzdata
+
+# Install composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER 1
+RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative --ansi
 
 # Install php extensions
+ARG APCU_VERSION=5.1.11
+ARG SWOOLE_VERSION=2.2.0
 RUN docker-php-source extract && \
     apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && \
     pecl install apcu-$APCU_VERSION && \
@@ -24,13 +27,13 @@ RUN docker-php-source extract && \
     apk del .phpize-deps && \
     docker-php-source delete
 
-# Set timezone
-RUN ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime && echo $TIMEZONE > /etc/timezone && \
-    "date" && \
-    apk del tzdata
+# Install dockerize
+ARG DOCKERIZE_VERSION=v0.6.1
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Prepare run scripts
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY deploy/php-overrides.ini /usr/local/etc/php/conf.d/
 COPY deploy/docker-app-entrypoint.sh /usr/local/bin/docker-app-entrypoint
 COPY deploy/docker-app-bootstrap.sh /usr/local/bin/docker-app-bootstrap
@@ -41,12 +44,10 @@ WORKDIR /usr/src/api
 ENTRYPOINT ["docker-app-entrypoint"]
 CMD ["bin/console", "swoole:server:run"]
 
-ENV COMPOSER_ALLOW_SUPERUSER 1
-RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative --ansi
-
 # Prevent the reinstallation of vendors at every changes in the source code
+ARG COMPOSER_INSTALL_FLAGS="--no-dev"
 COPY composer.json composer.lock ./
-RUN composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest --ansi \
+RUN composer install --prefer-dist --no-autoloader --no-scripts --no-progress --no-suggest --ansi $COMPOSER_INSTALL_FLAGS \
     && composer clear-cache --ansi
 
 COPY . /usr/src/api
