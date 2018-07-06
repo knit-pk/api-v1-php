@@ -11,8 +11,7 @@ env:
     - APP_ENV=test
     - APP_DEBUG=1
     - COMPOSER_METHOD=install
-    - SWOOLE_VERSION=2.2.0
-
+    - SWOOLE_VERSION=4.0.1
 matrix:
   include:
     - php: '7.2'

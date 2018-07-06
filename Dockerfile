@@ -2,7 +2,7 @@ ARG PHP_BASE_TAG=7.2-cli-alpine3.7
 FROM php:$PHP_BASE_TAG
 
 # Install custom packages
-RUN apk add --no-cache tzdata zip make openssl linux-headers
+RUN apk add --no-cache tzdata zip make openssl linux-headers libstdc++
 
 # Set timezone
 ARG TIMEZONE="Europe/Warsaw"
@@ -17,7 +17,7 @@ RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress
 
 # Install php extensions
 ARG APCU_VERSION=5.1.11
-ARG SWOOLE_VERSION=2.2.0
+ARG SWOOLE_VERSION=4.0.1
 RUN docker-php-source extract && \
     apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && \
     pecl install apcu-$APCU_VERSION && \

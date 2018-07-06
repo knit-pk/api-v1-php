@@ -161,16 +161,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.62.8",
+            "version": "3.62.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7f35cc8bdf5afec650300c5633277be279833e0a"
+                "reference": "c4bca5798cad053f3b594434c61320c13f0ebb72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7f35cc8bdf5afec650300c5633277be279833e0a",
-                "reference": "7f35cc8bdf5afec650300c5633277be279833e0a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c4bca5798cad053f3b594434c61320c13f0ebb72",
+                "reference": "c4bca5798cad053f3b594434c61320c13f0ebb72",
                 "shasum": ""
             },
             "require": {
@@ -237,7 +237,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-07-03T20:00:01+00:00"
+            "time": "2018-07-05T21:14:33+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -1943,16 +1943,16 @@
         },
         {
             "name": "lexik/jwt-authentication-bundle",
-            "version": "v2.5.2",
+            "version": "v2.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "6650b7990c4d2d6a04b216fc6f5de572a82a4c38"
+                "reference": "85b05784fbad7d6435626915edeeb55ed0bcd6a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/6650b7990c4d2d6a04b216fc6f5de572a82a4c38",
-                "reference": "6650b7990c4d2d6a04b216fc6f5de572a82a4c38",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/85b05784fbad7d6435626915edeeb55ed0bcd6a7",
+                "reference": "85b05784fbad7d6435626915edeeb55ed0bcd6a7",
                 "shasum": ""
             },
             "require": {
@@ -2035,7 +2035,7 @@
                 "rest",
                 "symfony"
             ],
-            "time": "2018-07-03T09:35:06+00:00"
+            "time": "2018-07-06T10:21:24+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -6993,16 +6993,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v2.12.1",
+            "version": "v2.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "beef6cbe6dec7205edcd143842a49f9a691859a6"
+                "reference": "dcc87d5414e9d0bd316fce81a5bedb9ce720b183"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/beef6cbe6dec7205edcd143842a49f9a691859a6",
-                "reference": "beef6cbe6dec7205edcd143842a49f9a691859a6",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/dcc87d5414e9d0bd316fce81a5bedb9ce720b183",
+                "reference": "dcc87d5414e9d0bd316fce81a5bedb9ce720b183",
                 "shasum": ""
             },
             "require": {
@@ -7036,7 +7036,7 @@
                 "php-cs-fixer/phpunit-constraint-isidenticalstring": "^1.0.1",
                 "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "^1.0.1",
                 "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1",
-                "phpunitgoodpractices/traits": "^1.5",
+                "phpunitgoodpractices/traits": "^1.5.1",
                 "symfony/phpunit-bridge": "^4.0"
             },
             "suggest": {
@@ -7080,7 +7080,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2018-06-10T08:26:56+00:00"
+            "time": "2018-07-06T10:37:40+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",
