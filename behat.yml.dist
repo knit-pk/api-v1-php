@@ -5,15 +5,15 @@ default:
                 - App\Tests\Feature\FeatureContext:
                     kernel: '@kernel'
                 - App\Tests\Feature\JsonContext
+                - App\Tests\Feature\AuthRestContext
                 - Behat\MinkExtension\Context\MinkContext
-                - Behatch\Context\RestContext
     extensions:
         Behat\Symfony2Extension:
             kernel:
                 bootstrap: features/bootstrap/bootstrap.php
                 class: App\Kernel
         Behat\MinkExtension:
-            base_url: "http://example.com/"
+            base_url: "http://localhost"
             sessions:
                 default:
                     symfony2: ~

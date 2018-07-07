@@ -5947,16 +5947,16 @@
         },
         {
             "name": "webonyx/graphql-php",
-            "version": "v0.12.2",
+            "version": "v0.12.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "167c3e735451633a524787b3103d3536cb9d78ea"
+                "reference": "50dfd3fac2cc566335b1667c7e23b29a86df3846"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/167c3e735451633a524787b3103d3536cb9d78ea",
-                "reference": "167c3e735451633a524787b3103d3536cb9d78ea",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/50dfd3fac2cc566335b1667c7e23b29a86df3846",
+                "reference": "50dfd3fac2cc566335b1667c7e23b29a86df3846",
                 "shasum": ""
             },
             "require": {
@@ -5987,7 +5987,7 @@
                 "api",
                 "graphql"
             ],
-            "time": "2018-06-25T16:56:32+00:00"
+            "time": "2018-07-07T15:46:58+00:00"
         },
         {
             "name": "willdurand/negotiation",

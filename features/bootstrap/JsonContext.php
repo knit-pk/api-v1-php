@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Feature;
 
 use Behatch\Context\JsonContext as BaseContext;
+use Ramsey\Uuid\Uuid;
 use RuntimeException;
 
 class JsonContext extends BaseContext
@@ -31,6 +32,24 @@ class JsonContext extends BaseContext
     public function theJsonRootCollectionShouldNotBeEmpty(): void
     {
         $this->theJsonCollectionShouldNotBeEmpty('');
+    }
+
+    /**
+     * @Then the JSON node :node should be a valid uuid
+     *
+     * @param string $node
+     *
+     * @throws \Exception
+     */
+    public function theJsonNodeShouldBeValidUuid(string $node): void
+    {
+        $json = $this->getJson();
+
+        $actual = $this->inspector->evaluate($json, $node);
+
+        if (!Uuid::isValid($actual)) {
+            throw new RuntimeException(\sprintf('The json node "%s" value %s is not a valid Uuid4', $node, \json_encode($actual)));
+        }
     }
 
     /**
