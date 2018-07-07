@@ -22,7 +22,8 @@ docker build -f Dockerfile.standalone . \
     --tag knitpk/api:standalone \
     --build-arg KNIT_API_TAG=${DOCKER_TAG} \
     --build-arg KNIT_API_ADMIN_TAG=latest \
-    --build-arg KNIT_API_URL=https://d15e2ckuuchn46.cloudfront.net
+    --build-arg KNTI_API_ADMIN_PUBLIC_URL=/admin \
+    --build-arg KNIT_API_ADMIN_API_URL=https://d15e2ckuuchn46.cloudfront.net
 
 docker push knitpk/api:${DOCKER_TAG}-standalone
 docker push knitpk/api:standalone

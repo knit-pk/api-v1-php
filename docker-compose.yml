@@ -49,6 +49,9 @@ services:
     nginx:
         build:
             context: ./docker/nginx
+            args:
+                - ADMIN_PUBLIC_URL='/admin'
+                - ADMIN_API_URL='http://localhost'
         depends_on:
             - api
         environment:
@@ -61,31 +64,32 @@ services:
             - './vendor:/usr/src/api/vendor'
             - '/usr/src/api/public/admin'
 
-#    standalone:
-#        image: knitpk/api:standalone
-#        depends_on:
-#            - mysql
-#            - redis
-#        build:
-#            dockerfile: Dockerfile.standalone
-#            context: .
-#            cache_from:
-#                - knitpk/api:standalone
-#            args:
-#                - KNIT_API_TAG=latest
-#                - KNIT_API_ADMIN_TAG=latest
-#                - 'KNIT_API_URL=http://localhost'
-#        env_file: .env.dev
-#        environment:
-#            - PORT=9501
-#            - NGINX_PORT=8899
-#        volumes:
-#            - '.:/usr/src/api'
-#            - /usr/src/api/var
-#            - /usr/src/api/public/admin
-#            - 'composer_cache:/root/.composer'
-#        ports:
-#            - '8300:8899'
+    # standalone:
+    #     image: knitpk/api:standalone
+    #     depends_on:
+    #         - mysql
+    #         - redis
+    #     build:
+    #         dockerfile: Dockerfile.standalone
+    #         context: .
+    #         cache_from:
+    #             - knitpk/api:standalone
+    #         args:
+    #             - KNIT_API_TAG=latest
+    #             - KNIT_API_ADMIN_TAG=latest
+    #             - 'KNTI_API_ADMIN_PUBLIC_URL=/admin'
+    #             - 'KNIT_API_ADMIN_API_URL=http://localhost:8300'
+    #     env_file: .env.dev
+    #     environment:
+    #         - PORT=9501
+    #         - NGINX_PORT=8899
+    #     volumes:
+    #         - '.:/usr/src/api'
+    #         - /usr/src/api/var
+    #         - /usr/src/api/public/adminos
+    #         - 'composer_cache:/root/.composer'
+    #     ports:
+    #         - '8300:8899'
 
     varnish:
         depends_on:

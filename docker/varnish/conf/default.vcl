@@ -13,6 +13,7 @@ acl ban {
     "localhost";
     "127.0.0.1";
     "api";
+    // "standalone";
 }
 
 sub vcl_backend_response {
@@ -38,7 +39,7 @@ sub vcl_deliver {
 
     // CORS
     set req.http.Access-Control-Allow-Origin = "*";
-    
+
     // Insert Diagnostic header to show Hit or Miss
     if (obj.hits > 0) {
         set resp.http.X-Cache = "Hits: " + obj.hits;
