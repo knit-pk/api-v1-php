@@ -231,12 +231,9 @@ class User implements UserInterface, FOSUserInterface
      */
     private $superAdmin;
 
-    /**
-     * User constructor.
-     */
-    public function __construct()
+    public function __construct(UuidInterface $id)
     {
-        $this->id = Uuid::uuid4();
+        $this->id = $id;
         $this->enabled = false;
         $this->superAdmin = false;
         $this->securityRoles = new ArrayCollection();

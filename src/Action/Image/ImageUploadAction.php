@@ -6,6 +6,7 @@ namespace App\Action\Image;
 
 use App\Entity\Image;
 use App\Security\UserProvider\UserEntityProvider;
+use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,6 +51,6 @@ final class ImageUploadAction
             throw new HttpException(400, 'Field `image` is required, and must be a file');
         }
 
-        return Image::fromFile($imageFile, $this->userEntityProvider->getReference($user));
+        return Image::fromFile(Uuid::uuid4(), $imageFile, $this->userEntityProvider->getReference($user));
     }
 }

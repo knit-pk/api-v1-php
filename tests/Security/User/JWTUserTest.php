@@ -14,13 +14,13 @@ class JWTUserTest extends TestCase
     public function testCreate(): void
     {
         $username = 'username';
-        $id = Uuid::uuid4()->toString();
+        $id = Uuid::uuid4();
         $roles = [UserInterface::ROLE_USER];
 
         $user = new JWTUser($id, $username, $roles);
 
         $this->assertSame($username, $user->getUsername());
-        $this->assertSame($id, $user->getId()->toString());
+        $this->assertSame($id, $user->getId());
         $this->assertSame($roles, $user->getRoles());
 
         $this->assertSame('', $user->getPassword());
@@ -40,14 +40,30 @@ class JWTUserTest extends TestCase
 
         $this->assertSame($username, $user->getUsername());
         $this->assertSame($payload['id'], $user->getId()->toString());
+        $this->assertNotSame($payload['id'], $user->getId());
+        $this->assertSame($payload['roles'], $user->getRoles());
+    }
+
+    public function testCreateFromPayloadWithUuidObject(): void
+    {
+        $username = 'username';
+        $payload = [
+            'id' => Uuid::uuid4(),
+            'roles' => [UserInterface::ROLE_USER],
+        ];
+
+        $user = JWTUser::createFromPayload($username, $payload);
+
+        $this->assertSame($username, $user->getUsername());
+        $this->assertSame($payload['id'], $user->getId());
         $this->assertSame($payload['roles'], $user->getRoles());
     }
 
     public function testIsUser(): void
     {
         $username = 'username';
-        $userId = Uuid::uuid4()->toString();
-        $userTwoId = Uuid::uuid4()->toString();
+        $userId = Uuid::uuid4();
+        $userTwoId = Uuid::uuid4();
         $roles = [UserInterface::ROLE_USER];
 
         $user = new JWTUser($userId, $username, $roles);

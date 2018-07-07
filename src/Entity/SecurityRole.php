@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -35,12 +36,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class SecurityRole extends Role
 {
     /**
-     * @var Uuid
+     * @var UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
      * @Groups({"SecurityRoleRead"})
      */
@@ -75,19 +74,15 @@ class SecurityRole extends Role
      */
     protected $users;
 
-    /**
-     * SecurityRole constructor.
-     *
-     * @param string $role
-     */
-    public function __construct(string $role)
+    public function __construct(UuidInterface $id, string $role)
     {
         parent::__construct($role);
+        $this->id = $id;
         $this->role = $role;
         $this->users = new ArrayCollection();
     }
 
-    public function getId(): ?Uuid
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

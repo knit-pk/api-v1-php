@@ -12,6 +12,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -68,12 +69,10 @@ class Image
     ];
 
     /**
-     * @var Uuid
+     * @var UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
      * @Groups({"ImageRead"})
      */
@@ -170,7 +169,12 @@ class Image
      */
     protected $createdAt;
 
-    public function getId(): ?Uuid
+    public function __construct(UuidInterface $id)
+    {
+        $this->id = $id;
+    }
+
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
@@ -268,16 +272,17 @@ class Image
     }
 
     /**
+     * @param UuidInterface                               $id
      * @param \Symfony\Component\HttpFoundation\File\File $file
      * @param \App\Entity\User|null                       $author
      *
      * @return \App\Entity\Image
      */
-    public static function fromFile(File $file, ?User $author = null): self
+    public static function fromFile(UuidInterface $id, File $file, ?User $author = null): self
     {
         Assertion::inArray($file->getMimeType(), self::SUPPORTED_MIME_TYPES, 'Given file mime type "%s" is not among supported: %s');
 
-        $image = new self();
+        $image = new self($id);
         $image->file = $file;
         $image->author = $author;
 

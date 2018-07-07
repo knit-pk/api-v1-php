@@ -48,7 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Category
 {
     /**
-     * @var \Ramsey\Uuid\UuidInterface
+     * @var UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
@@ -162,9 +162,9 @@ class Category
      */
     protected $overlayColor;
 
-    public function __construct()
+    public function __construct(UuidInterface $id)
     {
-        $this->id = Uuid::uuid4();
+        $this->id = $id;
         $this->articlesCount = 0;
     }
 

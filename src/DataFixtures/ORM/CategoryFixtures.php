@@ -11,6 +11,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Generator;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Yaml\Yaml;
 
 class CategoryFixtures extends Fixture implements DependentFixtureInterface
@@ -25,7 +26,7 @@ class CategoryFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         foreach ($this->getCategoryFixtures() as $fixture) {
-            $category = new Category();
+            $category = new Category(Uuid::uuid4());
             $category->setName($fixture['name']);
             $category->setDescription($fixture['description']);
             $category->setOverlayColor($fixture['overlayColor']);

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Serializer;
 
-use ApiPlatform\Core\Exception\RuntimeException;
 use ApiPlatform\Core\Serializer\SerializerContextBuilderInterface;
 use App\Serializer\Group\Factory\AdminSerializerGroupFactory;
 use DomainException;
@@ -13,27 +12,10 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class AdminContextBuilder implements SerializerContextBuilderInterface
 {
-    /**
-     * @var \ApiPlatform\Core\Serializer\SerializerContextBuilderInterface
-     */
     private $decorated;
-
-    /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
-     */
     private $authorizationChecker;
-
-    /**
-     * @var \App\Serializer\Group\Factory\AdminSerializerGroupFactory
-     */
     private $adminSerializerGroupFactory;
 
-    /**
-     * AdminContextBuilder constructor.
-     *
-     * @param \ApiPlatform\Core\Serializer\SerializerContextBuilderInterface               $decorated
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(SerializerContextBuilderInterface $decorated, AuthorizationCheckerInterface $authorizationChecker, AdminSerializerGroupFactory $adminSerializerGroupFactory)
     {
         $this->decorated = $decorated;
@@ -42,16 +24,7 @@ final class AdminContextBuilder implements SerializerContextBuilderInterface
     }
 
     /**
-     * Creates a serialization context from a Request.
-     *
-     * @param Request    $request
-     * @param bool       $normalization       true | false = denormalization
-     * @param array|null $extractedAttributes
-     *
-     * @throws RuntimeException
-     * @throws \DomainException
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function createFromRequest(Request $request, bool $normalization, array $extractedAttributes = null): array
     {

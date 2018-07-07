@@ -14,9 +14,9 @@ final class JWTUser implements UserInterface, JWTUserInterface
     private $username;
     private $roles;
 
-    public function __construct(string $id, string $username, array $roles)
+    public function __construct(UuidInterface $id, string $username, array $roles)
     {
-        $this->id = Uuid::fromString($id);
+        $this->id = $id;
         $this->username = $username;
         $this->roles = $roles;
     }
@@ -27,7 +27,7 @@ final class JWTUser implements UserInterface, JWTUserInterface
     public static function createFromPayload($username, array $payload): self
     {
         return new self(
-            $payload['id'],
+            $payload['id'] instanceof UuidInterface ? $payload['id'] : Uuid::fromString($payload['id']),
             $username,
             $payload['roles']
         );

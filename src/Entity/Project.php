@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -47,12 +48,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Project
 {
     /**
-     * @var Uuid
+     * @var UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     protected $id;
 
@@ -145,15 +144,13 @@ class Project
      */
     protected $updatedAt;
 
-    public function __construct()
+    public function __construct(UuidInterface $id)
     {
+        $this->id = $id;
         $this->teams = new ArrayCollection();
     }
 
-    /**
-     * @return Uuid|null
-     */
-    public function getId(): ?Uuid
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

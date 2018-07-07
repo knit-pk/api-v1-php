@@ -8,6 +8,7 @@ use App\Entity\Image;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Generator;
+use Ramsey\Uuid\Uuid;
 use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -53,9 +54,9 @@ class ImageFixtures extends Fixture
                 $this->filesystem->copy($imageFile->getRealPath(), $tempFile, true);
 
                 $file = new UploadedFile($tempFile, $fixture['name'], null, null, true);
-                $image = Image::fromFile($file);
+                $image = Image::fromFile(Uuid::uuid4(), $file);
             } else {
-                $image = new Image();
+                $image = new Image(Uuid::uuid4());
                 $image->setOriginalName($fixture['name']);
                 $image->setUrl($fixture['url']);
             }
