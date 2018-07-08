@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -47,12 +48,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Tag
 {
     /**
-     * @var Uuid
+     * @var UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
      * @Groups({"TagRead"})
      */
@@ -70,7 +69,7 @@ class Tag
     protected $code;
 
     /**
-     * @var null|string the name of the tag
+     * @var string the name of the tag
      *
      * @ORM\Column(type="string", nullable=false)
      *
@@ -83,33 +82,26 @@ class Tag
      */
     protected $name;
 
-    /**
-     * @return null|Uuid
-     */
-    public function getId(): ?Uuid
+    public function __construct(UuidInterface $id)
+    {
+        $this->id = $id;
+    }
+
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * @return null|string
-     */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;
@@ -117,6 +109,6 @@ class Tag
 
     public function __toString(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 }

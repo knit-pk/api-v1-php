@@ -9,6 +9,7 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Ramsey\Uuid\Uuid;
 
 class ProjectFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -25,7 +26,7 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 1; $i <= 10; ++$i) {
             $name = \sprintf('Project %d', $i);
 
-            $project = new Project();
+            $project = new Project(Uuid::uuid4());
             $project->setName($name);
             $project->setDescription(\sprintf('Fantastic %s description.', $name));
             $project->setAuthor($author);

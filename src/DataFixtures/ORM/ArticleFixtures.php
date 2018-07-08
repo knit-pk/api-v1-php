@@ -12,6 +12,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Gedmo\Sluggable\Util\Urlizer;
 use Generator;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
@@ -35,7 +36,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
     {
         // Predefined articles
         foreach ($this->getArticleFixtures() as $fixture) {
-            $article = new Article();
+            $article = new Article(Uuid::uuid4());
             if (isset($fixture['image'])) {
                 /** @var \App\Entity\Image $image */
                 $image = $this->getReference($fixture['image']);
@@ -67,7 +68,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
                 /** @var array[] $comments */
                 $comments = $fixture['comments'];
                 foreach ($comments as $commentFixture) {
-                    $comment = new Comment();
+                    $comment = new Comment(Uuid::uuid4());
                     /** @var \App\Entity\User $commentAuthor */
                     $commentAuthor = $this->getReference($commentFixture['author']);
                     $comment->setAuthor($commentAuthor);
@@ -78,7 +79,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
                         /** @var array[] $replies */
                         $replies = $commentFixture['replies'];
                         foreach ($replies as $replyData) {
-                            $reply = new CommentReply();
+                            $reply = new CommentReply(Uuid::uuid4());
                             /** @var \App\Entity\User $replyAuthor */
                             $replyAuthor = $this->getReference($replyData['author']);
                             $reply->setText($replyData['text']);

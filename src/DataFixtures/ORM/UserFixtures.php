@@ -9,6 +9,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Generator;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Yaml\Yaml;
 
 class UserFixtures extends Fixture implements DependentFixtureInterface
@@ -35,7 +36,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     {
         foreach ($this->getUserFixtures() as $fixture) {
             $username = $fixture['username'];
-            $user = new User();
+            $user = new User(Uuid::uuid4());
 
             $user->setFullname($fixture['fullname']);
             $user->setUsername($username);

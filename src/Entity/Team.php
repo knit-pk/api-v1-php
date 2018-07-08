@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -46,12 +47,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Team
 {
     /**
-     * @var Uuid
+     * @var UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
      * @Groups({"TeamRead"})
      */
@@ -104,13 +103,14 @@ class Team
      */
     protected $users;
 
-    public function __construct()
+    public function __construct(UuidInterface $id)
     {
+        $this->id = $id;
         $this->children = new ArrayCollection();
         $this->users = new ArrayCollection();
     }
 
-    public function getId(): ?Uuid
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

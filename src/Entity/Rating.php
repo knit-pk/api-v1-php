@@ -14,6 +14,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use RuntimeException;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -64,12 +65,10 @@ class Rating implements ThoughtInterface
     ];
 
     /**
-     * @var Uuid
+     * @var UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      *
      * @Groups({"RatingRead"})
      */
@@ -131,14 +130,15 @@ class Rating implements ThoughtInterface
      */
     protected $createdAt;
 
-    public function __construct(string $value = self::RATING_LIKE)
+    public function __construct(UuidInterface $id, string $value = self::RATING_LIKE)
     {
         Assertion::inArray($value, static::SUPPORTED_RATINGS, 'Review value "%s" is not among valid values: %s');
 
+        $this->id = $id;
         $this->value = $value;
     }
 
-    public function getId(): ?Uuid
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

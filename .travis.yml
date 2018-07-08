@@ -12,6 +12,9 @@ env:
     - APP_DEBUG=1
     - COMPOSER_METHOD=install
     - SWOOLE_VERSION=4.0.1
+    - JWT_PRIVATE_KEY_PATH=config/jwt/private.pem
+    - JWT_PUBLIC_KEY_PATH=config/jwt/public.pem
+    - JWT_PASSPHRASE=56c247d4c281f5de0d8d9d894f2b605157fd379c
 matrix:
   include:
     - php: '7.2'
@@ -67,6 +70,7 @@ script:
   - composer test
   - 'if [[ -v DATABASE_URL ]]; then bin/console doctrine:schema:create; fi'
   - 'if [[ -v DATABASE_URL ]]; then bin/console doctrine:fixtures:load -n; fi'
+  - 'if [[ -v DATABASE_URL ]]; then make generate-jwt-keys; fi'
   - 'if [[ -v DATABASE_URL ]]; then composer test-features -n; fi'
 
 before_deploy:

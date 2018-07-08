@@ -9,6 +9,7 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Generator;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Yaml\Yaml;
 
 class SecurityRoleFixtures extends Fixture
@@ -25,7 +26,7 @@ class SecurityRoleFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         foreach ($this->getSecurityRoleFixtures() as $fixture) {
-            $securityRole = new SecurityRole($fixture['role']);
+            $securityRole = new SecurityRole(Uuid::uuid4(), $fixture['role']);
             $securityRole->setName($fixture['name']);
 
             if ($fixture['public']) {

@@ -8,6 +8,7 @@ use App\Entity\Tag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Generator;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Yaml\Yaml;
 
 class TagFixtures extends Fixture
@@ -24,7 +25,7 @@ class TagFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         foreach ($this->getTagFixtures() as $fixture) {
-            $tag = new Tag();
+            $tag = new Tag(Uuid::uuid4());
             $tag->setName($fixture['name']);
 
             if ($fixture['public']) {

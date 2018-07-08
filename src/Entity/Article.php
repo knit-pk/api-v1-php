@@ -65,7 +65,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Article implements ThoughtfulInterface
 {
     /**
-     * @var \Ramsey\Uuid\UuidInterface
+     * @var UuidInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid")
@@ -263,9 +263,9 @@ class Article implements ThoughtfulInterface
      */
     protected $createdAt;
 
-    public function __construct()
+    public function __construct(UuidInterface $id)
     {
-        $this->id = Uuid::uuid4();
+        $this->id = $id;
         $this->tags = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->ratings = new ArrayCollection();
