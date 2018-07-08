@@ -45,6 +45,7 @@
         "friendsofphp/php-cs-fixer": "^2.9",
         "phpstan/phpstan": "^0.10.1",
         "phpstan/phpstan-doctrine": "^0.10.0",
+        "phpunit/phpcov": "^5.0",
         "phpunit/phpunit": "^7.0",
         "roave/security-advisories": "dev-master",
         "symfony/console": "^4.0",
@@ -71,16 +72,28 @@
         }
     },
     "scripts": {
-        "test": [
+        "analyze": [
             "phpstan analyze src -l 6 --ansi",
             "phpstan analyze features tests -l 5 -c phpstan.tests.neon --ansi",
-            "php-cs-fixer fix -v --dry-run --diff --stop-on-violation --ansi",
-            "phpunit --coverage-clover clover.xml --colors=always"
+            "php-cs-fixer fix -v --dry-run --diff --stop-on-violation --ansi"
         ],
-        "test-features": [
-            "behat -n -vvv --colors"
+        "test": [
+            "@analyze",
+            "@phpunit"
+        ],
+        "phpunit": [
+            "phpunit --colors=always"
+        ],
+        "behat": [
+            "behat -s default -n -vv --colors"
         ],
         "fix": "php-cs-fixer fix -v --ansi",
+        "code-coverage": [
+            "mkdir -p var/cov",
+            "phpunit --coverage-php var/cov/phpunit.cov --colors=always",
+            "behat -s code-coverage -n -vv --colors",
+            "phpcov merge var/cov --clover clover.xml"
+        ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install --symlink --relative public": "symfony-cmd"

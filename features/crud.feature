@@ -1,7 +1,7 @@
 Feature:
-    In order to get resources that match my criteria
+    In order to make use of API
     As a client software developer
-    I want to filter resource collections by their attributes
+    I want to be able to perform CRUD actions
 
     Scenario: It should be possible to get a collection of tags
         Given I am authenticated
