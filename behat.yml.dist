@@ -7,6 +7,14 @@ default:
                 - App\Tests\Feature\JsonContext
                 - App\Tests\Feature\AuthRestContext
                 - Behat\MinkExtension\Context\MinkContext
+        code-coverage:
+            contexts:
+                - App\Tests\Feature\FeatureContext:
+                    kernel: '@kernel'
+                - App\Tests\Feature\JsonContext
+                - App\Tests\Feature\AuthRestContext
+                - App\Tests\Feature\CoverageContext
+                - Behat\MinkExtension\Context\MinkContext
     extensions:
         Behat\Symfony2Extension:
             kernel:

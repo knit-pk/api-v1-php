@@ -67,11 +67,12 @@ install:
     --no-scripts --ansi
 
 script:
-  - composer test
+  - composer analyze
+  - 'if [[ "$DEPLOY" != "1" ]]; then composer phpunit; fi'
   - 'if [[ -v DATABASE_URL ]]; then bin/console doctrine:schema:create; fi'
   - 'if [[ -v DATABASE_URL ]]; then bin/console doctrine:fixtures:load -n; fi'
   - 'if [[ -v DATABASE_URL ]]; then make generate-jwt-keys; fi'
-  - 'if [[ -v DATABASE_URL ]]; then composer test-features -n; fi'
+  - 'if [[ -v DATABASE_URL ]]; then if [[ "$DEPLOY" != "1"  ]]; then composer behat; else composer code-coverage; fi; fi'
 
 before_deploy:
   - >-
