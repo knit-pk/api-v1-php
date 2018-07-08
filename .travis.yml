@@ -5,6 +5,7 @@ dist: trusty
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/pecl_cache
 
 env:
   global:
@@ -56,10 +57,10 @@ matrix:
         - COMPOSER_METHOD=update
 
 before_install:
-  - >-
-    echo "\n" | echo "\n" | echo "\n" | echo "\n" | echo "\n" | echo "\n" | echo "\n" |
-    pecl install -f swoole-$SWOOLE_VERSION
   - 'export PATH="$PATH:$HOME/.composer/vendor/bin"'
+  - 'composer global require phwoolcon/ci-pecl-cacher'
+  - pecl update-channels
+  - ci-pecl-install swoole-$SWOOLE_VERSION swoole
 
 install:
   - >-
