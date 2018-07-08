@@ -50,8 +50,8 @@ services:
         build:
             context: ./docker/nginx
             args:
-                - ADMIN_PUBLIC_URL='/admin'
-                - ADMIN_API_URL='http://localhost'
+                - 'ADMIN_PUBLIC_URL=/admin'
+                - 'ADMIN_API_URL=http://localhost'
         depends_on:
             - api
         environment:
