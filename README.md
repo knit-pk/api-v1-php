@@ -36,19 +36,20 @@ Requirements to work with project: `git`, `docker`, `docker-compose`
 
 ## Useful commands
 
-- Stop project (does not destroy data)
+- Stop project
     ```bash
     $ docker-compose stop
     ```
 
-- Down project (destroys data)
+- Stop project with destroying all its data
     ```bash
-    $ docker-compose down
+    $ docker-compose down -v
     ```
 
 - Rebuild and run docker images
     ```bash
-    $ docker-compose up -d --build
+    $ docker-compose build --pull
+    $ docker-compose up -d
     ```
 
 - Follow log output from containers
@@ -71,7 +72,15 @@ Requirements to work with project: `git`, `docker`, `docker-compose`
 - Running feature tests
 
     ```bash
-    $ docker-compose exec api composer test-features
+    $ docker-compose exec api composer behat
+    ```
+
+- Run swoole sever locally
+
+    ```bash
+    $ bin/console swoole:server:run
+    # or 
+    $ bin/console s:s:r
     ```
 
 ## Informations
@@ -84,8 +93,8 @@ Docker images:
 
 PHP Stack:
 - Symfony (v4.1.*)
-- Swoole Extension (v2.*)
-- Api Platform (v2.2.*)
+- Swoole Extension (v4.*)
+- API Platform (v2.3.*)
 
 ## Postman Collection
 Always for newest version:
