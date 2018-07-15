@@ -7,7 +7,6 @@ namespace App\Action\Image;
 use App\Entity\Image;
 use App\Security\UserProvider\UserEntityProvider;
 use Ramsey\Uuid\Uuid;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -31,8 +30,8 @@ final class ImageUploadAction
      *         "_api_resource_class": Image::class,
      *         "_api_collection_operation_name": "upload"
      *     },
+     *     methods={"POST"}
      * )
-     * @Method("POST")
      *
      * @param \Symfony\Component\HttpFoundation\Request           $request
      * @param \Symfony\Component\Security\Core\User\UserInterface $user
