@@ -12,7 +12,7 @@ env:
     - APP_ENV=test
     - APP_DEBUG=1
     - COMPOSER_METHOD=install
-    - SWOOLE_VERSION=4.0.1
+    - SWOOLE_VERSION=4.0.4
     - JWT_PRIVATE_KEY_PATH=config/jwt/private.pem
     - JWT_PUBLIC_KEY_PATH=config/jwt/public.pem
     - JWT_PASSPHRASE=56c247d4c281f5de0d8d9d894f2b605157fd379c
