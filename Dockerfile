@@ -16,8 +16,8 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress --no-suggest --classmap-authoritative --ansi
 
 # Install php extensions
-ARG APCU_VERSION=5.1.11
-ARG SWOOLE_VERSION=4.0.1
+ARG APCU_VERSION=5.1.12
+ARG SWOOLE_VERSION=4.0.4
 RUN docker-php-source extract && \
     apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && \
     pecl install apcu-$APCU_VERSION && \
