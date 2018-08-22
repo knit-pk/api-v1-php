@@ -23,6 +23,6 @@ COPY deploy/standalone/nginx.conf /etc/nginx/nginx.conf
 COPY deploy/standalone/default.conf /etc/nginx/conf.d/default.conf
 COPY deploy/standalone/docker-app-entrypoint.sh /usr/local/bin/docker-app-entrypoint
 RUN chmod +x /usr/local/bin/docker-app-entrypoint
-COPY --from=api-admin /usr/src/app/build /usr/src/api/public/adminos
+COPY --from=api-admin /usr/src/app/build /usr/src/api/public/admin
 
 ENV NGINX_PORT 80
