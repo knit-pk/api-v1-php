@@ -1,5 +1,15 @@
 <a name=""></a>
-# [](https://github.com/knit-pk/api-v1-php/compare/v0.12.3-dev...v) (2018-08-22)
+# [](https://github.com/knit-pk/api-v1-php/compare/v0.12.4-dev...v) (2018-08-22)
+
+
+### Bug Fixes
+
+* **standalone:** Fix typo for /admin route on standalone build ([b59f9c1](https://github.com/knit-pk/api-v1-php/commit/b59f9c1))
+
+
+
+<a name="0.12.4-dev"></a>
+## [0.12.4-dev](https://github.com/knit-pk/api-v1-php/compare/v0.12.3-dev...v0.12.4-dev) (2018-08-22)
 
 
 ### Bug Fixes
@@ -47,8 +57,8 @@
 
 
 
-<a name="0.10.1-dev"></a>
-## 0.10.1-dev (2018-04-06)
+<a name="0.10.4-dev"></a>
+## 0.10.4-dev (2018-04-08)
 
 
 
