@@ -34,7 +34,7 @@ services:
             cache_from:
                 - knitpk/api:latest
             args:
-                - 'COMPOSER_INSTALL_FLAGS=--dev'
+                - COMPOSER_INSTALL_FLAGS= # default --no-dev
         env_file: .env.dev
         environment:
             - HOST=api
