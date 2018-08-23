@@ -1,4 +1,4 @@
-ARG PHP_BASE_TAG=7.2-cli-alpine3.7
+ARG PHP_BASE_TAG=7.2-cli-alpine3.8
 FROM php:$PHP_BASE_TAG
 
 # Install custom packages
