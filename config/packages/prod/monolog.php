@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Symfony\Component\Config\Resource\ClassExistenceResource;
 use Symfony\Component\Console\Application;
 

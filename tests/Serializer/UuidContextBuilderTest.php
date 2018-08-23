@@ -23,7 +23,7 @@ class UuidContextBuilderTest extends TestCase
      */
     private $uuidContextBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->decoratedProphecy = $this->prophesize(SerializerContextBuilderInterface::class);
 

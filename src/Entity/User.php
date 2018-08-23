@@ -411,7 +411,7 @@ class User implements UserInterface, FOSUserInterface
     /**
      * @param string|null $fullname
      */
-    public function setFullname(?string $fullname)
+    public function setFullname(?string $fullname): void
     {
         $this->fullname = $fullname;
     }
@@ -555,7 +555,7 @@ class User implements UserInterface, FOSUserInterface
     /**
      * {@inheritdoc}
      */
-    public function setPlainPassword($password)
+    public function setPlainPassword($password): void
     {
         $this->plainPassword = $password;
     }
@@ -563,7 +563,7 @@ class User implements UserInterface, FOSUserInterface
     /**
      * {@inheritdoc}
      */
-    public function setPassword($hash)
+    public function setPassword($hash): void
     {
         $this->hash = $hash;
     }

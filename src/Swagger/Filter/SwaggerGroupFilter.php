@@ -60,7 +60,7 @@ final class SwaggerGroupFilter implements FilterInterface
         return $description;
     }
 
-    public function apply(Request $request, bool $normalization, array $attributes, array &$context)
+    public function apply(Request $request, bool $normalization, array $attributes, array &$context): void
     {
         $this->decorated->apply($request, $normalization, $attributes, $context);
     }

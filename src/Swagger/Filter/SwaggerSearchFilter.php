@@ -48,7 +48,7 @@ final class SwaggerSearchFilter implements ContextAwareFilterInterface
     /**
      * {@inheritdoc}
      */
-    public function apply(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null, array $context = [])
+    public function apply(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null, array $context = []): void
     {
         $this->decorated->apply($queryBuilder, $queryNameGenerator, $resourceClass, $operationName, $context);
     }

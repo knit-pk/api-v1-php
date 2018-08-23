@@ -8,6 +8,7 @@ return PhpCsFixer\Config::create()
         '@Symfony' => true,
         '@Symfony:risky' => true,
         '@PHP71Migration' => true,
+        '@PHP71Migration:risky' => true,
         '@DoctrineAnnotation' => true,
         'array_syntax' => ['syntax' => 'short'],
         'combine_consecutive_issets' => true,
