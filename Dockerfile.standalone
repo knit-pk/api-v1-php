@@ -26,3 +26,6 @@ RUN chmod +x /usr/local/bin/docker-app-entrypoint
 COPY --from=api-admin /usr/src/app/build /usr/src/api/public/admin
 
 ENV NGINX_PORT 80
+
+HEALTHCHECK --interval=5s --timeout=1s --start-period=1m \
+  CMD curl --fail http://127.0.0.1:${NGINX_PORT}/ || exit 1

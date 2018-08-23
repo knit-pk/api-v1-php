@@ -57,9 +57,12 @@ RUN mkdir -p var/cache var/log var/sessions public/media/upload && \
     bin/docker-console assets:install public --ansi && \
     chmod -R 777 var public
 
-ENV TZ ${TIMEZONE} \
-    PORT 9501 \
-    HOST '127.0.0.1' \
-    DOCKERIZE_WAIT_FOR '' \
-    JWT_PRIVATE_KEY_PATH 'config/jwt/private.pem' \
-    JWT_PUBLIC_KEY_PATH 'config/jwt/public.pem'
+ENV TZ=${TIMEZONE} \
+    PORT=9501 \
+    HOST='127.0.0.1' \
+    DOCKERIZE_WAIT_FOR='' \
+    JWT_PRIVATE_KEY_PATH='config/jwt/private.pem' \
+    JWT_PUBLIC_KEY_PATH='config/jwt/public.pem'
+
+HEALTHCHECK --interval=5s --timeout=1s --start-period=1m \
+  CMD curl --fail http://${HOST}:${PORT}/ || exit 1
