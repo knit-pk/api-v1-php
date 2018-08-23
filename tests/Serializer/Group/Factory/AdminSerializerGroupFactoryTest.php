@@ -42,12 +42,12 @@ class AdminSerializerGroupFactoryTest extends TestCase
      * @param string $postfix
      * @param string $expected
      */
-    public function testCreateAdminSerializerGroup(string $resourceClass, string $postfix, string $expected)
+    public function testCreateAdminSerializerGroup(string $resourceClass, string $postfix, string $expected): void
     {
         $this->assertSame($expected, $this->adminSerializerGroupFactory->createAdminGroup($resourceClass, $postfix));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adminSerializerGroupFactory = new \App\Serializer\Group\Factory\AdminSerializerGroupFactory();
     }

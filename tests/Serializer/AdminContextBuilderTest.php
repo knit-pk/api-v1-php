@@ -24,7 +24,7 @@ class AdminContextBuilderTest extends TestCase
      */
     private $adminContextBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serializerContextBuilderProphecy = $this->prophesize(SerializerContextBuilderInterface::class);
         $this->authorizationCheckerProphecy = $this->prophesize(AuthorizationCheckerInterface::class);

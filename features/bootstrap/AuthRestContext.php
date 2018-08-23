@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Feature;
 
 use App\Security\User\JWTUser;
@@ -42,7 +44,7 @@ final class AuthRestContext extends RestContext implements KernelAwareContext
     /**
      * {@inheritdoc}
      */
-    public function setKernel(KernelInterface $kernel)
+    public function setKernel(KernelInterface $kernel): void
     {
         $container = $kernel->getContainer();
         /** @var JWTManager $manager */

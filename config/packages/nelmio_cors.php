@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Bundle\SwooleBundle\Server\ServerUtils;
 
 if (isset($_ENV['CORS_ALLOW_ORIGINS'])) {

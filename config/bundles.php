@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     App\Bundle\SwooleBundle\SwooleBundle::class => ['dev' => true, 'stage' => true, 'prod' => true],
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
