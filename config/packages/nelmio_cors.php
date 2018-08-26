@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Bundle\SwooleBundle\Server\ServerUtils;
+use App\Bundle\SwooleBundle\Functions\ServerUtils;
 
 if (isset($_ENV['CORS_ALLOW_ORIGINS'])) {
     $container->loadFromExtension('nelmio_cors', [

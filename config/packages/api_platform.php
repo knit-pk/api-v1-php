@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Bundle\SwooleBundle\Server\ServerUtils;
+use App\Bundle\SwooleBundle\Functions\ServerUtils;
 
 if (isset($_ENV['VARNISH_URLS'])) {
     $container->loadFromExtension('api_platform', [

@@ -1,7 +1,7 @@
 <?php
 
+use App\Bundle\SwooleBundle\Functions\ServerUtils;
 use App\Kernel;
-use App\Bundle\SwooleBundle\Server\ServerUtils;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;

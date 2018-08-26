@@ -6,3 +6,8 @@ swoole:
     server:
         port: '%env(int:PORT)%'
         host: '%env(HOST)%'
+        settings:
+            worker_count: 9
+            reactor_count: 3
+            serve_static_files: false
+            public_dir: '%kernel.project_dir%/public'
