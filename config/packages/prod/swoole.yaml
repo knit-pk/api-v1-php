@@ -6,6 +6,7 @@ swoole:
     server:
         port: '%env(int:PORT)%'
         host: '%env(HOST)%'
+        use_advanced_static_handler: true
         settings:
             worker_count: 9
             reactor_count: 3
