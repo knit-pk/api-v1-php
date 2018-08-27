@@ -6,6 +6,7 @@ swoole:
     http_server:
         port: '%env(int:PORT)%'
         host: '%env(HOST)%'
-        drivers:
+        services:
             trust_all_proxies: true
             entity_manager_handler: true
+            cloudfront_proto_header_handler: true
