@@ -12,18 +12,22 @@ $handlers = [
         'level' => 'debug',
         'channels' => ['!event'],
     ],
-    'stdout' => [
-        'type' => 'stream',
-        'path' => 'php://stdout',
-        'level' => 'debug',
-        'channels' => ['!event', '!console'],
-    ],
     'redis' => [
         'id' => 'monolog.handler.redis_handler',
         'type' => 'service',
         'level' => 'info',
     ],
 ];
+
+// Log to stdout only if in docker container
+if (\array_key_exists('DOCKERIZE_WAIT_FOR', $_ENV)) {
+    $handlers['stdout'] = [
+        'type' => 'stream',
+        'path' => 'php://stdout',
+        'level' => 'debug',
+        'channels' => ['!event', '!console'],
+    ];
+}
 
 $container->addResource(new ClassExistenceResource(Application::class));
 if (\class_exists(Application::class)) {
