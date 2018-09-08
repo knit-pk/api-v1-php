@@ -6,6 +6,7 @@ swoole:
     http_server:
         port: '%env(int:PORT)%'
         host: '%env(HOST)%'
+        running_mode: 'process'
         static:
             strategy: 'advanced'
         services:
