@@ -27,7 +27,7 @@
         "symfony/framework-bundle": "^4.1",
         "symfony/monolog-bundle": "^3.2",
         "symfony/proxy-manager-bridge": "^4.0",
-        "symfony/yaml": "^4.0",
+        "symfony/yaml": "^4.1",
         "vich/uploader-bundle": "^1.8",
         "webonyx/graphql-php": "^0.12"
     },
@@ -48,10 +48,10 @@
         "phpunit/phpcov": "^5.0",
         "phpunit/phpunit": "^7.0",
         "roave/security-advisories": "dev-master",
-        "symfony/console": "^4.0",
-        "symfony/dotenv": "^4.0",
+        "symfony/console": "^4.1",
+        "symfony/dotenv": "^4.1",
         "symfony/profiler-pack": "^1.0",
-        "symfony/web-server-bundle": "^4.0"
+        "symfony/web-server-bundle": "^4.1"
     },
     "config": {
         "preferred-install": {

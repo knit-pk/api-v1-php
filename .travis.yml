@@ -11,8 +11,8 @@ env:
   global:
     - APP_ENV=test
     - APP_DEBUG=1
-    - COMPOSER_METHOD=install
-    - SWOOLE_VERSION=4.0.4
+    - COMPOSER_ARGS=install
+    - SWOOLE_VERSION=4.2.1
     - JWT_PRIVATE_KEY_PATH=config/jwt/private.pem
     - JWT_PUBLIC_KEY_PATH=config/jwt/public.pem
     - JWT_PASSPHRASE=56c247d4c281f5de0d8d9d894f2b605157fd379c
@@ -54,7 +54,7 @@ matrix:
         - 'DATABASE_URL="pgsql://postgres@127.0.0.1:5432/knit_api_test"'
     - php: '7.2'
       env:
-        - COMPOSER_METHOD=update
+        - COMPOSER_ARGS=update
 
 before_install:
   - 'export PATH="$PATH:$HOME/.composer/vendor/bin"'
@@ -64,7 +64,7 @@ before_install:
 
 install:
   - >-
-    composer $COMPOSER_METHOD --prefer-dist --no-progress --no-suggest
+    composer $COMPOSER_ARGS --prefer-dist --no-progress --no-suggest
     --no-scripts --ansi
 
 script:

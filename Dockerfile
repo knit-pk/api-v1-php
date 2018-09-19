@@ -17,7 +17,7 @@ RUN composer global require "hirak/prestissimo:^0.3" --prefer-dist --no-progress
 
 # Install php extensions
 ARG APCU_VERSION=5.1.12
-ARG SWOOLE_VERSION=4.0.4
+ARG SWOOLE_VERSION=4.2.1
 RUN docker-php-source extract && \
     apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS && \
     pecl install apcu-$APCU_VERSION && \
