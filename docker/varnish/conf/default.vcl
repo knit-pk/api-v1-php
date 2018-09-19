@@ -8,7 +8,7 @@ backend default {
 }
 
 // Hosts allowed to send BAN requests
-acl ban {
+acl ban_permitted {
     "172.18.0.1"; // debug/cli
     "localhost";
     "127.0.0.1";
@@ -63,7 +63,7 @@ sub vcl_recv {
 
     // To allow API Platform to ban by cache tags
     if (req.method == "BAN") {
-        if (client.ip !~ ban) {
+        if (client.ip !~ ban_permitted) {
             return(synth(405, "Not allowed: " + client.ip));
         }
 
