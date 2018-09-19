@@ -30,9 +30,10 @@ plugins:
                 enabled: false
 exclude_patterns:
     - config/
+    - docker/
     - dist/
     - features/
     - '**/tests/'
     - src/DataFixtures/
-    - docker/
     - src/Migrations/
+    - src/Bundle/SwooleBundle/DependencyInjection/
