@@ -479,9 +479,6 @@
     "symfony/intl": {
         "version": "v3.3.10"
     },
-    "symfony/lts": {
-        "version": "4-dev"
-    },
     "symfony/monolog-bridge": {
         "version": "v3.3.10"
     },
