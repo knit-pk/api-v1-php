@@ -1,5 +1,10 @@
 <a name=""></a>
-# [](https://github.com/knit-pk/api-v1-php/compare/v0.12.4-dev...v) (2018-08-22)
+# [](https://github.com/knit-pk/api-v1-php/compare/v0.12.5-dev...v) (2018-09-21)
+
+
+
+<a name="0.12.5-dev"></a>
+## [0.12.5-dev](https://github.com/knit-pk/api-v1-php/compare/v0.12.4-dev...v0.12.5-dev) (2018-08-22)
 
 
 ### Bug Fixes
@@ -39,14 +44,11 @@
 
 
 <a name="0.12.2-dev"></a>
-## [0.12.2-dev](https://github.com/knit-pk/api-v1-php/compare/v0.11.0-dev...v0.12.2-dev) (2018-06-30)
+## [0.12.2-dev](https://github.com/knit-pk/api-v1-php/compare/c2f217a...v0.12.2-dev) (2018-06-30)
 
 
 ### Bug Fixes
 
-* **article:** Fix article's commentsCount ([#128](https://github.com/knit-pk/api-v1-php/issues/128)) ([542140c](https://github.com/knit-pk/api-v1-php/commit/542140c))
-* **article:** Fix articles comment counting ([#130](https://github.com/knit-pk/api-v1-php/issues/130)) ([d162abe](https://github.com/knit-pk/api-v1-php/commit/d162abe))
-* **article:** Fix UpdateCommentsCount command ([#129](https://github.com/knit-pk/api-v1-php/issues/129)) ([a678114](https://github.com/knit-pk/api-v1-php/commit/a678114))
 * **jwt-auth:** Fix JWT Auth Configuration ([1c1a366](https://github.com/knit-pk/api-v1-php/commit/1c1a366))
 * **swoole:** Make swoole http server lazy ([#132](https://github.com/knit-pk/api-v1-php/issues/132)) ([e417bd0](https://github.com/knit-pk/api-v1-php/commit/e417bd0))
 
@@ -54,11 +56,6 @@
 ### Features
 
 * **category:** Add overlayColor field ([c2f217a](https://github.com/knit-pk/api-v1-php/commit/c2f217a))
-
-
-
-<a name="0.10.4-dev"></a>
-## 0.10.4-dev (2018-04-08)
 
 
 
