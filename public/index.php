@@ -1,6 +1,6 @@
 <?php
 
-use App\Bundle\SwooleBundle\Functions\ServerUtils;
+use function App\Bundle\SwooleBundle\Functions\decode_string_as_set;
 use App\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\Dotenv\Dotenv;
@@ -23,11 +23,11 @@ if ($debug = $_SERVER['APP_DEBUG'] ?? false) {
 }
 
 if ($trustedHosts = $_SERVER['APP_TRUSTED_HOSTS'] ?? false) {
-    Request::setTrustedHosts(ServerUtils::decodeStringAsSet($trustedHosts));
+    Request::setTrustedHosts(decode_string_as_set($trustedHosts));
 }
 
 if ($trustedProxies = $_SERVER['APP_TRUSTED_PROXIES'] ?? false) {
-    Request::setTrustedProxies(ServerUtils::decodeStringAsSet($trustedProxies), Request::HEADER_X_FORWARDED_ALL);
+    Request::setTrustedProxies(decode_string_as_set($trustedProxies), Request::HEADER_X_FORWARDED_ALL);
 }
 
 $kernel = new Kernel($_SERVER['APP_ENV'] ?? 'dev', $debug);

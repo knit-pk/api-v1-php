@@ -19,8 +19,6 @@ plugins:
                 enabled: false
             CleanCode/StaticAccess:
                 enabled: false
-            Controversial/Superglobals:
-                enabled: false
     sonar-php:
         enabled: true
         checks:

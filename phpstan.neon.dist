@@ -4,7 +4,6 @@ includes:
 parameters:
     excludes_analyse:
         - src/Migrations
-        - src/Bundle/SwooleBundle/Functions/ServerUtils
     ignoreErrors:
         # Put false positives here
         - '#Cannot cast object to string#'

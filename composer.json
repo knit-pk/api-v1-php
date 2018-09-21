@@ -61,6 +61,7 @@
         "optimize-autoloader": true
     },
     "autoload": {
+        "files": ["src/Bundle/SwooleBundle/Functions/functions_include.php"],
         "psr-4": {
             "App\\": "src/"
         }
