@@ -1,7 +1,7 @@
 {
     "name": "knit-pk/api-v1-php",
     "description": "KNIT API PHP",
-    "version": "0.13.0-dev",
+    "version": "0.13.1-dev",
     "type": "project",
     "license": "MIT",
     "require": {
