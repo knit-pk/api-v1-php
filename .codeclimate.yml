@@ -19,8 +19,6 @@ plugins:
                 enabled: false
             CleanCode/StaticAccess:
                 enabled: false
-            Controversial/Superglobals:
-                enabled: false
     sonar-php:
         enabled: true
         checks:
@@ -30,9 +28,9 @@ plugins:
                 enabled: false
 exclude_patterns:
     - config/
+    - docker/
     - dist/
     - features/
     - '**/tests/'
     - src/DataFixtures/
-    - docker/
     - src/Migrations/

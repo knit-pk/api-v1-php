@@ -176,6 +176,9 @@
     "justinrainbow/json-schema": {
         "version": "5.2.6"
     },
+    "k911/swoole-bundle": {
+        "version": "v0.1.x-dev"
+    },
     "lcobucci/jwt": {
         "version": "3.2.2"
     },
