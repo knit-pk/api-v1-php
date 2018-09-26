@@ -1,6 +1,6 @@
 <?php
 
-use function App\Bundle\SwooleBundle\Functions\decode_string_as_set;
+use function K911\Swoole\decode_string_as_set;
 use App\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\Dotenv\Dotenv;

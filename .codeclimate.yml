@@ -34,4 +34,3 @@ exclude_patterns:
     - '**/tests/'
     - src/DataFixtures/
     - src/Migrations/
-    - src/Bundle/SwooleBundle/DependencyInjection/

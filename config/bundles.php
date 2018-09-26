@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    App\Bundle\SwooleBundle\SwooleBundle::class => ['dev' => true, 'stage' => true, 'prod' => true],
+    K911\Swoole\Bridge\Symfony\Bundle\SwooleBundle::class => ['dev' => true, 'stage' => true, 'prod' => true],
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true],
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],

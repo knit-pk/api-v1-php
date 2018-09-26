@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "841e8df857733da9b47a2121f42da5f4",
+    "content-hash": "a42b6d76653c5e3ba74cef66d79b11db",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -1999,6 +1999,81 @@
                 "yaml"
             ],
             "time": "2016-12-05T10:18:33+00:00"
+        },
+        {
+            "name": "k911/swoole-bundle",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/k911/swoole-bundle.git",
+                "reference": "06127d288bb9f54870d477abb96bfa195e3e1649"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/k911/swoole-bundle/zipball/06127d288bb9f54870d477abb96bfa195e3e1649",
+                "reference": "06127d288bb9f54870d477abb96bfa195e3e1649",
+                "shasum": ""
+            },
+            "require": {
+                "beberlei/assert": "^3.0",
+                "ext-swoole": "^4",
+                "php": "^7.2",
+                "symfony/config": "^4.1",
+                "symfony/console": "^4.1",
+                "symfony/dependency-injection": "^4.1",
+                "symfony/http-foundation": "^4.1",
+                "symfony/http-kernel": "^4.1"
+            },
+            "require-dev": {
+                "doctrine/orm": "^2.6",
+                "eaglewu/swoole-ide-helper": "dev-master",
+                "friendsofphp/php-cs-fixer": "^2.13",
+                "phpstan/phpstan": "^0.10.3",
+                "phpstan/phpstan-beberlei-assert": "^0.10.0",
+                "phpstan/phpstan-doctrine": "^0.10.0",
+                "phpstan/phpstan-phpunit": "^0.10.0",
+                "phpunit/phpunit": "^7.0",
+                "symfony/debug": "^4.1"
+            },
+            "suggest": {
+                "doctrine/orm": "To use the EntityManager handler."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "v0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions_include.php"
+                ],
+                "psr-4": {
+                    "K911\\Swoole\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Konrad Obal",
+                    "email": "konrad.obal@gmail.com",
+                    "homepage": "https://github.com/k911"
+                }
+            ],
+            "description": "Swoole Symfony Bundle",
+            "homepage": "https://github.com/k911/swoole-bundle",
+            "keywords": [
+                "async",
+                "bundle",
+                "http",
+                "php",
+                "server",
+                "swoole"
+            ],
+            "time": "2018-09-26T20:19:56+00:00"
         },
         {
             "name": "lcobucci/jwt",
@@ -10290,6 +10365,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "k911/swoole-bundle": 20,
         "behat/mink": 20,
         "eaglewu/swoole-ide-helper": 20,
         "roave/security-advisories": 20
@@ -10298,8 +10374,8 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^7.2",
-        "ext-iconv": "*",
-        "ext-ctype": "*"
+        "ext-ctype": "*",
+        "ext-iconv": "*"
     },
     "platform-dev": []
 }
